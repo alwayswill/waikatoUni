@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl" href="http://www.nzdl.org/gsdl/web/style/oai2.xsl" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+             http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+  <responseDate>2015-03-05T22:13:18Z</responseDate>
+  <request identifier="demo:HASH163120a9a8b21602ebb36c" metadataPrefix="oai_dc" verb="GetRecord">
+           http://www.nzdl.org/cgi-bin/oaiserver.cgi</request>
+ <GetRecord>
+  <record>
+    <header>
+      <identifier>demo:HASH163120a9a8b21602ebb36c</identifier>
+      <datestamp>2009-03-01</datestamp>
+      <setSpec>demo</setSpec>
+    </header>
+    <metadata>
+      <oai_dc:dc
+          xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/
+                              http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+        <dc:language>English</dc:language>
+        <dc:publisher>BOSTID</dc:publisher>
+        <dc:subject>Animal Husbandry and Animal Product Processing|Other animals (micro-livestock, little known animals, silkworms, reptiles, frogs, snails, game, etc.)</dc:subject>
+        <dc:title>Managing Tropical Animal Resources - Crocodiles as a Resource for the Tropics (b20cre)</dc:title>
+      </oai_dc:dc>
+    </metadata>
+  </record>
+
+ </GetRecord>
+</OAI-PMH>

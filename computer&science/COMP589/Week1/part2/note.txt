@@ -1,0 +1,1 @@
+wget -c "http://nzdl.org/cgi-bin/oaiserver?verb=ListIdentifiers&set=demo&metadataPrefix=oai_dc"

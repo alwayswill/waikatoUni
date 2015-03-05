@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl" href="http://www.nzdl.org/gsdl/web/style/oai2.xsl" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+             http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+  <responseDate>2015-03-05T22:13:18Z</responseDate>
+  <request identifier="demo:HASH4632a8a51d33c47a75c559" metadataPrefix="oai_dc" verb="GetRecord">
+           http://www.nzdl.org/cgi-bin/oaiserver.cgi</request>
+ <GetRecord>
+  <record>
+    <header>
+      <identifier>demo:HASH4632a8a51d33c47a75c559</identifier>
+      <datestamp>2009-03-01</datestamp>
+      <setSpec>demo</setSpec>
+    </header>
+    <metadata>
+      <oai_dc:dc
+          xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/
+                              http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+        <dc:language>English</dc:language>
+        <dc:publisher>EC Courier</dc:publisher>
+        <dc:subject>Society, Culture, Community, Woman, Youth, Population|Social sciences, sociology (works comprising several subgroups) incl. participatory research and training</dc:subject>
+        <dc:subject>Development Periodicals and Magazines|The Courier ACP 1990 - 1996 Africa-Caribbean-Pacific - European Union</dc:subject>
+        <dc:title>The Courier - N°159 - Sept- Oct 1996 Dossier Investing in People Country Reports: Mali ; Western Samoa (ec159e)</dc:title>
+      </oai_dc:dc>
+    </metadata>
+  </record>
+
+ </GetRecord>
+</OAI-PMH>

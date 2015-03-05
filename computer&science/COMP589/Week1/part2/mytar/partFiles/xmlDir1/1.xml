@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl" href="http://www.nzdl.org/gsdl/web/style/oai2.xsl" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+             http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+  <responseDate>2015-03-05T22:13:14Z</responseDate>
+  <request identifier="demo:HASH01d242dc3e08e1fdcf7343bb" metadataPrefix="oai_dc" verb="GetRecord">
+           http://www.nzdl.org/cgi-bin/oaiserver.cgi</request>
+ <GetRecord>
+  <record>
+    <header>
+      <identifier>demo:HASH01d242dc3e08e1fdcf7343bb</identifier>
+      <datestamp>2009-03-01</datestamp>
+      <setSpec>demo</setSpec>
+    </header>
+    <metadata>
+      <oai_dc:dc
+          xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/
+                              http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+        <dc:language>English</dc:language>
+        <dc:publisher>BOSTID</dc:publisher>
+        <dc:subject>Animal Husbandry and Animal Product Processing|Cattle</dc:subject>
+        <dc:subject>Animal Husbandry and Animal Product Processing|Other animals (micro-livestock, little known animals, silkworms, reptiles, frogs, snails, game, etc.)</dc:subject>
+        <dc:title>The Water Buffalo: New Prospects For An Underutilized Animal (1984) (b21wae)</dc:title>
+      </oai_dc:dc>
+    </metadata>
+  </record>
+
+ </GetRecord>
+</OAI-PMH>
