@@ -16,12 +16,13 @@ import android.widget.Spinner;
 
 
 public class MainActivity extends Activity implements ActionBar.OnNavigationListener, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
-
+    private static final String Tag = "MainActivity";
     private DrawerLayout leftDrawerLayout;
     private ListView leftDrawerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(Tag, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initActionBar();
@@ -31,6 +32,7 @@ public class MainActivity extends Activity implements ActionBar.OnNavigationList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(Tag, "onCreateOptionsMenu");
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
@@ -48,6 +50,7 @@ public class MainActivity extends Activity implements ActionBar.OnNavigationList
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(Tag, "onOptionsItemSelected");
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -61,9 +64,9 @@ public class MainActivity extends Activity implements ActionBar.OnNavigationList
         return super.onOptionsItemSelected(item);
     }
 
-    public void initActionBar(){
+    public void initActionBar() {
         final android.app.ActionBar actionBar = getActionBar();
-        Log.i("Will", "actionbar");
+        Log.d(Tag, "initActionBar");
 //        set the first dropdown on actionbar
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setHomeButtonEnabled(true);
@@ -78,8 +81,9 @@ public class MainActivity extends Activity implements ActionBar.OnNavigationList
 
     }
 
-//    set drawer data
-    public void initDrawer(){
+    //    set drawer data
+    public void initDrawer() {
+        Log.d(Tag, "initDrawer");
         leftDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         leftDrawerList = (ListView) findViewById(R.id.left_drawer);
         String[] subject_list = getResources().getStringArray(R.array.subject_list);
@@ -91,28 +95,30 @@ public class MainActivity extends Activity implements ActionBar.OnNavigationList
 
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+        Log.d(Tag, "onNavigationItemSelected");
         return false;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        Log.d(Tag, "onItemClick");
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        Log.d(Tag, "onItemSelected");
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+        Log.d(Tag, "onNothingSelected");
     }
 
     /* The click listner for ListView in the navigation drawer */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("DrawerItemClickListener", "onItemClick");
 //            selectItem(position);
         }
     }
