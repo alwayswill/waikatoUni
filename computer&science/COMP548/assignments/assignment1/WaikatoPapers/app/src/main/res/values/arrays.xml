@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="subject_list">
+        <item>Accounting</item>
+        <item>Agribusiness</item>
+        <item>Animal Behaviour</item>
+        <item>Anthropology</item>
+        <item>Applied Computing</item>
+        <item>Biochemistry</item>
+        <item>Biological Sciences</item>
+        <item>Biotechnology</item>
+        <item>Chemical and Biological Engineering</item>
+        <item>Chemistry</item>
+        <item>Computer Graphic Design</item>
+        <item>Computer Science</item>
+        <item>Creative Practices</item>
+        <item>Creative Technologies</item>
+        <item>Design Media</item>
+        <item>Earth Sciences</item>
+        <item>Economics</item>
+        <item>Education Studies</item>
+        <item>Electronic Business</item>
+        <item>Electronic Engineering</item>
+        <item>Electronics</item>
+        <item>Engineering</item>
+        <item>English</item>
+        <item>Entrepreneurship</item>
+        <item>Environmental Planning</item>
+        <item>Environmental Sciences</item>
+        <item>Ethics</item>
+        <item>Finance</item>
+        <item>Geography</item>
+        <item>History</item>
+        <item>Hospitality Management</item>
+        <item>Human Development</item>
+        <item>Human Resource Management</item>
+        <item>Industrial Relations and Human Resource Management</item>
+        <item>International Languages and Culture</item>
+        <item>International Management</item>
+    </string-array>
+    <string-array name="level_list">
+        <item>All Levels</item>
+        <item>Level 100</item>
+        <item>Level 200</item>
+        <item>Level 300</item>
+        <item>Level 400</item>
+        <item>Level 500</item>
+    </string-array>
+    <string-array name="sem_list">
+        <item>A Semester</item>
+        <item>B Semester</item>
+        <item>S Semester</item>
+        <item>T Semester</item>
+    </string-array>
+</resources>

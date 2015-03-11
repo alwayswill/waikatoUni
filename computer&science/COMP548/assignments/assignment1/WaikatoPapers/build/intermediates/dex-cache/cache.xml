@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/lixiaoxin/Sites/waikatoUni/computer&amp;science/COMP548/assignments/assignment1/WaikatoPapers/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/Users/lixiaoxin/Sites/waikatoUni/computer&amp;science/COMP548/assignments/assignment1/WaikatoPapers/app/build/intermediates/pre-dexed/debug/classes-cd1b7a9a5e57368b88939769f6bd0f2873edfb38.jar" />
+    </item>
+    <item
+        jar="/Users/lixiaoxin/Sites/waikatoUni/computer&amp;science/COMP548/assignments/assignment1/WaikatoPapers/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="/Users/lixiaoxin/Sites/waikatoUni/computer&amp;science/COMP548/assignments/assignment1/WaikatoPapers/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-17e191a182d4df0192564f2bf347c0921c5a678c.jar" />
+    </item>
+    <item
+        jar="/Applications/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="/Users/lixiaoxin/Sites/waikatoUni/computer&amp;science/COMP548/assignments/assignment1/WaikatoPapers/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-fa100554894d48afbb0ad0851f92cc333d0a6051.jar" />
+    </item>
+    <item
+        jar="/Users/lixiaoxin/Sites/waikatoUni/computer&amp;science/COMP548/assignments/assignment1/WaikatoPapers/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/Users/lixiaoxin/Sites/waikatoUni/computer&amp;science/COMP548/assignments/assignment1/WaikatoPapers/app/build/intermediates/pre-dexed/debug/classes-4fe3e8817cde82795833959e2e4537abc2330859.jar" />
+    </item>
+
+</items>
