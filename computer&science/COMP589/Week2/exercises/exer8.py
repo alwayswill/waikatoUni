@@ -2,8 +2,6 @@
 import re
 with open('mountain.html','r') as f:
     htmlFile = f.read()
-htmlFile = re.sub(r'tx', r'TX', htmlFile);
-tags = re.findall(r'mountain|abundance|precipice', htmlFile, re.I)
+tags = re.findall(r'<div id=\"sY\d+\" class=\"sE\".*>(.*)</a>', htmlFile)
 for tag in tags:
-	print "";
 	print tag
