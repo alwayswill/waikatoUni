@@ -1,0 +1,25 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var str="ccabbbccabcd";
+			var patt=/ab*c/;
+			document.write("test: "+ patt.test(str)+"</br>");
+			document.write("exec: "+ patt.exec(str)+"</br>");
+			document.write("search: "+ str.search(patt)+"</br>");
+			document.write("math: "+ str.match(patt).join(',')+"<br>");
+			var patt=/ab*c/g;
+			document.write("match with g: "+str.match(patt).join(',')+"<br>");
+			var patt=/(\w+)\s(\w+)/;
+			str = "John Smith, Many White";
+			document.write("replace: "+str.replace(patt, "$2,$1")+"</br>");
+			patt=/(\w+)\s(\w+)/g;
+			alert(str.match(patt).join('|'));
+			document.write("replace: "+str.replace(patt, "$2,$1")+"</br>");
+			
+		</script>	
+
+	</body>
+</html>
+
