@@ -13,71 +13,46 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+/**
+ * Paper      : COMP548-15A(HAM)
+ * Student ID : 125491
+ * Name       : Shuzu Li
+ * Email      : lishuzu@gmail.com
+ * <p/>
+ * Created by Shuzu Li on 14/03/15.
+ */
 
-public class MainActivity extends Activity implements ActionBar.OnNavigationListener, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
+public class MainActivity extends PaperBase implements ActionBar.OnNavigationListener {
     private static final String Tag = "MainActivity";
     private DrawerLayout leftDrawerLayout;
     private ListView leftDrawerList;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Log.d(Tag, "onCreate");
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initActionBar();
         initDrawer();
-    }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d(Tag, "onCreateOptionsMenu");
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-//        set the second dropdown for semester
-        String[] sem_list = getResources().getStringArray(R.array.sem_list);
-        Spinner semester_spinner =
-                (Spinner) menu.findItem(R.id.action_filter_semester).getActionView();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, sem_list);
-
-        semester_spinner.setOnItemSelectedListener(this);
-        semester_spinner.setAdapter(adapter);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(Tag, "onOptionsItemSelected");
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (getFragmentManager().findFragmentById(android.R.id.content) == null) {
+            getFragmentManager().beginTransaction()
+                    .add(android.R.id.content,
+                            new ActionBarFragment()).commit();
         }
 
-        return super.onOptionsItemSelected(item);
     }
 
     public void initActionBar() {
-        final android.app.ActionBar actionBar = getActionBar();
-        Log.d(Tag, "initActionBar");
-//        set the first dropdown on actionbar
+        final android.app.ActionBar actionBar = this.getActionBar();
+        Log.d(getClass().getName(), "initActionBar");
+
         actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        String[] level_list = getResources().getStringArray(R.array.level_list);
-
-        ArrayAdapter<String> level_list_adapter;
-        level_list_adapter = new ArrayAdapter<String>(actionBar.getThemedContext(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, level_list);
-        actionBar.setListNavigationCallbacks(level_list_adapter, this);
 
     }
 
@@ -99,27 +74,13 @@ public class MainActivity extends Activity implements ActionBar.OnNavigationList
         return false;
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.d(Tag, "onItemClick");
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Log.d(Tag, "onItemSelected");
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        Log.d(Tag, "onNothingSelected");
-    }
-
     /* The click listner for ListView in the navigation drawer */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("DrawerItemClickListener", "onItemClick");
-//            selectItem(position);
+            Log.d("DrawerItemClickListener", "onItemClick");
+            Toast.makeText(getApplicationContext(), "onItemSelected(" + position + ", " + id + ") = " + parent.getAdapter().getItem(position),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 }
