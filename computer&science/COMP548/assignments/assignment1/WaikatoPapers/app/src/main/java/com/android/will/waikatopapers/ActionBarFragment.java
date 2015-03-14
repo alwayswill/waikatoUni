@@ -25,7 +25,7 @@ import static android.widget.AdapterView.OnItemSelectedListener;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ActionBarFragment extends Fragment implements OnItemSelectedListener{
+public class ActionBarFragment extends Fragment implements OnItemSelectedListener {
 
 
     @Override
@@ -33,8 +33,6 @@ public class ActionBarFragment extends Fragment implements OnItemSelectedListene
         Log.d(getClass().getName(), "onCreate");
         setRetainInstance(true);
         setHasOptionsMenu(true);
-
-
         super.onCreate(savedInstanceState);
 
 
@@ -44,8 +42,6 @@ public class ActionBarFragment extends Fragment implements OnItemSelectedListene
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
-
-
 
 
     @Override
@@ -62,7 +58,6 @@ public class ActionBarFragment extends Fragment implements OnItemSelectedListene
 
         levelSpinner.setOnItemSelectedListener(this);
         levelSpinner.setAdapter(levelAdapter);
-
 
 
 //      set up dropdown for semester
@@ -106,7 +101,7 @@ public class ActionBarFragment extends Fragment implements OnItemSelectedListene
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        Toast.makeText(getActivity(), "onNothingSelected"+parent.toString(),
+        Toast.makeText(getActivity(), "onNothingSelected" + parent.toString(),
                 Toast.LENGTH_SHORT).show();
         Log.d(getClass().getName(), "onNothingSelected");
     }

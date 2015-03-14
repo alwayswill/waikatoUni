@@ -36,18 +36,18 @@ public class MainActivity extends PaperBase implements ActionBar.OnNavigationLis
 
         initActionBar();
         initDrawer();
-//        initPapersList();
+        initPapersList();
 
 
     }
 
-//    public void initPapersList(){
-//        if (getFragmentManager().findFragmentById(android.R.id.content) == null) {
-//            getFragmentManager().beginTransaction()
-//                    .add(R.id.content_layout,
-//                            new PaperListFragment()).commit();
-//        }
-//    }
+    public void initPapersList() {
+        if (getFragmentManager().findFragmentById(R.id.content_layout) == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.content_layout,
+                            new PaperListFragment()).commit();
+        }
+    }
 
     public void initActionBar() {
         final android.app.ActionBar actionBar = this.getActionBar();
@@ -92,7 +92,15 @@ public class MainActivity extends PaperBase implements ActionBar.OnNavigationLis
             Log.d("DrawerItemClickListener", "onItemClick");
             Toast.makeText(getApplicationContext(), "onItemSelected(" + position + ", " + id + ") = " + parent.getAdapter().getItem(position),
                     Toast.LENGTH_SHORT).show();
+            refreshPapers();
         }
+    }
+
+    public void refreshPapers() {
+        PaperListFragment paperListFragment = (PaperListFragment) getFragmentManager().findFragmentById(R.id.content_layout);
+        paperListFragment.refreshPapers();
+        Toast.makeText(this, "Refresh Papers",
+                Toast.LENGTH_SHORT).show();
     }
 }
 

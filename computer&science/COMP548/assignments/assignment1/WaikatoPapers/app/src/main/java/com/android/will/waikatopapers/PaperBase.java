@@ -10,9 +10,8 @@ import android.util.Log;
  * Student ID : 125491
  * Name       : Shuzu Li
  * Email      : lishuzu@gmail.com
- *
+ * <p/>
  * Created by Shuzu Li on 14/03/15.
- *
  */
 
 public class PaperBase extends Activity {
