@@ -36,14 +36,18 @@ public class MainActivity extends PaperBase implements ActionBar.OnNavigationLis
 
         initActionBar();
         initDrawer();
+//        initPapersList();
 
-        if (getFragmentManager().findFragmentById(android.R.id.content) == null) {
-            getFragmentManager().beginTransaction()
-                    .add(android.R.id.content,
-                            new ActionBarFragment()).commit();
-        }
 
     }
+
+//    public void initPapersList(){
+//        if (getFragmentManager().findFragmentById(android.R.id.content) == null) {
+//            getFragmentManager().beginTransaction()
+//                    .add(R.id.content_layout,
+//                            new PaperListFragment()).commit();
+//        }
+//    }
 
     public void initActionBar() {
         final android.app.ActionBar actionBar = this.getActionBar();
@@ -53,6 +57,13 @@ public class MainActivity extends PaperBase implements ActionBar.OnNavigationLis
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+//        set up for actionbar fragment
+        if (getFragmentManager().findFragmentById(android.R.id.content) == null) {
+            getFragmentManager().beginTransaction()
+                    .add(android.R.id.content,
+                            new ActionBarFragment()).commit();
+        }
 
     }
 
