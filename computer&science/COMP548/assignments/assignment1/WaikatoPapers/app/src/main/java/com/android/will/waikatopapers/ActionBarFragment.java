@@ -2,6 +2,7 @@ package com.android.will.waikatopapers;
 
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -26,7 +27,23 @@ import static android.widget.AdapterView.OnItemSelectedListener;
  * A simple {@link Fragment} subclass.
  */
 public class ActionBarFragment extends Fragment implements OnItemSelectedListener {
+    onActionBarItemSelectedListener mCallback;
+    // Container Activity must implement this interface
+    public interface onActionBarItemSelectedListener {
+        public void onActionBarItemSelected(int position);
+    }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        Log.d(getClass().getName(), "onAttach");;
+        try {
+            mCallback = (onActionBarItemSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement onActionBarItemSelected");
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,6 +113,8 @@ public class ActionBarFragment extends Fragment implements OnItemSelectedListene
         Log.d(getClass().getName(), "onItemSelected");
         Toast.makeText(getActivity(), "onItemSelected(" + position + ", " + id + ") = " + parent.getAdapter().getItem(position),
                 Toast.LENGTH_SHORT).show();
+        //refresh papers
+        mCallback.onActionBarItemSelected(position);
 
     }
 
@@ -104,5 +123,10 @@ public class ActionBarFragment extends Fragment implements OnItemSelectedListene
         Toast.makeText(getActivity(), "onNothingSelected" + parent.toString(),
                 Toast.LENGTH_SHORT).show();
         Log.d(getClass().getName(), "onNothingSelected");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 }

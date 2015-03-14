@@ -24,7 +24,7 @@ import android.widget.Toast;
  * Created by Shuzu Li on 14/03/15.
  */
 
-public class MainActivity extends PaperBase implements ActionBar.OnNavigationListener {
+public class MainActivity extends PaperBase implements ActionBar.OnNavigationListener, ActionBarFragment.onActionBarItemSelectedListener {
     private static final String Tag = "MainActivity";
     private DrawerLayout leftDrawerLayout;
     private ListView leftDrawerList;
@@ -45,7 +45,7 @@ public class MainActivity extends PaperBase implements ActionBar.OnNavigationLis
         if (getFragmentManager().findFragmentById(R.id.content_layout) == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.content_layout,
-                            new PaperListFragment()).commit();
+                            new PaperListFragment(), "papersListFragment").commit();
         }
     }
 
@@ -62,7 +62,7 @@ public class MainActivity extends PaperBase implements ActionBar.OnNavigationLis
         if (getFragmentManager().findFragmentById(android.R.id.content) == null) {
             getFragmentManager().beginTransaction()
                     .add(android.R.id.content,
-                            new ActionBarFragment()).commit();
+                            new ActionBarFragment(), "actionBarFragment").commit();
         }
 
     }
@@ -85,6 +85,12 @@ public class MainActivity extends PaperBase implements ActionBar.OnNavigationLis
         return false;
     }
 
+    @Override
+    public void onActionBarItemSelected(int position) {
+        Log.d(Tag, "onActionBarItemSelected");
+        refreshPapers();
+    }
+
     /* The click listner for ListView in the navigation drawer */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -97,7 +103,7 @@ public class MainActivity extends PaperBase implements ActionBar.OnNavigationLis
     }
 
     public void refreshPapers() {
-        PaperListFragment paperListFragment = (PaperListFragment) getFragmentManager().findFragmentById(R.id.content_layout);
+        PaperListFragment paperListFragment = (PaperListFragment) getFragmentManager().findFragmentByTag("papersListFragment");
         paperListFragment.refreshPapers();
         Toast.makeText(this, "Refresh Papers",
                 Toast.LENGTH_SHORT).show();
