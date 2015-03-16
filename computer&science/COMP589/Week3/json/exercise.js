@@ -1,32 +1,5 @@
-function createTr(tds){
-	var tr = document.createElement("tr");
-	return tr;
-}
 
-function createTd(text, isTd, colspan){
-	var tag = "td";
-	if (isTd) {
-		tag = "th"
-	};
-	var tdNode = document.createElement(tag);
-	if (colspan >0) {
-		var att = document.createAttribute("colspan");
-		att.value = colspan;
-		tdNode.setAttributeNode(att);
-	};
-	tdNode.innerHTML = text;
-	return tdNode;
-}
-
-
-function createTable(){
-	var table = document.createElement("table");
-	var att = document.createAttribute("border");
-	att.value = "solid";
-	table.setAttributeNode(att);
-	return table;
-}
-
+// lib
 function parseData(sense){
 	var nameAttr = ["id", "title", "linkDocCount", "linkOccCount"];
 	var data = {};
@@ -38,8 +11,10 @@ function parseData(sense){
 
 function createTag(tag, text, attr){
 	var tagNode = document.createElement(tag);
-	tagNode.innerHTML = text;
-	if (attr != "undefined") {
+	if (text != undefined) {
+		tagNode.innerHTML = text;
+	};
+	if (attr != undefined) {
 		for(var k in attr){
 			var att = document.createAttribute(k);
 			att.value = attr[k];
@@ -48,36 +23,49 @@ function createTag(tag, text, attr){
 	};
 	return tagNode;
 }
-
+//init body and data
 body = document.getElementsByTagName("body");
-
 senses = obj.labels[0].senses;
 
-
+// head text
 body[0].appendChild(createTag("p", "Text :"+obj.labels[0].text, {"style":"font-weight: bold;"}));
 body[0].appendChild(createTag("p", "LinkDocCount :"+obj.labels[0].linkDocCount, {"style":"font-weight: bold;"}));
 body[0].appendChild(createTag("p", "LinkOccCount :"+obj.labels[0].linkOccCount, {"style":"font-weight: bold;"}));
-//create table
-table = createTable();
-body = document.getElementsByTagName("body");
-body[0].appendChild(table);
 
-//create t head
-tr = createTr();
-table.appendChild(tr);
+//create table
+table = createTag("table", undefined, {"border":"solid"});
+tbody = createTag("tbody");
+thead = createTag("thead");
+tfoot = createTag("tfoot");
+
+
+table.appendChild(thead);
+table.appendChild(tbody);
+table.appendChild(tfoot);
+
+//create thead
+tr = createTag("tr");
+thead.appendChild(tr);
 var attrNames = ["id", "title", "linkDocCount", "linkOccCount"];
 for (var i = 0; i <= attrNames.length -1; i++) {
-	tr.appendChild(createTd(attrNames[i], true));
+	tr.appendChild(createTag("th",attrNames[i]));
 };
 
-
-//create tr
+//create tbody
 for(var j in senses){
-	var tr = createTr();
+	var tr = createTag("tr");
 	for (var i = 0; i <= attrNames.length -1; i++) {
 		var text = senses[j][attrNames[i]];
-		tr.appendChild(createTd(text, false, 0));
+		tr.appendChild(createTag("td", text));
 	};
-	
-	table.appendChild(tr);
+	tbody.appendChild(tr);
 }
+
+//create tfoot
+var tr = createTag("tr");
+tr.appendChild(createTag("td", "Created by Shuzu Li", {"colspan":"4", "style":"text-align:right;background:#ccc"}));
+tfoot.appendChild(tr);
+
+//append to body
+body = document.getElementsByTagName("body");
+body[0].appendChild(table);
