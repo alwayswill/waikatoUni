@@ -1,0 +1,25 @@
+{
+  "labels": [
+    {
+      "text": "Kiwi",
+      "linkDocCount": 168,
+      "linkOccCount": 177,
+      "senses": [
+        {
+          "id": 17362,
+          "title": "Kiwi",
+          "linkDocCount": 59,
+          "linkOccCount": 60,
+          "fromTitle": true
+        },
+        {
+          "id": 509080,
+          "title": "Kiwi (people)",
+          "linkDocCount": 38,
+          "linkOccCount": 41,
+          "fromTitle": false
+        }
+      ]
+    }
+  ]
+}
