@@ -1,0 +1,26 @@
+<html>
+	<head>
+		<title>
+			Test1
+		
+		</title>
+	</head>
+	<body>
+		<script>
+			var pE = document.createElement("p");
+			var pT = document.createTextNode('This is the first paragraph');
+			pE.appendChild(pT);
+			//document.appendChild(pE);
+			var bodyE = document.getElementsByTagName("body")[0];
+			bodyE.appendChild(pE);
+			var nodes = document.getElementsByTagName('html')[0].childNodes;
+			var total = nodes.length;
+			for(var i=0; i<nodes.length;i++){
+				var node = nodes[i];
+				total += node.childNodes.length;
+
+			}
+			console.log(total);
+		</script>
+	</body>
+</html>
