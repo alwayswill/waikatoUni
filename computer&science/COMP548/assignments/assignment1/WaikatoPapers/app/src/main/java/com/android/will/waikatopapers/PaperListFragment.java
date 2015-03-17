@@ -67,7 +67,7 @@ public class PaperListFragment extends ListFragment {
         Random randomGenerator = new Random();
         int randomInt = randomGenerator.nextInt(900) + 100;
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             char random_Char = (char) (97 + randomGenerator.nextInt(25));
             title = title + "" + random_Char;
         }
