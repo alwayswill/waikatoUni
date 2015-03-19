@@ -9,4 +9,6 @@
     <string name="action_sort_date">latest</string>
     <string name="ic_menu_price_desc">Long to short</string>
     <string name="title_activity_papers_list">PapersListActivity</string>
+    <string name="drawer_open">drawer_open</string>
+    <string name="drawer_close">drawer_close</string>
 </resources>

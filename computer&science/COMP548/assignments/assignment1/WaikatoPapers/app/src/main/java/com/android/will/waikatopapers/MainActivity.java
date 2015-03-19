@@ -2,6 +2,7 @@ package com.android.will.waikatopapers;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -105,6 +106,9 @@ public class MainActivity extends PaperBase implements ActionBar.OnNavigationLis
     public void refreshPapers() {
         PaperListFragment paperListFragment = (PaperListFragment) getFragmentManager().findFragmentByTag("papersListFragment");
         paperListFragment.refreshPapers();
+//            close Drawer
+        leftDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        leftDrawerLayout.closeDrawers();
         Toast.makeText(this, "Refresh Papers",
                 Toast.LENGTH_SHORT).show();
     }
