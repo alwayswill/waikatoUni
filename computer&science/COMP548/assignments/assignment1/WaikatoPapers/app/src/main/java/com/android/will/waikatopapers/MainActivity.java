@@ -1,10 +1,9 @@
 package com.android.will.waikatopapers;
 
 import android.app.ActionBar;
-import android.app.Activity;
+import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 /**
@@ -29,6 +27,7 @@ public class MainActivity extends PaperBase implements ActionBar.OnNavigationLis
     private static final String Tag = "MainActivity";
     private DrawerLayout leftDrawerLayout;
     private ListView leftDrawerList;
+    public ActionBarDrawerToggle leftDrawerToggle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +71,23 @@ public class MainActivity extends PaperBase implements ActionBar.OnNavigationLis
     public void initDrawer() {
         Log.d(Tag, "initDrawer");
         leftDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        leftDrawerToggle = new ActionBarDrawerToggle(this, leftDrawerLayout, R.drawable.ic_navigation_drawer, R.string.drawer_open,
+                R.string.drawer_close) {
+//            here we do not need to recreate menu because that will triger refresh list many times
+            public void onDrawerClosed(View view) {
+//                super.onDrawerClosed(view);
+//                invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View view) {
+//                super.onDrawerOpened(view);
+//                invalidateOptionsMenu();
+            }
+        };
+
+        leftDrawerLayout.setDrawerListener(leftDrawerToggle);
+
         leftDrawerList = (ListView) findViewById(R.id.left_drawer);
         String[] subject_list = getResources().getStringArray(R.array.subject_list);
         ArrayAdapter<String> subject_list_adapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item, subject_list);
@@ -88,8 +104,10 @@ public class MainActivity extends PaperBase implements ActionBar.OnNavigationLis
 
     @Override
     public void onActionBarItemSelected(int position) {
-        Log.d(Tag, "onActionBarItemSelected");
-        refreshPapers();
+        if(position != 0){
+            refreshPapers();
+        }
+
     }
 
     /* The click listner for ListView in the navigation drawer */
@@ -102,7 +120,7 @@ public class MainActivity extends PaperBase implements ActionBar.OnNavigationLis
             refreshPapers();
         }
     }
-
+    //refresh list
     public void refreshPapers() {
         PaperListFragment paperListFragment = (PaperListFragment) getFragmentManager().findFragmentByTag("papersListFragment");
         paperListFragment.refreshPapers();
@@ -111,6 +129,38 @@ public class MainActivity extends PaperBase implements ActionBar.OnNavigationLis
         leftDrawerLayout.closeDrawers();
         Toast.makeText(this, "Refresh Papers",
                 Toast.LENGTH_SHORT).show();
+    }
+
+
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If the nav drawer is open, hide action items related to the content view
+        leftDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        boolean drawerOpen = leftDrawerLayout.isDrawerOpen(leftDrawerList);
+        menu.findItem(R.id.action_search).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (leftDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.d(getClass().getName(), "onConfigurationChanged");
+        leftDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        Log.d(getClass().getName(), "onPostCreate");
+        leftDrawerToggle.syncState();
     }
 }
 

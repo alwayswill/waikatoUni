@@ -110,11 +110,15 @@ public class ActionBarFragment extends Fragment implements OnItemSelectedListene
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Log.d(getClass().getName(), "onItemSelected");
-        Toast.makeText(getActivity(), "onItemSelected(" + position + ", " + id + ") = " + parent.getAdapter().getItem(position),
-                Toast.LENGTH_SHORT).show();
-        //refresh papers
-        mCallback.onActionBarItemSelected(position);
+        Log.v("actionbar selection", String.valueOf(parent));
+        if (position != 0){
+            Log.d(getClass().getName(), "onItemSelected");
+            Toast.makeText(getActivity(), "onItemSelected(" + position + ", " + id + ") = " + parent.getAdapter().getItem(position),
+                    Toast.LENGTH_SHORT).show();
+            //refresh papers
+            mCallback.onActionBarItemSelected(position);
+        }
+
 
     }
 
