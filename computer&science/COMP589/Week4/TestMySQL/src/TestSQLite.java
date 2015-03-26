@@ -1,10 +1,5 @@
-import java.sql.Connection;
+import java.sql.*;
 import java.util.Date;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.PreparedStatement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -12,7 +7,7 @@ import sun.rmi.runtime.Log;
 
 import com.mysql.jdbc.DatabaseMetaData;
 
-public class TestMySQL{
+public class TestSQLite{
 
     private Connection connect;
     public PreparedStatement stmt = null;
@@ -80,24 +75,24 @@ public class TestMySQL{
 
     private void testServer() throws Exception{
 //    	mysql
-        Class.forName("com.mysql.jdbc.Driver");
-        // Setup the connection with the DB
-        connect = DriverManager
-            .getConnection("jdbc:mysql://mysql.cms.waikato.ac.nz/sl255?"
-                           + "user=sl255&password=123123");
-    	
-    	
-//        Class.forName("org.sqlite.JDBC");
+//        Class.forName("com.mysql.jdbc.Driver");
 //        // Setup the connection with the DB
 //        connect = DriverManager
-//            .getConnection("jdbc:sqlite:/home/sl255/Sites/waikatoUni/computer&science/COMP589/Week4/SQLite/sl255.sqlite");
+//            .getConnection("jdbc:mysql://mysql.cms.waikato.ac.nz/sl255?"
+//                           + "user=sl255&password=123123");
+    	
+    	
+        Class.forName("org.sqlite.JDBC");
+        // Setup the connection with the DB
+        connect = DriverManager
+            .getConnection("jdbc:sqlite:/home/sl255/Sites/waikatoUni/computer&science/COMP589/Week4/SQLite/sl255.sqlite");
 
     }
 
     public static void main(String[] args){
         System.out.println("This is a test");
         try{
-            TestMySQL me = new TestMySQL();
+            TestSQLite me = new TestSQLite();
             me.testServer();
             me.testDatabase();
 
