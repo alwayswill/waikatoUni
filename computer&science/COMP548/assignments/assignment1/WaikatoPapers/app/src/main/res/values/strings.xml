@@ -11,4 +11,90 @@
     <string name="title_activity_papers_list">PapersListActivity</string>
     <string name="drawer_open">drawer_open</string>
     <string name="drawer_close">drawer_close</string>
+    <string name="title_activity_paper_details">PaperDetailsActivity</string>
+    <string name="paper_content_sample">15 Points\n
+                \n
+                This paper will consider the design and implementation of applications for mobile devices covering topics such as: mobile application software architectures; development platform options; design and evaluation of small-screen touch-based user interfaces; leveraging technologies such as global positioning, near-field communication and orientation/environmental sensing; mobile web applications. Practical work will use the Android platform and so the paper is best-suited to students with experience of Java programming.\n
+                \n
+                Pre Requisite Papers\n
+                60 points at 300 level in Computer Science\n
+                \n
+                Corresponding Papers\n
+                COMP448 Developing Mobile Applications\n
+                \n
+                Lecturers and Tutors\n
+                A Semester\n
+                \n
+                Lecturer(s)\n
+                \n
+                Associate Professor Steve Jones \n
+                Room: G.2.24\n
+                Phone: +64 7 838 4490\n
+                stevej@waikato.ac.nz\n
+                \n
+                Timetable\n
+                Official Timetable Information\n
+                \n
+                Compulsory Components\n
+                All items of assessment are compulsory.\n
+                \n
+                Workload\n
+                Approximately 8 hours per week.\n
+                \n
+                Required Reading\n
+                None\n
+                \n
+                Recommended Reading\n
+                Optional but a useful resource: a subscription to http://commonsware.com\n
+                \n
+                Means of Assessment\n
+                4 practical software development tasks.\n
+                \n
+                Assessment Ratio\n
+                Internal assessment/final examination ratio 1:0\n
+                \n
+                Assessment Components\n
+                There are 4 items of coursework. Each is worth one quarter of the final course grade. Submission dates are as follows:\n
+                \n
+                Coursework 1: Friday 27th March\n
+                Coursework 2: Friday 8th May\n
+                Coursework 3: Monday 8th June\n
+                Coursework 4: Wednesday 10th June\n
+                Coursework will be practically oriented and focus on design and implementation of a mobile application.\n
+                Hand in and Return of Assignments\n
+                Assignments will be submitted electronically via Moodle. Grades and feedback will be returned via Moodle.\n
+                \n
+                Attendance Policy\n
+                Class attendance is expected. The course notes provided are not comprehensive, additional material will be covered in class. You are responsible for all material covered in class.\n
+                \n
+                Lecture Outlines\n
+                See Moodle page.\n
+                \n
+                Changes in Response to Course Evaluations\n
+                Coursework 1 modified to place more emphasis on implementation rather than UI design.\n
+                \n
+                Academic Integrity\n
+                Follow this link for Academic Integrity information and this link for detailed explanation of How to prevent plagiarism in Computer Science assessment items.\n
+                \n
+                Performance Impairment\n
+                Follow this link for information on Performance Impairment.\n
+                \n
+                Student Concerns and Complaints\n
+                Follow this link for Student Concerns and Complaints information.\n
+                \n
+                Application for Extension\n
+                Follow this link for information on applying for an Extension.\n
+                \n
+                Review of Grade\n
+                Follow this link for information on applying for a Review of Grade.\n
+                \n
+                University Regulations\n
+                Your attention is drawn to the following regulations and policies, which are published in the University Calendar:\n
+                \n
+                Assessment Regulations 2005\n
+                Student Discipline Regulations 2008\n
+                Computer Systems Regulations 2005\n
+                Policy on the Use of Māori for Assessment\n
+                Ethical Conduct in Human Research and Related Activities Regulations 2008\n
+                Student Research Regulations 2008</string>
 </resources>

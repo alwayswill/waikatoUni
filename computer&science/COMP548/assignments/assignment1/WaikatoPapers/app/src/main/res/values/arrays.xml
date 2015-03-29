@@ -52,4 +52,11 @@
         <item>S Semester</item>
         <item>T Semester</item>
     </string-array>
+
+    <string-array name="paper_list">
+        <item>A Semester</item>
+        <item>B Semester</item>
+        <item>S Semester</item>
+        <item>T Semester</item>
+    </string-array>
 </resources>

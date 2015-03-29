@@ -31,13 +31,20 @@
 
         <!-- android:uiOptions="splitActionBarWhenNarrow" -->
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:name=".activities.MainActivity"
+            android:label="@string/app_name"
+
+            android:launchMode="singleTask" ><!--// if don't set this, backbutton will go back to another mainview and will call oncreate in mainview-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.DetailsActivityActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:label="@string/title_activity_paper_details" >
         </activity>
     </application>
 

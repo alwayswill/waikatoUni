@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    style="@style/activated"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dip" >
+
+    <ImageView
+        android:id="@+id/paper_thumbnail"
+        android:layout_width="60dip"
+        android:layout_height="48dip"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="8dip"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/paper_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/paper_thumbnail"
+        android:layout_toRightOf="@id/paper_thumbnail"
+        android:textStyle="bold"
+        android:typeface="sans" />
+
+    <TextView
+        android:id="@+id/paper_lecturer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/paper_title"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@id/paper_thumbnail" />
+
+</RelativeLayout>
+<!-- From: file:/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment1/WaikatoPapers/app/src/main/res/layout/paper_list_item.xml -->
