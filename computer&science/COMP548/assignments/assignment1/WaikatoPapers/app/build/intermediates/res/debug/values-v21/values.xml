@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- From: file:/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&science/COMP548/assignments/assignment1/WaikatoPapers/app/src/main/res/values-v21/styles.xml -->
+    <eat-comment/>
+    <style name="AppTheme" parent="android:Theme.Material.Light">
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark</item>
+        <item name="android:color">@color/primary_dark</item>
+        <!--<item name="android:primary">@color/accent</item>-->
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
+        <item name="android:divider">@color/divider</item>
+        <!--<item name="android:icon">@color/icons</item>-->
+    </style>
     <!-- From: file:/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&science/COMP548/assignments/assignment1/WaikatoPapers/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values-v21/values.xml -->
     <eat-comment/>
     <style name="Base.TextAppearance.AppCompat" parent="android:TextAppearance.Material"/>
