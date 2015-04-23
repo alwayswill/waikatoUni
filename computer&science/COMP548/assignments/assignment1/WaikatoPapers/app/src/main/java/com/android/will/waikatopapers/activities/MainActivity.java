@@ -118,7 +118,6 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         if(position != 0){
             refreshPapers();
         }
-
     }
 
     @Override

@@ -31,6 +31,7 @@
         <!-- android:uiOptions="splitActionBarWhenNarrow" -->
         <activity
             android:name="com.android.will.waikatopapers.activities.MainActivity"
+            android:configChanges="locale|orientation|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask" > <!-- // if don't set this, backbutton will go back to another mainview and will call oncreate in mainview -->
             <intent-filter>
