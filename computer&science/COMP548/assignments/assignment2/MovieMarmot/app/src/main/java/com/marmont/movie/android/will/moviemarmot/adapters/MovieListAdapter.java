@@ -41,7 +41,6 @@ public class MovieListAdapter extends ArrayAdapter<Movie> {
         ViewHolder holder;
         if (convertView == null) {
             convertView = layout_inflater.inflate(R.layout.movie_list_item, parent, false);
-
             holder = new ViewHolder();
             holder.thumbnail = (NetworkImageView) convertView.findViewById(R.id.movie_thumbnail);
             holder.title = (TextView) convertView.findViewById(R.id.movie_title);

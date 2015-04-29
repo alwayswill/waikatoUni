@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.util.Log;
@@ -66,15 +68,18 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
         fragment_manager = getFragmentManager();
         addNonUIFragments();
 
+        setUpShareIntent();
+        initActionBar();
+
         if (savedInstanceState != null) {
             selected_movie_position = savedInstanceState.getInt(SELECTED_FILTER_IDX);
+            getActionBar().setSelectedNavigationItem(selected_movie_position);
             Log.d(TAG, "onCreate() : retrieved selected filter position = " + selected_movie_position);
         }else{
             Log.d(TAG, "onCreate() is null");
         }
 
-        setUpShareIntent();
-        initActionBar();
+
     }
 
     private void addNonUIFragments() {
@@ -138,6 +143,7 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
         Log.d(TAG, "onNavigationItemSelected : " + itemPosition + ":"+itemId);
 
         movie_filter_changed = selected_movie_position != itemPosition;
+        SlidingPaneLayout sliding_layout = (SlidingPaneLayout) findViewById(R.id.sliding_layout);
 
         selected_movie_position = itemPosition;
         Log.v(TAG, "selected_movie_position:"+selected_movie_position+"--------itemPosition:"+itemPosition);
@@ -156,6 +162,12 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
                     .findFragmentByTag(Movie_DETAILS_FRAGMENT_TAG);
             if (movie_details_fragment != null) {
                 movie_details_fragment.clear();
+
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && sliding_layout.isOpen() == false){
+//                    Log.d(TAG, String.valueOf(sliding_layout.isOpen()));
+                    Log.d(TAG, "close slide");
+                    sliding_layout.openPane();
+                }
             }
         }
         return true;
@@ -253,6 +265,11 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
         } else {
             sliding_layout.openPane();
         }
+    }
+
+    public void RTHomepage(MenuItem item) {
+        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://www.rottentomatoes.com"));
+        startActivity(intent);
     }
 
 

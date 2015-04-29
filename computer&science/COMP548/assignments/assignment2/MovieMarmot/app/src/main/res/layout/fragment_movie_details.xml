@@ -26,6 +26,7 @@
         <RatingBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="?android:attr/ratingBarStyleSmall"
             android:id="@+id/movie_details_rating"
             android:layout_below="@+id/movie_details_mpaa_rating"
             android:isIndicator="true"

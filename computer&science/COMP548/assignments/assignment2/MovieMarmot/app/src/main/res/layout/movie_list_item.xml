@@ -10,7 +10,7 @@
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/movie_thumbnail"
         android:layout_width="60dip"
-        android:layout_height="48dip"
+        android:layout_height="60dip"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="8dip"
         android:contentDescription="@null"
@@ -18,27 +18,32 @@
 
     <TextView
         android:id="@+id/movie_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/movie_thumbnail"
         android:layout_toRightOf="@id/movie_thumbnail"
-        android:textStyle="bold"
-        android:typeface="sans" />
+        android:typeface="sans"
+        android:textStyle="bold" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/movie_mpaa_rating"
-        android:layout_below="@+id/movie_title"/>
+        android:layout_below="@+id/movie_title"
+        android:layout_toRightOf="@+id/movie_thumbnail"
+        android:layout_alignParentEnd="false" />
 
     <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/movie_rating"
         android:layout_below="@+id/movie_mpaa_rating"
+        android:layout_toRightOf="@+id/movie_thumbnail"
+        style="?android:attr/ratingBarStyleSmall"
+        android:id="@+id/movie_rating"
         android:isIndicator="true"
         android:numStars="5"
         android:stepSize="0.5"
-        android:clickable="false" />
+        android:clickable="false"
+        />
 
 </RelativeLayout>

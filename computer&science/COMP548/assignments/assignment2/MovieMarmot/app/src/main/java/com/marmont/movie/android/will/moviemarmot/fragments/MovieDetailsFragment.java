@@ -48,13 +48,16 @@ public class MovieDetailsFragment extends Fragment {
 
         title.setText("");
         ratingbar.setRating(0);
+        ratingbar.setVisibility(View.INVISIBLE);
         mpaaRating.setText("");
         summary.setText("");
     }
 
     // update UI with new property details
     public void update(Movie movie) {
-        Log.d(getClass().getName(), "setContent()");
+        Log.d(getClass().getName(), "update()");
+
+
 
         TextView title = (TextView) getView().findViewById(R.id.movie_details_title);
         RatingBar ratingbar = (RatingBar) getView().findViewById(R.id.movie_details_rating);
@@ -63,8 +66,10 @@ public class MovieDetailsFragment extends Fragment {
 
         title.setText(movie.getTitle());
         ratingbar.setRating(movie.getRating());
+        ratingbar.setVisibility(View.VISIBLE);
         mpaaRating.setText(movie.getMpaaRating());
-        summary.setText(movie.getSummary());
+        //debug
+        summary.setText(getString(R.string.fake_data_movie_summary));
     }
 
 }

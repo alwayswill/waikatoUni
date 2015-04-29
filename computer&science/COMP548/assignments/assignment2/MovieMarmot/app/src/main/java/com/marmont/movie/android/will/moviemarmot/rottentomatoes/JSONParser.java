@@ -45,7 +45,8 @@ public class JSONParser {
 		m.Title = movie.optString("Title");
 		m.PosterURL = movie.optString("PictureHref");
         m.MpaaRating = "G";
-        m.setRating(3.5f);
+        float randomRating = (float) ((Math.random()*10)/2+0.5);
+        m.setRating(randomRating);
 //        TODO movie all attributes
 		return m;
 	}
