@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- search has an additional UI component (View) that appears when clicked. Specify the type of component via actionViewClass -->
+
+    <item
+        android:id="@+id/action_RT_homepage"
+        android:showAsAction="collapseActionView|ifRoom"
+        android:onClick="DBSourceHomepage"
+        android:title="@string/action_RT_homepage"/>
+
+    <item
+        android:id="@+id/action_search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@android:drawable/ic_menu_search"
+        android:showAsAction="collapseActionView|ifRoom"
+        android:title="@string/action_bar_search"/>
+
+    <item
+        android:id="@+id/action_share"
+        android:actionProviderClass="android.widget.ShareActionProvider"
+        android:icon="@android:drawable/ic_menu_share"
+        android:showAsAction="never"
+        android:title="@string/action_bar_share"/>
+
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_settings" />
+
+    <item
+        android:id="@+id/action_legal_notices"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_legal_notices" />
+</menu>
+<!-- From: file:/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment2/MovieMarmot/app/src/main/res/menu/menu_main.xml -->

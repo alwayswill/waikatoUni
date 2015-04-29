@@ -53,7 +53,7 @@ public class MovieDetailsFragment extends Fragment {
         summary.setText("");
     }
 
-    // update UI with new property details
+
     public void update(Movie movie) {
         Log.d(getClass().getName(), "update()");
 
@@ -68,8 +68,7 @@ public class MovieDetailsFragment extends Fragment {
         ratingbar.setRating(movie.getRating());
         ratingbar.setVisibility(View.VISIBLE);
         mpaaRating.setText(movie.getMpaaRating());
-        //debug
-        summary.setText(getString(R.string.fake_data_movie_summary));
+        summary.setText(movie.getSummary());
     }
 
 }

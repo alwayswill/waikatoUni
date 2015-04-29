@@ -1,4 +1,4 @@
-package com.marmont.movie.android.will.moviemarmot.rottentomatoes;
+package com.marmont.movie.android.will.moviemarmot.myapifilms;
 
 /**
  * Paper      : COMP548-15A(HAM)
@@ -8,13 +8,6 @@ package com.marmont.movie.android.will.moviemarmot.rottentomatoes;
  * <p/>
  * Created by Shuzu Li on 22/04/15.
  */
-import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.util.Log;
 
 //public class JSONParser {
 //    private static final String	TAG	= "JSONParser";

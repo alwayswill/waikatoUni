@@ -1,4 +1,4 @@
-package com.marmont.movie.android.will.moviemarmot.rottentomatoes;
+package com.marmont.movie.android.will.moviemarmot.myapifilms;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -11,27 +11,21 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.marmont.movie.android.will.moviemarmot.interfaces.RTResponseListener;
 import com.marmont.movie.android.will.moviemarmot.utils.BitmapCache;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class RTClientFragment extends Fragment {
-	private static final String		TAG						= "TradeMeClientFragment";
+public class ClientFragment extends Fragment {
+	private static final String		TAG						= "ClientFragment";
 
-	public static final String		BASE_SEARCH_URL			= "https://api.tmsandbox.co.nz/v1/Search/Property/Residential.json?";
-	public static final String		BASE_LISTING_URL		= "https://api.tmsandbox.co.nz/v1/Listings/";
-	public static final String		OAUTH_CONSUMER_KEY		= "A159CE6D959861728BD0C8929011CF5C";
-	public static final String		OAUTH_CONSUMER_SECRET	= "3D84FA9E2AA160AD5203C54971A13CB2";
-	public static final String		OAUTH_ARGUMENTS			= "oauth_consumer_key=" + OAUTH_CONSUMER_KEY
-																	+ "&oauth_signature_method=PLAINTEXT&oauth_signature="
-																	+ OAUTH_CONSUMER_SECRET + "%26";
-
-	public static final String		REGION_TYPE				= "1";
-	public static final String		DISTRICT_TYPE			= "2";
-	public static final String		SUBURB_TYPE				= "3";
+    public static final String		BASE_URL			= "http://www.myapifilms.com/";
+	public static final String		BASE_SEARCH_URL			= "http://www.myapifilms.com/title";
+	public static final String		BASE_LISTING_URL		= "http://www.myapifilms.com/imdb/inTheaters";
 
 	// Volley queue, cache, image loader
 	private RequestQueue request_queue			= null;
@@ -41,7 +35,7 @@ public class RTClientFragment extends Fragment {
 	private RTResponseListener rt_response_listener;
 
 
-	public RTClientFragment() {
+	public ClientFragment() {
 	}
 
 	// ensure that the hosting activity implements the response listener interface
@@ -96,14 +90,17 @@ public class RTClientFragment extends Fragment {
 	}
 	
 
-	public void getMovieList(String suburb_id, String district_id, String region_id, String num_properties) {
-		final String request_url = BASE_SEARCH_URL + "region=" + region_id + "&district=" + district_id + "&suburb=" + suburb_id + "&rows="
-				+ num_properties + "&" + OAUTH_ARGUMENTS;
+	public void getMovieList() {
+		final String request_url = BASE_LISTING_URL;
+        Log.v("URL", "getMovieList");
         Log.v("URL", request_url);
-		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
-			public void onResponse(JSONObject json_object) {
+
+
+		JsonArrayRequest request = new JsonArrayRequest(Method.GET, request_url, null, new Listener<JSONArray>() {
+			public void onResponse(JSONArray json_array) {
 				Log.d(TAG, "onResponse");
-				rt_response_listener.onRTMovieListResponse(json_object);
+                Log.d(TAG, json_array.toString());
+				rt_response_listener.onRTMovieListResponse(json_array);
 			}
 		}, new ErrorListener() {
 			public void onErrorResponse(VolleyError error) {

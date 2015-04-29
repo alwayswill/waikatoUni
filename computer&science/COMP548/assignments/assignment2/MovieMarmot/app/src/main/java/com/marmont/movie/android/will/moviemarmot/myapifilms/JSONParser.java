@@ -1,4 +1,4 @@
-package com.marmont.movie.android.will.moviemarmot.rottentomatoes;
+package com.marmont.movie.android.will.moviemarmot.myapifilms;
 
 import android.util.Log;
 
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class JSONParser {
 	private static final String	TAG	= "JSONParser";
+    public static String filterTag = "In Theaters Now";
 
 	public static Movie parseMovieDetailsJSON(JSONObject property) {
 		Movie m = new Movie();
@@ -42,33 +43,42 @@ public class JSONParser {
 	public static Movie parseMovieJSON(JSONObject movie) {
 
         Movie m = new Movie();
-		m.Title = movie.optString("Title");
-		m.PosterURL = movie.optString("PictureHref");
-        m.MpaaRating = "G";
-        float randomRating = (float) ((Math.random()*10)/2+0.5);
-        m.setRating(randomRating);
+        m.setTitle(movie.optString("title"));
+        m.setPosterURL(movie.optString("urlPoster"));
+        m.setMpaaRating(movie.optString("rated"));
+        m.setSummary(movie.optString("plot"));
+        m.setRating((float) (movie.optDouble("rating")/2));
+        m.setId(movie.optString("idIMDB"));
 //        TODO movie all attributes
 		return m;
 	}
 
-	public static ArrayList<Movie> parseMovieListJSON(JSONObject json) {
+	public static ArrayList<Movie> parseMovieListJSON(JSONArray json) {
 		ArrayList<Movie> movies = new ArrayList<Movie>();
 
 		try {
-			Log.d(TAG, json.toString(2));
-			JSONArray movie_list = json.getJSONArray("List");
+			Log.d(TAG, json.toString());
+            for (int i =0; i<json.length(); i++ ){
+                String dataTag = String.valueOf(json.getJSONObject(i).get("date"));
+                if(dataTag.equalsIgnoreCase(filterTag)){
 
-			for (int i = 0; i < movie_list.length(); i++) {
+                    JSONArray movie_list = json.getJSONObject(i).getJSONArray("movies");
+                    for (int j = 0; j < movie_list.length(); j++) {
 
-				JSONObject movie = movie_list.getJSONObject(i);
+                        JSONObject movie = movie_list.getJSONObject(j);
 
-				movies.add(parseMovieJSON(movie));
-			}
+                        movies.add(parseMovieJSON(movie));
+                    }
+                }else{
+                    Log.d(TAG, filterTag);
+                }
+            }
 		} catch (JSONException e) {
 			Log.d(TAG, "JSONException");
 			e.printStackTrace();
-			return movies;
-		}
+		}catch (Exception se){
+            se.printStackTrace();
+        }
 		return movies;
 	}
 

@@ -4,8 +4,11 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SlidingPaneLayout;
@@ -25,9 +28,10 @@ import com.marmont.movie.android.will.moviemarmot.fragments.MovieListFragment;
 import com.marmont.movie.android.will.moviemarmot.interfaces.MovieSelectionListener;
 import com.marmont.movie.android.will.moviemarmot.interfaces.RTResponseListener;
 import com.marmont.movie.android.will.moviemarmot.model.Movie;
-import com.marmont.movie.android.will.moviemarmot.rottentomatoes.JSONParser;
-import com.marmont.movie.android.will.moviemarmot.rottentomatoes.RTClientFragment;
+import com.marmont.movie.android.will.moviemarmot.myapifilms.ClientFragment;
+import com.marmont.movie.android.will.moviemarmot.myapifilms.JSONParser;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -35,21 +39,21 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
 
     private static final String TAG = "MainActivity";
     private static final String Movie_DETAILS_FRAGMENT_TAG = "MovieDetailsFragment";
-    private static final String RT_CLIENT_FRAGMENT_TAG = "RTClientFragment";
+    private static final String RT_CLIENT_FRAGMENT_TAG = "ClientFragment";
     private static final String Movie_LIST_FRAGMENT_TAG = "MovieListFragment";
     private static final String SELECTED_FILTER_IDX = "SELECTED_FILTER_IDX";
     private static final int NO_SELECTION = -1;
 
-    // stores position of currently selected suburb from menu so that we can store/restore it on config change
+
     private int selected_movie_position = NO_SELECTION;
     private boolean movie_filter_changed = false;
 
 
     private ArrayAdapter<String> action_bar_nav_adapter;
     private FragmentManager fragment_manager;
-    private RTClientFragment rt_client_fragment;
+    private ClientFragment rt_client_fragment;
 
-    // we set these up but aren't using them (yet)
+
     private ShareActionProvider share_action_provider;
     private Intent share_intent;
     private MenuItem search_menu_item;
@@ -71,6 +75,10 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
         setUpShareIntent();
         initActionBar();
 
+        if(!isNetworkConnected()){
+            Toast.makeText(this, "Fail to connect to Internet.", Toast.LENGTH_SHORT).show();
+        }
+
         if (savedInstanceState != null) {
             selected_movie_position = savedInstanceState.getInt(SELECTED_FILTER_IDX);
             getActionBar().setSelectedNavigationItem(selected_movie_position);
@@ -79,18 +87,17 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
             Log.d(TAG, "onCreate() is null");
         }
 
-
     }
 
     private void addNonUIFragments() {
         Log.d(getClass().getName(), "addNonUIFragments()");
 
-        rt_client_fragment = (RTClientFragment) fragment_manager.findFragmentByTag(RT_CLIENT_FRAGMENT_TAG);
+        rt_client_fragment = (ClientFragment) fragment_manager.findFragmentByTag(RT_CLIENT_FRAGMENT_TAG);
 
         FragmentTransaction ft = fragment_manager.beginTransaction();
 
         if (rt_client_fragment == null) {
-            rt_client_fragment = new RTClientFragment();
+            rt_client_fragment = new ClientFragment();
             ft.add(rt_client_fragment, RT_CLIENT_FRAGMENT_TAG);
         }
 
@@ -124,11 +131,12 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
     }
 
     @Override
-    public void onRTMovieListResponse(JSONObject json_object) {
+    public void onRTMovieListResponse(JSONArray json_array) {
         Log.d(getClass().getName(), "onRTMovieListResponse()");
         MovieListFragment movie_list_fragment = (MovieListFragment) fragment_manager.findFragmentByTag(Movie_LIST_FRAGMENT_TAG);
         if (movie_list_fragment != null) {
-            movie_list_fragment.update(JSONParser.parseMovieListJSON(json_object), movie_filter_changed);
+
+            movie_list_fragment.update(JSONParser.parseMovieListJSON(json_array), movie_filter_changed);
         }
     }
 
@@ -150,7 +158,7 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
         String[] movie_filter_menu_ids = getResources().getStringArray(R.array.movie_filter_menu_ids);
         String filter_id = movie_filter_menu_ids[itemPosition];
 
-        rt_client_fragment.getMovieList(filter_id, "16", "14", "30");
+        rt_client_fragment.getMovieList();
 
         MovieListFragment movie_list_fragment = (MovieListFragment) fragment_manager.findFragmentByTag(Movie_LIST_FRAGMENT_TAG);
         if (movie_list_fragment != null) {
@@ -164,7 +172,6 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
                 movie_details_fragment.clear();
 
                 if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && sliding_layout.isOpen() == false){
-//                    Log.d(TAG, String.valueOf(sliding_layout.isOpen()));
                     Log.d(TAG, "close slide");
                     sliding_layout.openPane();
                 }
@@ -218,7 +225,7 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
     }
 
 
-    // make sure all pending network requests are cancelled when this activity stops
+
     @Override
     public void onStop() {
         Log.d(TAG, "onStop");
@@ -267,15 +274,12 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
         }
     }
 
-    public void RTHomepage(MenuItem item) {
+    public void DBSourceHomepage(MenuItem item) {
         Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://www.rottentomatoes.com"));
         startActivity(intent);
     }
 
 
-    /**
-     * This panel slide listener updates the action bar accordingly for each panel state.
-     */
     private class SliderListener extends SlidingPaneLayout.SimplePanelSlideListener {
         @Override
         public void onPanelOpened(View panel) {
@@ -288,5 +292,22 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
             getActionBar().setHomeButtonEnabled(true);
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    private boolean isNetworkConnected() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
     }
 }

@@ -12,7 +12,7 @@ import org.json.JSONObject;
  * Created by Shuzu Li on 22/04/15.
  */
 public class Movie {
-    public int Id;
+    public String Id;
     public String PosterURL;
     public String Title;
     public String MpaaRating;
@@ -24,7 +24,7 @@ public class Movie {
 
     }
 
-    public Movie(int id, String PosterURL, String title, String mpaaRating, float rating, String summary) {
+    public Movie(String id, String PosterURL, String title, String mpaaRating, float rating, String summary) {
         this.Id = id;
         this.PosterURL = PosterURL;
         this.Title = title;
@@ -33,11 +33,11 @@ public class Movie {
         this.Summary = summary;
     }
 
-    public int getId() {
+    public String getId() {
         return Id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         Id = id;
     }
 

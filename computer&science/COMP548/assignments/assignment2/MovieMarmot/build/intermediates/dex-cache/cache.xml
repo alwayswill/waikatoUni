@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment2/MovieMarmot/app/build/intermediates/exploded-aar/MovieMarmot/volley/unspecified/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a37fefd9104b84df68830928c0656f3f7ad0c9e3">
+        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment2/MovieMarmot/app/build/intermediates/pre-dexed/debug/classes-f750eda90482b90eda03f5438906cea6c7cc3579.jar" />
+    </item>
+    <item
+        jar="/Applications/android-sdk-macosx/extras/android/m2repository/com/android/support/support-v4/18.0.0/support-v4-18.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="44ec51e9d395a47aab135e5e1b556c0007442156">
+        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment2/MovieMarmot/app/build/intermediates/pre-dexed/debug/support-v4-18.0.0-f5bd42a4888d2067828e478c3ac9d9175725618a.jar" />
+    </item>
+
+</items>

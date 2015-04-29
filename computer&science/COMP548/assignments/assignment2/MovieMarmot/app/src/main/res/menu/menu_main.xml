@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_RT_homepage"
         android:showAsAction="collapseActionView|ifRoom"
-        android:onClick="RTHomepage"
+        android:onClick="DBSourceHomepage"
         android:title="@string/action_RT_homepage"/>
 
     <item
