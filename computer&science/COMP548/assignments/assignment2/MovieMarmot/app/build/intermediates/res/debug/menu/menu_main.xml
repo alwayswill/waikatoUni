@@ -3,17 +3,12 @@
     <!-- search has an additional UI component (View) that appears when clicked. Specify the type of component via actionViewClass -->
 
     <item
-        android:id="@+id/action_RT_homepage"
+        android:id="@+id/action_data_source_page"
         android:showAsAction="collapseActionView|ifRoom"
+        android:icon="@drawable/ic_action_data_source"
         android:onClick="DBSourceHomepage"
-        android:title="@string/action_RT_homepage"/>
+        android:title="@string/action_data_source_page"/>
 
-    <item
-        android:id="@+id/action_search"
-        android:actionViewClass="android.widget.SearchView"
-        android:icon="@android:drawable/ic_menu_search"
-        android:showAsAction="collapseActionView|ifRoom"
-        android:title="@string/action_bar_search"/>
 
     <item
         android:id="@+id/action_share"

@@ -24,6 +24,7 @@ import java.util.List;
  * <p/>
  * Created by Shuzu Li on 22/04/15.
  */
+
 public class MovieListAdapter extends ArrayAdapter<Movie> {
     private LayoutInflater layout_inflater;
     private ImageLoader image_loader = null;

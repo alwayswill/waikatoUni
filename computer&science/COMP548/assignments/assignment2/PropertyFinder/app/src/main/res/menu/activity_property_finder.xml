@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- represents the actions available in the action bar -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- search has an additional UI component (View) that appears when clicked. Specify the type of component via actionViewClass -->
+    <item
+        android:id="@+id/action_search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@android:drawable/ic_menu_search"
+        android:showAsAction="collapseActionView|ifRoom"
+        android:title="@string/action_bar_search"/>
+    <item
+        android:id="@+id/action_map"
+        android:icon="@android:drawable/ic_menu_mapmode"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_bar_map"/>
+    <!-- share has a popup menu of further actions that is automatically constructed. Specify how the entries are provided to the list via actionProviderClass -->
+    <item
+        android:id="@+id/action_share"
+        android:actionProviderClass="android.widget.ShareActionProvider"
+        android:icon="@android:drawable/ic_menu_share"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_bar_share"/>
+    <item
+        android:id="@+id/action_sort"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_bar_sort">
+        <!-- sub menus can be explicitly added -->
+        <menu>
+            <item
+                android:id="@+id/action_sort_price_asc"
+                android:icon="@drawable/ic_menu_price_asc"
+                android:title="@string/action_bar_sort_price_asc"/>
+            <item
+                android:id="@+id/action_sort_price_desc"
+                android:icon="@drawable/ic_menu_price_desc"
+                android:title="@string/action_bar_sort_price_desc"/>
+            <item
+                android:id="@+id/action_sort_alpha"
+                android:icon="@android:drawable/ic_menu_sort_alphabetically"
+                android:title="@string/action_bar_sort_alpha"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:showAsAction="never"
+        android:title="@string/action_bar_settings">
+    </item>
+    <item
+        android:id="@+id/action_legal"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_bar_legal"/>
+
+</menu>

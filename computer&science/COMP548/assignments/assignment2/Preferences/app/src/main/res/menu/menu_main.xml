@@ -1,0 +1,7 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    <item android:id="@+id/action_single_screen_settings" android:title="@string/action_single_screen_settings"
+        android:orderInCategory="100" android:showAsAction="ifRoom" />
+    <item android:id="@+id/action_multi_screen_settings" android:title="@string/action_multi_screen_settings"
+        android:orderInCategory="100" android:showAsAction="ifRoom" />
+</menu>

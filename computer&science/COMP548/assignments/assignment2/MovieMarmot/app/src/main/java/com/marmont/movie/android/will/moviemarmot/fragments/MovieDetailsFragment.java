@@ -45,12 +45,14 @@ public class MovieDetailsFragment extends Fragment {
         RatingBar ratingbar = (RatingBar) getView().findViewById(R.id.movie_details_rating);
         TextView mpaaRating = (TextView) getView().findViewById(R.id.movie_details_mpaa_rating);
         TextView summary = (TextView) getView().findViewById(R.id.movie_details_summary);
+        TextView dataSource = (TextView) getView().findViewById(R.id.movie_details_data_source);
 
         title.setText("");
         ratingbar.setRating(0);
         ratingbar.setVisibility(View.INVISIBLE);
         mpaaRating.setText("");
         summary.setText("");
+        dataSource.setVisibility(View.INVISIBLE);
     }
 
 
@@ -63,12 +65,14 @@ public class MovieDetailsFragment extends Fragment {
         RatingBar ratingbar = (RatingBar) getView().findViewById(R.id.movie_details_rating);
         TextView mpaaRating = (TextView) getView().findViewById(R.id.movie_details_mpaa_rating);
         TextView summary = (TextView) getView().findViewById(R.id.movie_details_summary);
+        TextView dataSource = (TextView) getView().findViewById(R.id.movie_details_data_source);
 
         title.setText(movie.getTitle());
         ratingbar.setRating(movie.getRating());
         ratingbar.setVisibility(View.VISIBLE);
         mpaaRating.setText(movie.getMpaaRating());
         summary.setText(movie.getSummary());
+        dataSource.setVisibility(View.VISIBLE);
     }
 
 }

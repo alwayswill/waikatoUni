@@ -3,18 +3,8 @@
     <!-- From: file:/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&science/COMP548/assignments/assignment2/MovieMarmot/app/src/main/res/values/arrays.xml -->
     <eat-comment/>
     <string-array name="movie_filter_menu">
-        <item>Box Office</item>
         <item>In Theatres</item>
         <item>Opening</item>
-    </string-array>
-    <string-array name="movie_filter_menu_ids">
-        <item>1241</item>
-        <item>1244</item>
-        <item>1186</item>
-        <item>1240</item>
-        <item>1380</item>
-        <item>1153</item>
-        <item>777</item>
     </string-array>
     <!-- From: file:/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&science/COMP548/assignments/assignment2/MovieMarmot/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
@@ -22,9 +12,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <!-- From: file:/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&science/COMP548/assignments/assignment2/MovieMarmot/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="action_RT_homepage">Rottentomatoes</string>
     <string name="action_bar_search">Search</string>
     <string name="action_bar_share">Share</string>
+    <string name="action_data_source_page">Rottentomatoes</string>
     <string name="action_legal_notices">Legal Notices</string>
     <string name="action_settings">Settings</string>
     <string name="app_name">MovieMarmot</string>

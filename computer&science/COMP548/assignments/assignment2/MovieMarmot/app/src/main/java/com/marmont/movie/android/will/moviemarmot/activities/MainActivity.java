@@ -17,16 +17,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.SearchView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.marmont.movie.android.will.moviemarmot.R;
 import com.marmont.movie.android.will.moviemarmot.fragments.MovieDetailsFragment;
 import com.marmont.movie.android.will.moviemarmot.fragments.MovieListFragment;
+import com.marmont.movie.android.will.moviemarmot.interfaces.MYFResponseListener;
 import com.marmont.movie.android.will.moviemarmot.interfaces.MovieSelectionListener;
-import com.marmont.movie.android.will.moviemarmot.interfaces.RTResponseListener;
 import com.marmont.movie.android.will.moviemarmot.model.Movie;
 import com.marmont.movie.android.will.moviemarmot.myapifilms.ClientFragment;
 import com.marmont.movie.android.will.moviemarmot.myapifilms.JSONParser;
@@ -35,7 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 
-public class MainActivity extends Activity implements RTResponseListener, MovieSelectionListener, ActionBar.OnNavigationListener {
+public class MainActivity extends Activity implements MYFResponseListener, MovieSelectionListener, ActionBar.OnNavigationListener {
 
     private static final String TAG = "MainActivity";
     private static final String Movie_DETAILS_FRAGMENT_TAG = "MovieDetailsFragment";
@@ -43,7 +43,7 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
     private static final String Movie_LIST_FRAGMENT_TAG = "MovieListFragment";
     private static final String SELECTED_FILTER_IDX = "SELECTED_FILTER_IDX";
     private static final int NO_SELECTION = -1;
-
+    public static final String DATA_SOURCE_URL = "http://www.myapifilms.com";
 
     private int selected_movie_position = NO_SELECTION;
     private boolean movie_filter_changed = false;
@@ -56,8 +56,7 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
 
     private ShareActionProvider share_action_provider;
     private Intent share_intent;
-    private MenuItem search_menu_item;
-    private SearchView search_view;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +74,7 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
         setUpShareIntent();
         initActionBar();
 
-        if(!isNetworkConnected()){
+        if (!isNetworkConnected()) {
             Toast.makeText(this, "Fail to connect to Internet.", Toast.LENGTH_SHORT).show();
         }
 
@@ -83,7 +82,7 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
             selected_movie_position = savedInstanceState.getInt(SELECTED_FILTER_IDX);
             getActionBar().setSelectedNavigationItem(selected_movie_position);
             Log.d(TAG, "onCreate() : retrieved selected filter position = " + selected_movie_position);
-        }else{
+        } else {
             Log.d(TAG, "onCreate() is null");
         }
 
@@ -131,13 +130,18 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
     }
 
     @Override
-    public void onRTMovieListResponse(JSONArray json_array) {
-        Log.d(getClass().getName(), "onRTMovieListResponse()");
+    public void onMYFMovieListResponse(JSONArray json_array) {
+        Log.d(getClass().getName(), "onMYFMovieListResponse()");
         MovieListFragment movie_list_fragment = (MovieListFragment) fragment_manager.findFragmentByTag(Movie_LIST_FRAGMENT_TAG);
         if (movie_list_fragment != null) {
 
             movie_list_fragment.update(JSONParser.parseMovieListJSON(json_array), movie_filter_changed);
         }
+    }
+
+    @Override
+    public void onMYFErrorResponse(VolleyError error) {
+        Toast.makeText(this, "Network Exception, Please try again.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -148,17 +152,21 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 
-        Log.d(TAG, "onNavigationItemSelected : " + itemPosition + ":"+itemId);
+        String movieType = ClientFragment.IN_THEATRES_MOVIES;
+
+        if (selected_movie_position != 0) {
+            movieType = ClientFragment.OPENING_MOVIES;
+        }
+
+        Log.d(TAG, "onNavigationItemSelected : " + itemPosition + ":" + itemId);
 
         movie_filter_changed = selected_movie_position != itemPosition;
         SlidingPaneLayout sliding_layout = (SlidingPaneLayout) findViewById(R.id.sliding_layout);
 
         selected_movie_position = itemPosition;
-        Log.v(TAG, "selected_movie_position:"+selected_movie_position+"--------itemPosition:"+itemPosition);
-        String[] movie_filter_menu_ids = getResources().getStringArray(R.array.movie_filter_menu_ids);
-        String filter_id = movie_filter_menu_ids[itemPosition];
+        Log.v(TAG, "selected_movie_position:" + selected_movie_position + "--------itemPosition:" + itemPosition);
 
-        rt_client_fragment.getMovieList();
+        rt_client_fragment.getMovieList(movieType);
 
         MovieListFragment movie_list_fragment = (MovieListFragment) fragment_manager.findFragmentByTag(Movie_LIST_FRAGMENT_TAG);
         if (movie_list_fragment != null) {
@@ -171,7 +179,7 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
             if (movie_details_fragment != null) {
                 movie_details_fragment.clear();
 
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && sliding_layout.isOpen() == false){
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && sliding_layout.isOpen() == false) {
                     Log.d(TAG, "close slide");
                     sliding_layout.openPane();
                 }
@@ -225,7 +233,6 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
     }
 
 
-
     @Override
     public void onStop() {
         Log.d(TAG, "onStop");
@@ -256,9 +263,6 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
         share_action_provider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
         share_action_provider.setShareIntent(share_intent);
 
-        search_menu_item = (MenuItem) menu.findItem(R.id.action_search);
-        search_view = (SearchView) search_menu_item.getActionView();
-
         return true;
     }
 
@@ -275,7 +279,7 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
     }
 
     public void DBSourceHomepage(MenuItem item) {
-        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://www.rottentomatoes.com"));
+        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(DATA_SOURCE_URL));
         startActivity(intent);
     }
 
@@ -294,6 +298,7 @@ public class MainActivity extends Activity implements RTResponseListener, MovieS
         }
     }
 
+    //    check network, if network including WIFI and mobile is not working, we are not able to download movies.
     private boolean isNetworkConnected() {
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;

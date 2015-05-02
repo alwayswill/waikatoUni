@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="movie_filter_menu">
-        <item>Box Office</item>
         <item>In Theatres</item>
         <item>Opening</item>
-    </string-array>
-
-    <string-array name="movie_filter_menu_ids">
-        <item>1241</item>
-        <item>1244</item>
-        <item>1186</item>
-        <item>1240</item>
-        <item>1380</item>
-        <item>1153</item>
-        <item>777</item>
     </string-array>
 </resources>
