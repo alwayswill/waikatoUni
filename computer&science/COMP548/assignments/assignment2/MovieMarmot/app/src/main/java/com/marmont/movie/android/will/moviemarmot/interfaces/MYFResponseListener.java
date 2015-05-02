@@ -5,9 +5,17 @@ import com.android.volley.VolleyError;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/*
+the listener for reponse from myapifilm.com api
+ */
 public interface MYFResponseListener {
-	public void onMYFMovieListResponse(JSONArray json_array);
-    public void onMYFErrorResponse(VolleyError error);
+    /*
+     * retrieve data from the response from api
+     */
+    public void onMYFMovieListResponse(JSONArray json_array);
 
-	public void onRTMovieDetailsResponse(JSONObject json_object);
+    /*
+     * handle errors, especially for timeout exception
+     */
+    public void onMYFErrorResponse(VolleyError error);
 }

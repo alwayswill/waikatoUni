@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -22,17 +21,18 @@ import java.util.List;
  * Name       : Shuzu Li
  * Email      : lishuzu@gmail.com
  * <p/>
- * Created by Shuzu Li on 22/04/15.
+ * Created by Shuzu Li on 02/05/15.
+ * adapter for the list of movies that retrieved from apis.
  */
 
 public class MovieListAdapter extends ArrayAdapter<Movie> {
-    private LayoutInflater layout_inflater;
-    private ImageLoader image_loader = null;
+    private LayoutInflater mLayoutInflater;
+    private ImageLoader mImageLoader = null;
 
-    public MovieListAdapter(Context context, int resource, int textViewResourceId, List<Movie> objects, ImageLoader image_loader) {
+    public MovieListAdapter(Context context, int resource, int textViewResourceId, List<Movie> objects, ImageLoader mImageLoader) {
         super(context, resource, textViewResourceId, objects);
-        layout_inflater = LayoutInflater.from(context);
-        this.image_loader = image_loader;
+        mLayoutInflater = LayoutInflater.from(context);
+        this.mImageLoader = mImageLoader;
     }
 
 
@@ -41,12 +41,12 @@ public class MovieListAdapter extends ArrayAdapter<Movie> {
 
         ViewHolder holder;
         if (convertView == null) {
-            convertView = layout_inflater.inflate(R.layout.movie_list_item, parent, false);
+            convertView = mLayoutInflater.inflate(R.layout.movie_list_item, parent, false);
             holder = new ViewHolder();
             holder.thumbnail = (NetworkImageView) convertView.findViewById(R.id.movie_thumbnail);
             holder.title = (TextView) convertView.findViewById(R.id.movie_title);
             holder.rating = (RatingBar) convertView.findViewById(R.id.movie_rating);
-            holder.mpaaRating =(TextView) convertView.findViewById(R.id.movie_mpaa_rating);
+            holder.mpaaRating = (TextView) convertView.findViewById(R.id.movie_mpaa_rating);
 
             convertView.setTag(holder);
         } else {
@@ -56,7 +56,7 @@ public class MovieListAdapter extends ArrayAdapter<Movie> {
         Movie movie = this.getItem(position);
 
         holder.title.setText(movie.getTitle());
-        holder.thumbnail.setImageUrl(movie.PosterURL, image_loader);
+        holder.thumbnail.setImageUrl(movie.posterURL, mImageLoader);
         holder.rating.setRating(movie.getRating());
         holder.mpaaRating.setText(movie.getMpaaRating());
 

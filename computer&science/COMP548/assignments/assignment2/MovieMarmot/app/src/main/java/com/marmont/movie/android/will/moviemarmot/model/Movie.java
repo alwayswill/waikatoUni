@@ -1,5 +1,8 @@
 package com.marmont.movie.android.will.moviemarmot.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,74 +14,73 @@ import org.json.JSONObject;
  * <p/>
  * Created by Shuzu Li on 22/04/15.
  */
-public class Movie {
-    public String Id;
-    public String PosterURL;
-    public String Title;
-    public String MpaaRating;
-    public float Rating;
-    public String Summary;
-    public String RTurl;
+public class Movie implements Parcelable {
+    public String id;
+    public String posterURL;
+    public String title;
+    public String mpaaRating;
+    public float rating;
+    public String summary;
 
     public Movie(){
 
     }
 
     public Movie(String id, String PosterURL, String title, String mpaaRating, float rating, String summary) {
-        this.Id = id;
-        this.PosterURL = PosterURL;
-        this.Title = title;
-        this.MpaaRating = mpaaRating;
-        this.Rating = rating;
-        this.Summary = summary;
+        this.id = id;
+        this.posterURL = PosterURL;
+        this.title = title;
+        this.mpaaRating = mpaaRating;
+        this.rating = rating;
+        this.summary = summary;
     }
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public void setId(String id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getPosterURL() {
-        return PosterURL;
+        return posterURL;
     }
 
     public void setPosterURL(String posterURL) {
-        PosterURL = posterURL;
+        this.posterURL = posterURL;
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        Title = title;
+        this.title = title;
     }
 
     public String getMpaaRating() {
-        return MpaaRating;
+        return mpaaRating;
     }
 
     public void setMpaaRating(String mpaaRating) {
-        MpaaRating = mpaaRating;
+        this.mpaaRating = mpaaRating;
     }
 
     public float getRating() {
-        return Rating;
+        return rating;
     }
 
     public void setRating(float rating) {
-        this.Rating = rating;
+        this.rating = rating;
     }
 
     public String getSummary() {
-        return Summary;
+        return summary;
     }
 
     public void setSummary(String summary) {
-        Summary = summary;
+        this.summary = summary;
     }
 
     public String toJSONString() {
@@ -88,7 +90,7 @@ public class Movie {
     public JSONObject toJSONObject() {
         JSONObject json = new JSONObject();
         try {
-            json.put("Title", Title.replace("&", "%26"));
+            json.put("title", title.replace("&", "%26"));
             return json;
         } catch (JSONException e) {
 
@@ -101,4 +103,36 @@ public class Movie {
         return 0;
     }
 
+    private Movie(Parcel in) {
+
+        this.id = in.readString();
+        this.posterURL = in.readString();
+        this.title = in.readString();
+        this.mpaaRating = in.readString();
+        this.rating = in.readFloat();
+        this.summary = in.readString();
+
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(id);
+        dest.writeString(posterURL);
+        dest.writeString(title);
+        dest.writeString(mpaaRating);
+        dest.writeFloat(rating);
+        dest.writeString(summary);
+    }
+
+    public static final Parcelable.Creator<Movie>	CREATOR	= new Parcelable.Creator<Movie>() {
+        public Movie createFromParcel(Parcel in) {
+            Movie m = new Movie(in);
+            return m;
+        }
+
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }

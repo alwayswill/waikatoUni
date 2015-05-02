@@ -14,7 +14,7 @@ import com.marmont.movie.android.will.moviemarmot.R;
 import com.marmont.movie.android.will.moviemarmot.model.Movie;
 
 /**
- * A simple {@link Fragment} subclass.
+ * fragment for show details of a movie.
  */
 public class MovieDetailsFragment extends Fragment {
 
@@ -35,9 +35,13 @@ public class MovieDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.clear();
     }
 
 
+    /**
+     * set all views in detail view to be invisible
+     */
     public void clear() {
         Log.d(getClass().getName(), "clear()");
 
@@ -55,11 +59,11 @@ public class MovieDetailsFragment extends Fragment {
         dataSource.setVisibility(View.INVISIBLE);
     }
 
-
+    /**
+     * update content of all elements of detail view of the movie
+     */
     public void update(Movie movie) {
         Log.d(getClass().getName(), "update()");
-
-
 
         TextView title = (TextView) getView().findViewById(R.id.movie_details_title);
         RatingBar ratingbar = (RatingBar) getView().findViewById(R.id.movie_details_rating);

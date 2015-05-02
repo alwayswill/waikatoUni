@@ -28,7 +28,6 @@
         android:uiOptions="splitActionBarWhenNarrow" >
         <activity
             android:name="com.marmont.movie.android.will.moviemarmot.activities.MainActivity"
-            android:configChanges="locale|orientation|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask" >
             <intent-filter>
@@ -39,4 +38,4 @@
         </activity>
     </application>
 
-</manifest> <!--  -->
+</manifest> <!-- android:configChanges="locale|orientation|screenSize" -->

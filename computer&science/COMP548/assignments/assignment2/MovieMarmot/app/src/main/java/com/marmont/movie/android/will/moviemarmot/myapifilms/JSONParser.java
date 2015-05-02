@@ -2,6 +2,7 @@ package com.marmont.movie.android.will.moviemarmot.myapifilms;
 
 import android.util.Log;
 
+import com.android.volley.TimeoutError;
 import com.marmont.movie.android.will.moviemarmot.model.Movie;
 
 import org.json.JSONArray;
@@ -10,35 +11,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/*
+ * class for parsing json from data of response from apis.
+ */
 public class JSONParser {
+
     private static final String TAG = "JSONParser";
 
-    public static Movie parseMovieDetailsJSON(JSONObject property) {
-        Movie m = new Movie();
-//		try {
-//			m.ListingID = property.optInt("ListingId");
-//			m.Body = property.optString("Body");
-//			ArrayList<Integer> photo_ids = new ArrayList<Integer>();
-//			ArrayList<String> photo_thumb_urls = new ArrayList<String>();
-//			ArrayList<String> photo_large_urls = new ArrayList<String>();
-//			JSONArray photos = property.getJSONArray("Photos");
-//			for (int j = 0; j < photos.length(); j++) {
-//				JSONObject photo = photos.getJSONObject(j);
-//				Integer key = photo.optInt("Key");
-//				JSONObject value = photo.getJSONObject("Value");
-//				String thumb_url = value.optString("Thumbnail");
-//				String large_url = value.optString("Large");
-//				m.photo_thumb_urls.add(thumb_url);
-//				m.photo_large_urls.add(large_url);
-//			}
-//
-//		} catch (JSONException e) {
-//			Log.d(TAG, "JSONException");
-//			e.printStackTrace();
-//		}
-        return m;
-    }
-
+    /*
+     * parse movie object from json data.
+     */
     public static Movie parseMovieJSON(JSONObject movie) {
 
         Movie m = new Movie();
@@ -48,10 +30,12 @@ public class JSONParser {
         m.setSummary(movie.optString("plot"));
         m.setRating((float) (movie.optDouble("rating") / 2));
         m.setId(movie.optString("idIMDB"));
-//        TODO movie all attributes
         return m;
     }
 
+    /*
+     * parse movies from data of apis.
+     */
     public static ArrayList<Movie> parseMovieListJSON(JSONArray json) {
         ArrayList<Movie> movies = new ArrayList<Movie>();
 

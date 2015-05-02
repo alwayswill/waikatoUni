@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.marmont.movie.android.will.moviemarmot.R;
@@ -32,30 +33,35 @@ import com.marmont.movie.android.will.moviemarmot.myapifilms.ClientFragment;
 import com.marmont.movie.android.will.moviemarmot.myapifilms.JSONParser;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
+import java.util.ArrayList;
 
+/*
+ * the initial activity when the app is launched
+ */
 public class MainActivity extends Activity implements MYFResponseListener, MovieSelectionListener, ActionBar.OnNavigationListener {
 
     private static final String TAG = "MainActivity";
-    private static final String Movie_DETAILS_FRAGMENT_TAG = "MovieDetailsFragment";
-    private static final String RT_CLIENT_FRAGMENT_TAG = "ClientFragment";
-    private static final String Movie_LIST_FRAGMENT_TAG = "MovieListFragment";
+    private static final String MOVIE_DETAILS_FRAGMENT_TAG = "MovieDetailsFragment";
+    private static final String CLIENT_FRAGMENT_TAG = "ClientFragment";
+    private static final String MOVIE_LIST_FRAGMENT_TAG = "MovieListFragment";
+    private static final String KEY_MOVIE_LIST = "MovieList";
+
     private static final String SELECTED_FILTER_IDX = "SELECTED_FILTER_IDX";
     private static final int NO_SELECTION = -1;
     public static final String DATA_SOURCE_URL = "http://www.myapifilms.com";
 
-    private int selected_movie_position = NO_SELECTION;
-    private boolean movie_filter_changed = false;
+    private int mSelectedMoviePosition = NO_SELECTION;
+    private boolean mMovieFilterChanged = false;
+
+    public ArrayList<Movie> retrievedMovies;
+    private ArrayAdapter<String> mActionBarNavAdapter;
+    private FragmentManager mFragmentManager;
+    private ClientFragment mClientFragment;
 
 
-    private ArrayAdapter<String> action_bar_nav_adapter;
-    private FragmentManager fragment_manager;
-    private ClientFragment rt_client_fragment;
-
-
-    private ShareActionProvider share_action_provider;
-    private Intent share_intent;
+    private ShareActionProvider mShareActionProvider;
+    private Intent mShareIntent;
 
 
     @Override
@@ -68,7 +74,7 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
         sliding_layout.setPanelSlideListener(new SliderListener());
         sliding_layout.openPane();
 
-        fragment_manager = getFragmentManager();
+        mFragmentManager = getFragmentManager();
         addNonUIFragments();
 
         setUpShareIntent();
@@ -79,37 +85,45 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
         }
 
         if (savedInstanceState != null) {
-            selected_movie_position = savedInstanceState.getInt(SELECTED_FILTER_IDX);
-            getActionBar().setSelectedNavigationItem(selected_movie_position);
-            Log.d(TAG, "onCreate() : retrieved selected filter position = " + selected_movie_position);
+            mSelectedMoviePosition = savedInstanceState.getInt(SELECTED_FILTER_IDX);
+            retrievedMovies = savedInstanceState.getParcelableArrayList(KEY_MOVIE_LIST);
+            getActionBar().setSelectedNavigationItem(mSelectedMoviePosition);
+            Log.d(TAG, "onCreate() : retrieved selected filter position = " + mSelectedMoviePosition);
         } else {
             Log.d(TAG, "onCreate() is null");
         }
 
     }
 
+    /**
+     * add client fragment into this view for requesting data
+     */
     private void addNonUIFragments() {
         Log.d(getClass().getName(), "addNonUIFragments()");
 
-        rt_client_fragment = (ClientFragment) fragment_manager.findFragmentByTag(RT_CLIENT_FRAGMENT_TAG);
+        mClientFragment = (ClientFragment) mFragmentManager.findFragmentByTag(CLIENT_FRAGMENT_TAG);
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
-        FragmentTransaction ft = fragment_manager.beginTransaction();
-
-        if (rt_client_fragment == null) {
-            rt_client_fragment = new ClientFragment();
-            ft.add(rt_client_fragment, RT_CLIENT_FRAGMENT_TAG);
+        if (mClientFragment == null) {
+            mClientFragment = new ClientFragment();
+            fragmentTransaction.add(mClientFragment, CLIENT_FRAGMENT_TAG);
         }
 
-        ft.commit();
-        fragment_manager.executePendingTransactions();
+        fragmentTransaction.commit();
+        mFragmentManager.executePendingTransactions();
     }
 
-
+    /**
+     * set up Share intent
+     */
     private void setUpShareIntent() {
-        share_intent = new Intent(Intent.ACTION_SEND);
-        share_intent.setType("*/*");
+        mShareIntent = new Intent(Intent.ACTION_SEND);
+        mShareIntent.setType("*/*");
     }
 
+    /**
+     * set up actionBar
+     */
     public void initActionBar() {
         Log.d(TAG, "initActionBar");
         ActionBar actionBar = getActionBar();
@@ -122,30 +136,30 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
 
         String[] movie_menu_list = getResources().getStringArray(R.array.movie_filter_menu);
 
-        action_bar_nav_adapter = new ArrayAdapter<String>(actionBar.getThemedContext(), android.R.layout.simple_list_item_1,
+        mActionBarNavAdapter = new ArrayAdapter<String>(actionBar.getThemedContext(), android.R.layout.simple_list_item_1,
                 android.R.id.text1);
-        action_bar_nav_adapter.addAll(movie_menu_list);
+        mActionBarNavAdapter.addAll(movie_menu_list);
 
-        actionBar.setListNavigationCallbacks(action_bar_nav_adapter, this);
+        actionBar.setListNavigationCallbacks(mActionBarNavAdapter, this);
     }
 
     @Override
     public void onMYFMovieListResponse(JSONArray json_array) {
         Log.d(getClass().getName(), "onMYFMovieListResponse()");
-        MovieListFragment movie_list_fragment = (MovieListFragment) fragment_manager.findFragmentByTag(Movie_LIST_FRAGMENT_TAG);
+        MovieListFragment movie_list_fragment = (MovieListFragment) mFragmentManager.findFragmentByTag(MOVIE_LIST_FRAGMENT_TAG);
         if (movie_list_fragment != null) {
-
-            movie_list_fragment.update(JSONParser.parseMovieListJSON(json_array), movie_filter_changed);
+            retrievedMovies = JSONParser.parseMovieListJSON(json_array);
+            movie_list_fragment.update(retrievedMovies, mMovieFilterChanged);
         }
     }
 
     @Override
     public void onMYFErrorResponse(VolleyError error) {
-        Toast.makeText(this, "Network Exception, Please try again.", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onRTMovieDetailsResponse(JSONObject json_object) {
+        if (error instanceof TimeoutError) {
+            Toast.makeText(this, "Request timeout, Please try again.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Network Exception, Please try again.", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -154,32 +168,38 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
 
         String movieType = ClientFragment.IN_THEATRES_MOVIES;
 
-        if (selected_movie_position != 0) {
+        if (itemPosition != 0) {
             movieType = ClientFragment.OPENING_MOVIES;
         }
 
         Log.d(TAG, "onNavigationItemSelected : " + itemPosition + ":" + itemId);
 
-        movie_filter_changed = selected_movie_position != itemPosition;
+        mMovieFilterChanged = mSelectedMoviePosition != itemPosition;
         SlidingPaneLayout sliding_layout = (SlidingPaneLayout) findViewById(R.id.sliding_layout);
 
-        selected_movie_position = itemPosition;
-        Log.v(TAG, "selected_movie_position:" + selected_movie_position + "--------itemPosition:" + itemPosition);
+        mSelectedMoviePosition = itemPosition;
+        Log.v(TAG, "mSelectedMoviePosition:" + mSelectedMoviePosition + "--------itemPosition:" + itemPosition);
 
-        rt_client_fragment.getMovieList(movieType);
-
-        MovieListFragment movie_list_fragment = (MovieListFragment) fragment_manager.findFragmentByTag(Movie_LIST_FRAGMENT_TAG);
+        MovieListFragment movie_list_fragment = (MovieListFragment) mFragmentManager.findFragmentByTag(MOVIE_LIST_FRAGMENT_TAG);
         if (movie_list_fragment != null) {
             movie_list_fragment.setIsLoading(true);
         }
 
-        if (movie_filter_changed) {
-            MovieDetailsFragment movie_details_fragment = (MovieDetailsFragment) fragment_manager
-                    .findFragmentByTag(Movie_DETAILS_FRAGMENT_TAG);
+        if (retrievedMovies != null && mMovieFilterChanged == false) {
+            Log.d(TAG, "update movies from storaged data");
+            movie_list_fragment.update(retrievedMovies, mMovieFilterChanged);
+        } else {
+            Log.d(TAG, "update movies from api");
+            mClientFragment.getMovieList(movieType);
+        }
+
+        if (mMovieFilterChanged) {
+            MovieDetailsFragment movie_details_fragment = (MovieDetailsFragment) mFragmentManager
+                    .findFragmentByTag(MOVIE_DETAILS_FRAGMENT_TAG);
             if (movie_details_fragment != null) {
                 movie_details_fragment.clear();
 
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && sliding_layout.isOpen() == false) {
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && !sliding_layout.isOpen()) {
                     Log.d(TAG, "close slide");
                     sliding_layout.openPane();
                 }
@@ -190,12 +210,11 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        MovieListFragment  movie_list_fragment = (MovieListFragment) fragment_manager.findFragmentByTag(Movie_LIST_FRAGMENT_TAG);
 
         switch (item.getItemId()) {
             case android.R.id.home:
                 SlidingPaneLayout sliding_layout = (SlidingPaneLayout) findViewById(R.id.sliding_layout);
-                if (sliding_layout.isOpen() == false) {
+                if (!sliding_layout.isOpen()) {
                     sliding_layout.openPane();
                 }
                 return true;
@@ -214,10 +233,10 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
     @Override
     public void onMovieSelected(Movie movie) {
 
-        Log.d(getClass().getName(), "onMovieSelected() : " + movie.Title);
+        Log.d(getClass().getName(), "onMovieSelected() : " + movie.title);
 
-        MovieDetailsFragment movie_details_fragment = (MovieDetailsFragment) fragment_manager
-                .findFragmentByTag(Movie_DETAILS_FRAGMENT_TAG);
+        MovieDetailsFragment movie_details_fragment = (MovieDetailsFragment) mFragmentManager
+                .findFragmentByTag(MOVIE_DETAILS_FRAGMENT_TAG);
         if (movie_details_fragment != null) {
             movie_details_fragment.update(movie);
         }
@@ -229,7 +248,7 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
 
 
     public ImageLoader getImageLoader() {
-        return rt_client_fragment.getImageLoader();
+        return mClientFragment.getImageLoader();
     }
 
 
@@ -237,8 +256,8 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
     public void onStop() {
         Log.d(TAG, "onStop");
         super.onStop();
-        if (rt_client_fragment != null) {
-            rt_client_fragment.cancelAllRequests();
+        if (mClientFragment != null) {
+            mClientFragment.cancelAllRequests();
         }
     }
 
@@ -247,6 +266,7 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
         Log.d(TAG, "onSaveInstanceState");
         int selected_filter_idx = getActionBar().getSelectedNavigationIndex();
         outState.putInt(SELECTED_FILTER_IDX, selected_filter_idx);
+        outState.putParcelableArrayList(KEY_MOVIE_LIST, retrievedMovies);
         super.onSaveInstanceState(outState);
 
         Log.d(TAG, "onSaveInstanceState() : stored selected filter position = " + selected_filter_idx);
@@ -259,9 +279,9 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        share_action_provider = (ShareActionProvider) menu.findItem(R.id.action_share).getActionProvider();
-        share_action_provider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
-        share_action_provider.setShareIntent(share_intent);
+        mShareActionProvider = (ShareActionProvider) menu.findItem(R.id.action_share).getActionProvider();
+        mShareActionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+        mShareActionProvider.setShareIntent(mShareIntent);
 
         return true;
     }
@@ -278,12 +298,17 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
         }
     }
 
+    /**
+     * click the brower icon to access homepage of website
+     */
     public void DBSourceHomepage(MenuItem item) {
         Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(DATA_SOURCE_URL));
         startActivity(intent);
     }
 
-
+    /**
+     * set listener for slide pane
+     */
     private class SliderListener extends SlidingPaneLayout.SimplePanelSlideListener {
         @Override
         public void onPanelOpened(View panel) {
@@ -298,7 +323,9 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
         }
     }
 
-    //    check network, if network including WIFI and mobile is not working, we are not able to download movies.
+    /**
+     * check network, if network including WIFI and mobile is not working, we are not able to download movies.
+     */
     private boolean isNetworkConnected() {
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
