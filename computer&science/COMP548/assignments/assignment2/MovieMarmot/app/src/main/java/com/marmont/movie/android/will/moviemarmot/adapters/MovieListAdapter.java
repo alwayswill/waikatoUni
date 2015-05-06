@@ -56,7 +56,7 @@ public class MovieListAdapter extends ArrayAdapter<Movie> {
         Movie movie = this.getItem(position);
 
         holder.title.setText(movie.getTitle());
-        holder.thumbnail.setImageUrl(movie.posterURL, mImageLoader);
+        holder.thumbnail.setImageUrl(movie.getPosterURL(), mImageLoader);
         holder.rating.setRating(movie.getRating());
         holder.mpaaRating.setText(movie.getMpaaRating());
 

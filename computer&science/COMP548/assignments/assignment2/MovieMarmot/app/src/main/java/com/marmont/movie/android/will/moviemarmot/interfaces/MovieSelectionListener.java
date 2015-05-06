@@ -10,5 +10,9 @@ public interface MovieSelectionListener {
     /*
      * the action when movie is selected
      */
-    public void onMovieSelected(Movie movie);
+    void onMovieSelected(Movie movie);
+    /*
+    * the method to clear all data in detail fragment.
+    * */
+    void clearDetailFragment();
 }

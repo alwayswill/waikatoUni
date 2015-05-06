@@ -49,7 +49,7 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
 
     private static final String SELECTED_FILTER_IDX = "SELECTED_FILTER_IDX";
     private static final int NO_SELECTION = -1;
-    public static final String DATA_SOURCE_URL = "http://www.myapifilms.com";
+    public static final String DATA_SOURCE_URL = "http://www.imdb.com";
 
     private int mSelectedMoviePosition = NO_SELECTION;
     private boolean mMovieFilterChanged = false;
@@ -65,7 +65,7 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -136,7 +136,7 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
 
         String[] movie_menu_list = getResources().getStringArray(R.array.movie_filter_menu);
 
-        mActionBarNavAdapter = new ArrayAdapter<String>(actionBar.getThemedContext(), android.R.layout.simple_list_item_1,
+        mActionBarNavAdapter = new ArrayAdapter<>(actionBar.getThemedContext(), android.R.layout.simple_list_item_1,
                 android.R.id.text1);
         mActionBarNavAdapter.addAll(movie_menu_list);
 
@@ -175,7 +175,6 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
         Log.d(TAG, "onNavigationItemSelected : " + itemPosition + ":" + itemId);
 
         mMovieFilterChanged = mSelectedMoviePosition != itemPosition;
-        SlidingPaneLayout sliding_layout = (SlidingPaneLayout) findViewById(R.id.sliding_layout);
 
         mSelectedMoviePosition = itemPosition;
         Log.v(TAG, "mSelectedMoviePosition:" + mSelectedMoviePosition + "--------itemPosition:" + itemPosition);
@@ -184,26 +183,20 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
         if (movie_list_fragment != null) {
             movie_list_fragment.setIsLoading(true);
         }
-
-        if (retrievedMovies != null && mMovieFilterChanged == false) {
+        //when device roated, it will reload data from storied data rather than api.
+        if (retrievedMovies != null && !mMovieFilterChanged) {
             Log.d(TAG, "update movies from storaged data");
-            movie_list_fragment.update(retrievedMovies, mMovieFilterChanged);
+            if (movie_list_fragment != null) {
+                movie_list_fragment.update(retrievedMovies, mMovieFilterChanged);
+            }
+
         } else {
             Log.d(TAG, "update movies from api");
             mClientFragment.getMovieList(movieType);
         }
 
         if (mMovieFilterChanged) {
-            MovieDetailsFragment movie_details_fragment = (MovieDetailsFragment) mFragmentManager
-                    .findFragmentByTag(MOVIE_DETAILS_FRAGMENT_TAG);
-            if (movie_details_fragment != null) {
-                movie_details_fragment.clear();
-
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && !sliding_layout.isOpen()) {
-                    Log.d(TAG, "close slide");
-                    sliding_layout.openPane();
-                }
-            }
+            clearDetailFragment();
         }
         return true;
     }
@@ -246,7 +239,24 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
 
     }
 
+    @Override
+    public void clearDetailFragment() {
+        SlidingPaneLayout sliding_layout = (SlidingPaneLayout) findViewById(R.id.sliding_layout);
+        MovieDetailsFragment movie_details_fragment = (MovieDetailsFragment) mFragmentManager
+                .findFragmentByTag(MOVIE_DETAILS_FRAGMENT_TAG);
+        if (movie_details_fragment != null) {
+            movie_details_fragment.clear();
 
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && !sliding_layout.isOpen()) {
+                Log.d(TAG, "close slide");
+                sliding_layout.openPane();
+            }
+        }
+    }
+
+    /*
+    * This is for images in the movie list by using ImageLoader of Volley.
+    * */
     public ImageLoader getImageLoader() {
         return mClientFragment.getImageLoader();
     }
@@ -302,7 +312,16 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
      * click the brower icon to access homepage of website
      */
     public void DBSourceHomepage(MenuItem item) {
-        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(DATA_SOURCE_URL));
+        String tagetUrl = DATA_SOURCE_URL;
+        Movie selected_movie = new Movie();
+        MovieListFragment movie_list_fragment = (MovieListFragment) mFragmentManager.findFragmentByTag(MOVIE_LIST_FRAGMENT_TAG);
+        if (movie_list_fragment != null) {
+            selected_movie = movie_list_fragment.getSelectedMovie();
+            if (selected_movie != null){
+                tagetUrl = selected_movie.getUrlIMDB();
+            }
+        }
+        Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(tagetUrl));
         startActivity(intent);
     }
 

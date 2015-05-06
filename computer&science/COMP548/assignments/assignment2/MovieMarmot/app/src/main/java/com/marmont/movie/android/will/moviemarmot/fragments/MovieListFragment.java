@@ -21,11 +21,13 @@ import java.util.ArrayList;
  */
 public class MovieListFragment extends ListFragment {
     private static final String TAG = "MovieListFragment";
+    private static final String KEY_SELECTED_MOVIE_ID = "sSelectedMovieId";
     private static final int NO_SELECTION = -1;
 
-    private ArrayList<Movie> mMovies = new ArrayList<Movie>();
+    private ArrayList<Movie> mMovies = new ArrayList<>();
     private MovieSelectionListener mMovieSelectionListener;
     private MovieListAdapter mMovieListAdapter;
+    private String mSelectedMovieId = "";
 
     private int selectedItemPosition = NO_SELECTION;
 
@@ -53,6 +55,7 @@ public class MovieListFragment extends ListFragment {
         if (savedInstanceState != null) {
             Log.d(TAG, "onActivityCreated() : getting selectedItemPosition from savedInstanceState");
             selectedItemPosition = savedInstanceState.getInt("selectedItemPosition");
+            mSelectedMovieId = savedInstanceState.getString(KEY_SELECTED_MOVIE_ID);
         }
     }
 
@@ -112,6 +115,27 @@ public class MovieListFragment extends ListFragment {
         mMovies.clear();
         mMovies.addAll(retrieved_movies);
         mMovieListAdapter.notifyDataSetChanged();
+        /*
+         * when device rotated during requesting with a selected item, It might choose wrong item or get a null pointer,
+         * because the selected item has changed. If we still try to set selection to original position, then we may get
+         * a null pointer because the item in that position may not exist.
+         *
+         * we use checking titles of two items to ensure the item we restored is the right one otherwise refresh the list and detail fragment.
+         */
+
+        if (filter_changed == false && selectedItemPosition != NO_SELECTION){
+            try {
+                Movie seletedMovie = mMovieListAdapter.getItem(selectedItemPosition);
+                if (seletedMovie == null || !mMovieListAdapter.getItem(selectedItemPosition).getId().equals(mSelectedMovieId)){
+                    filter_changed= true;
+                    mMovieSelectionListener.clearDetailFragment();
+                }
+            }catch (IndexOutOfBoundsException e){
+                filter_changed= true;
+                mMovieSelectionListener.clearDetailFragment();
+            }
+        }
+
 
         if (filter_changed) {
             getListView().setItemChecked(selectedItemPosition, false);
@@ -139,6 +163,12 @@ public class MovieListFragment extends ListFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt("selectedItemPosition", selectedItemPosition);
+        if (selectedItemPosition != NO_SELECTION){
+            outState.putString(KEY_SELECTED_MOVIE_ID, getSelectedMovie().getId());
+        }else{
+            outState.putString(KEY_SELECTED_MOVIE_ID, "");
+        }
+
         Log.d(TAG, "onSaveInstanceState() : selectedItemPosition = " + selectedItemPosition);
         super.onSaveInstanceState(outState);
     }

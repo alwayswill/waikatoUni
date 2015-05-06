@@ -125,7 +125,7 @@ public class ClientFragment extends Fragment {
             }
         });
 
-        int socketTimeout = 30000;//30 seconds
+        int socketTimeout = 20000;//20 seconds
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         request.setRetryPolicy(policy);
 

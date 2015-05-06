@@ -1,8 +1,6 @@
 package com.marmont.movie.android.will.moviemarmot.myapifilms;
 
 import android.util.Log;
-
-import com.android.volley.TimeoutError;
 import com.marmont.movie.android.will.moviemarmot.model.Movie;
 
 import org.json.JSONArray;
@@ -24,12 +22,14 @@ public class JSONParser {
     public static Movie parseMovieJSON(JSONObject movie) {
 
         Movie m = new Movie();
+        m.setId(movie.optString("idIMDB"));
         m.setTitle(movie.optString("title"));
         m.setPosterURL(movie.optString("urlPoster"));
         m.setMpaaRating(movie.optString("rated"));
         m.setSummary(movie.optString("plot"));
         m.setRating((float) (movie.optDouble("rating") / 2));
         m.setId(movie.optString("idIMDB"));
+        m.setUrlIMDB(movie.optString("urlIMDB"));
         return m;
     }
 
@@ -37,7 +37,7 @@ public class JSONParser {
      * parse movies from data of apis.
      */
     public static ArrayList<Movie> parseMovieListJSON(JSONArray json) {
-        ArrayList<Movie> movies = new ArrayList<Movie>();
+        ArrayList<Movie> movies = new ArrayList<>();
 
         try {
             for (int i = 0; i < json.length(); i++) {

@@ -3,16 +3,13 @@ package com.marmont.movie.android.will.moviemarmot.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 /**
  * Paper      : COMP548-15A(HAM)
  * Student ID : 125491
  * Name       : Shuzu Li
  * Email      : lishuzu@gmail.com
  * <p/>
- * Created by Shuzu Li on 22/04/15.
+ * Created by Shuzu Li on 02/05/15.
  */
 public class Movie implements Parcelable {
     public String id;
@@ -22,17 +19,18 @@ public class Movie implements Parcelable {
     public float rating;
     public String summary;
 
-    public Movie(){
-
+    public String getUrlIMDB() {
+        return urlIMDB;
     }
 
-    public Movie(String id, String PosterURL, String title, String mpaaRating, float rating, String summary) {
-        this.id = id;
-        this.posterURL = PosterURL;
-        this.title = title;
-        this.mpaaRating = mpaaRating;
-        this.rating = rating;
-        this.summary = summary;
+    public void setUrlIMDB(String urlIMDB) {
+        this.urlIMDB = urlIMDB;
+    }
+
+    public String urlIMDB;
+
+    public Movie(){
+
     }
 
     public String getId() {
@@ -83,22 +81,6 @@ public class Movie implements Parcelable {
         this.summary = summary;
     }
 
-    public String toJSONString() {
-        return toJSONObject().toString();
-    }
-
-    public JSONObject toJSONObject() {
-        JSONObject json = new JSONObject();
-        try {
-            json.put("title", title.replace("&", "%26"));
-            return json;
-        } catch (JSONException e) {
-
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public int describeContents() {
         return 0;
     }
@@ -111,6 +93,7 @@ public class Movie implements Parcelable {
         this.mpaaRating = in.readString();
         this.rating = in.readFloat();
         this.summary = in.readString();
+        this.urlIMDB = in.readString();
 
     }
 
@@ -123,12 +106,12 @@ public class Movie implements Parcelable {
         dest.writeString(mpaaRating);
         dest.writeFloat(rating);
         dest.writeString(summary);
+        dest.writeString(urlIMDB);
     }
 
     public static final Parcelable.Creator<Movie>	CREATOR	= new Parcelable.Creator<Movie>() {
         public Movie createFromParcel(Parcel in) {
-            Movie m = new Movie(in);
-            return m;
+            return new Movie(in);
         }
 
         public Movie[] newArray(int size) {
