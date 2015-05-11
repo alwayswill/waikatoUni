@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    style="@style/activated"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dip" >
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/movie_thumbnail"
+        android:layout_width="60dip"
+        android:layout_height="60dip"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="8dip"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/movie_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/movie_thumbnail"
+        android:layout_toRightOf="@id/movie_thumbnail"
+        android:typeface="sans"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/movie_mpaa_rating"
+        android:layout_below="@+id/movie_title"
+        android:layout_toRightOf="@+id/movie_thumbnail"
+        android:layout_alignParentEnd="false" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/movie_mpaa_rating"
+        android:layout_toRightOf="@+id/movie_thumbnail"
+        style="?android:attr/ratingBarStyleSmall"
+        android:id="@+id/movie_rating"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:stepSize="0.1"
+        android:clickable="false"
+        />
+
+</RelativeLayout>
+<!-- From: file:/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment2/MovieMarmot/app/src/main/res/layout/movie_list_item.xml -->

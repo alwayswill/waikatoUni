@@ -31,8 +31,9 @@
                 android:layout_below="@+id/movie_details_mpaa_rating"
                 android:isIndicator="true"
                 android:numStars="5"
-                android:stepSize="0.5"
+                android:stepSize="0.1"
                 android:clickable="false" />
+
 
             <TextView
                 android:id="@+id/movie_details_summary"

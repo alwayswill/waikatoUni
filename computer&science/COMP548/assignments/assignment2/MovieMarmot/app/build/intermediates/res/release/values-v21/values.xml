@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&science/COMP548/assignments/assignment2/MovieMarmot/app/src/main/res/values-v21/styles.xml -->
+    <eat-comment/>
+    <style name="AppTheme" parent="android:Theme.Material.Light">
+    </style>
+    <style name="activated" parent="android:Theme.Holo.Light">
+        <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
+    </style>
+</resources>
