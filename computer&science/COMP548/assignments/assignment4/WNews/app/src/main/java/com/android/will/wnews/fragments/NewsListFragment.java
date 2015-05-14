@@ -80,7 +80,7 @@ public class NewsListFragment extends ListFragment {
 			getListView().setItemChecked(selectedItemPosition, true);
 			getListView().setSelection(selectedItemPosition);
 			getListView().smoothScrollToPositionFromTop(selectedItemPosition, 200, 0);
-			mNewsSelectionListener.onNewsSelected(mNewsListAdapter.getItem(selectedItemPosition));
+//			mNewsSelectionListener.onNewsSelected(mNewsListAdapter.getItem(selectedItemPosition));
 		}
 	}
 
@@ -142,7 +142,7 @@ public class NewsListFragment extends ListFragment {
 			getListView().setItemChecked(selectedItemPosition, true);
 			getListView().setSelection(selectedItemPosition);
 			getListView().smoothScrollToPositionFromTop(selectedItemPosition, 200, 0);
-			mNewsSelectionListener.onNewsSelected(mNewsListAdapter.getItem(selectedItemPosition));
+//			mNewsSelectionListener.onNewsSelected(mNewsListAdapter.getItem(selectedItemPosition));
 		}
 	}
 

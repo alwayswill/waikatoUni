@@ -16,13 +16,6 @@
          android:layout_gravity="left" instead. -->
     <!-- The drawer is given a fixed width in dp and extends the full height of
          the container. -->
-    <!--<fragment-->
-        <!--android:id="@+id/news_list_fragment"-->
-        <!--android:name="com.android.will.wnews.fragments.NewsListFragment"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="left"-->
-        <!--android:tag="NewsListFragment" />-->
 
     <fragment android:id="@+id/navigation_drawer"
         android:layout_width="@dimen/navigation_drawer_width" android:layout_height="match_parent"

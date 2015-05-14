@@ -21,7 +21,7 @@ import org.json.JSONObject;
 public class ClientFragment extends Fragment {
 	private static final String		TAG						= "ClientFragment";
 
-	public static final String		BASE_URL			= "http://wnews.timepic.net/wnews/";
+	public static final String		BASE_URL			= "http://wnews.timepic.net/wnews/api/";
 	public static final String		API_KEY		= "hXVBQPSennzh46Xp";
 	public static final String		API_ARGUMENTS			= "key=" + API_KEY;
 
@@ -89,7 +89,7 @@ public class ClientFragment extends Fragment {
 	
 	// issue requests to trademe and return responses to the registered listener
 	public void getMovieList() {
-		final String request_url = BASE_URL+"api?"+API_ARGUMENTS;
+		final String request_url = BASE_URL+"newslist?"+API_ARGUMENTS;
 		Log.d(TAG, request_url);
 		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
 			public void onResponse(JSONObject json_object) {

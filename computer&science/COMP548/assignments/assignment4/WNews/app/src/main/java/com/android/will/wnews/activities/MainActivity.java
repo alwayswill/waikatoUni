@@ -138,9 +138,11 @@ public class MainActivity extends Activity implements NewsSelectionListener,ApiR
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            // Respond to the action bar's Up/Home button
         }
 
         return super.onOptionsItemSelected(item);
@@ -166,12 +168,27 @@ public class MainActivity extends Activity implements NewsSelectionListener,ApiR
 
     @Override
     public void onNewsSelected(News news) {
+        Log.d(TAG, "onNewsSelected() : " + news.title);
+
+        Intent intent= new Intent(this, NewsDetailActivity.class);
+        intent.putExtra(NewsDetailActivity.EXTRA_MESSAGE, news);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (mNavigationDrawerFragment.isDrawerOpen()){
+            mNavigationDrawerFragment.closeDrawer();
+        }else{
+            super.onBackPressed();
+        }
 
     }
 
     /*
-* This is for images in the movie list by using ImageLoader of Volley.
-* */
+    * This is for images in the movie list by using ImageLoader of Volley.
+    * */
     public ImageLoader getImageLoader() {
         return mClientFragment.getImageLoader();
     }
