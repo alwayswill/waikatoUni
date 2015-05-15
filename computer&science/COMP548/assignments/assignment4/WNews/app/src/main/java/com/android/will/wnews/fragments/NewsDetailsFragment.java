@@ -33,14 +33,14 @@ public class NewsDetailsFragment extends Fragment {
     }
 
     public static NewsDetailsFragment newInstance(News news) {
-        NewsDetailsFragment f = new NewsDetailsFragment();
+        NewsDetailsFragment newsDetailsFragment = new NewsDetailsFragment();
 
         // Supply index input as an argument.
         Bundle args = new Bundle();
         args.putParcelable(NEWS_DETAIL, news);
-        f.setArguments(args);
+        newsDetailsFragment.setArguments(args);
 
-        return f;
+        return newsDetailsFragment;
     }
 
     @Override

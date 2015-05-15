@@ -29,10 +29,10 @@ public final class R {
         public static final int drawer_layout=0x7f0a0000;
         public static final int movie_details_data_source=0x7f0a0007;
         public static final int navigation_drawer=0x7f0a0002;
+        public static final int news_detail_fragment=0x7f0a0003;
         public static final int news_details_content=0x7f0a0006;
         public static final int news_details_timestamp=0x7f0a0005;
         public static final int news_details_title=0x7f0a0004;
-        public static final int news_list_fragment=0x7f0a0003;
         public static final int news_thumbnail=0x7f0a0008;
         public static final int news_title=0x7f0a0009;
     }

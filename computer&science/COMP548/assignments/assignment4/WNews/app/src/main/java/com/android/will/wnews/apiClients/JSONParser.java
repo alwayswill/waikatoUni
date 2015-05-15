@@ -30,7 +30,6 @@ public class JSONParser {
 		ArrayList<News> newses = new ArrayList<News>();
 
 		try {
-			Log.d(TAG, json.toString(2));
 			JSONArray news_list = json.getJSONArray("datas");
 
 			for (int i = 0; i < news_list.length(); i++) {

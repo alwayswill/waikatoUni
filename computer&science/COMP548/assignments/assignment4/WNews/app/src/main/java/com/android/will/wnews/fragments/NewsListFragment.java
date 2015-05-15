@@ -20,6 +20,8 @@ public class NewsListFragment extends ListFragment {
 	private static final String TAG = "NewsListFragment";
 	private static final String KEY_SELECTED_NEWS_ID = "sSelectedMovieId";
 	private static final int NO_SELECTION = -1;
+	private static final String KEY_NEWS_LIST = "MovieList";
+
 
 	private ArrayList<News> mNews = new ArrayList<>();
 	private NewsSelectionListener mNewsSelectionListener;
@@ -49,17 +51,23 @@ public class NewsListFragment extends ListFragment {
 		Log.d(TAG, "onCreate()");
 		super.onCreate(savedInstanceState);
 
-		if (savedInstanceState != null) {
-			Log.d(TAG, "onActivityCreated() : getting selectedItemPosition from savedInstanceState");
-			selectedItemPosition = savedInstanceState.getInt("selectedItemPosition");
-			mSelectedNewsId = savedInstanceState.getInt(KEY_SELECTED_NEWS_ID);
-		}
+
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		Log.d(TAG, "onActivityCreated()");
+
 		super.onActivityCreated(savedInstanceState);
+		Log.d(TAG, "onActivityCreated() : getting selectedItemPosition from savedInstanceState");
+
+		if (savedInstanceState != null) {
+
+			selectedItemPosition = savedInstanceState.getInt("selectedItemPosition");
+			mSelectedNewsId = savedInstanceState.getInt(KEY_SELECTED_NEWS_ID);
+			mNews = savedInstanceState.getParcelableArrayList(KEY_NEWS_LIST);
+		}
+
+
 
 		mNewsListAdapter = new NewsListAdapter(getActivity(), R.layout.news_list_item, R.id.news_title, mNews, ((MainActivity) getActivity()).getImageLoader());
 
@@ -159,15 +167,18 @@ public class NewsListFragment extends ListFragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
 		outState.putInt("selectedItemPosition", selectedItemPosition);
+		outState.putParcelableArrayList(KEY_NEWS_LIST, mNews);
 		if (selectedItemPosition != NO_SELECTION){
 			outState.putInt(KEY_SELECTED_NEWS_ID, getSelectedNews().id);
 		}else{
 			outState.putInt(KEY_SELECTED_NEWS_ID, 0);
 		}
 
+
 		Log.d(TAG, "onSaveInstanceState() : selectedItemPosition = " + selectedItemPosition);
-		super.onSaveInstanceState(outState);
+
 	}
 
 

@@ -24,21 +24,21 @@ public class BitmapCache extends LruCache<String, Bitmap> implements ImageLoader
 	}
 
 	public Bitmap getBitmap(String url) {
-		Log.d("BitmapCache", "getBitmap : " + url);
+//		Log.d("BitmapCache", "getBitmap : " + url);
 		// url = url.substring(url.indexOf("http"));
 
 		Bitmap b = get(url);
 		if (b != null) {
-			Log.d("BitmapCache", "getBitmap : " + b.getWidth() + " x " + b.getHeight());
+//			Log.d("BitmapCache", "getBitmap : " + b.getWidth() + " x " + b.getHeight());
 		}
 		return get(url);
 	}
 
 	public void putBitmap(String url, Bitmap bitmap) {
-		Log.d("BitmapCache", "putBitmap : " + url);
+//		Log.d("BitmapCache", "putBitmap : " + url);
 		// url = url.substring(url.indexOf("http"));
 
-		Log.d("BitmapCache", "putBitmap : " + bitmap.getWidth() + " x " + bitmap.getHeight());
+//		Log.d("BitmapCache", "putBitmap : " + bitmap.getWidth() + " x " + bitmap.getHeight());
 		put(url, bitmap);
 	}
 }

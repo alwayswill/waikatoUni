@@ -88,8 +88,8 @@ public class ClientFragment extends Fragment {
 	}
 	
 	// issue requests to trademe and return responses to the registered listener
-	public void getMovieList() {
-		final String request_url = BASE_URL+"newslist?"+API_ARGUMENTS;
+	public void getNewsList(int category_id) {
+		final String request_url = BASE_URL+"newslist/category_id/"+category_id+"?"+API_ARGUMENTS;
 		Log.d(TAG, request_url);
 		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
 			public void onResponse(JSONObject json_object) {
@@ -98,7 +98,7 @@ public class ClientFragment extends Fragment {
 			}
 		}, new ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
-				Log.d(TAG, "getMovieList : onErrorResponse : " + error.getMessage());
+				Log.d(TAG, "getNewsList : onErrorResponse : " + error.getMessage());
 				error.printStackTrace();
 				trademe_response_listener.onNewsListResponse(null);
 			}

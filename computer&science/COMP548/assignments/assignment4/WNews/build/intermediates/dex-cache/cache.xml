@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
+        jar="/Applications/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
-        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/classes-3e993d0a1e181516bb1e566037cebbde76a3afb2.jar" />
+        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
+        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-bb460cd1147b2b176376e0b853dbdc5fd2cd3ddf.jar" />
     </item>
     <item
         jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
@@ -19,15 +19,15 @@
         jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/WNews/volley/unspecified/jars/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="ac94b343485f7c6bd60e29a14b41b7821ae28e3c">
+        sha1="cb27b7c43615d9b59f15bdb12bb98fb26519fe03">
         <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/classes-f46f16df1739f635b2e91f6d613604a7fe645b09.jar" />
     </item>
     <item
-        jar="/Applications/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
+        jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
-        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-bb460cd1147b2b176376e0b853dbdc5fd2cd3ddf.jar" />
+        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
+        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/classes-3e993d0a1e181516bb1e566037cebbde76a3afb2.jar" />
     </item>
 
 </items>

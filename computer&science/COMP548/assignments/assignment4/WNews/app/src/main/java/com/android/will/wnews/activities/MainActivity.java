@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,29 +29,29 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class MainActivity extends Activity implements NewsSelectionListener,ApiResponseListener, NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends Activity implements NewsSelectionListener, ApiResponseListener, NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    public static final String		TAG								= "MainActivity";
+    public static final String TAG = "MainActivity";
     public static final String CLIENT_FRAGMENT_TAG = "ClientFragment";
     public static final String NEWS_LIST_FRAGMENT_TAG = "NewsListFragment";
+    private static final String SELECTED_CATEOGRY_ID = "selectedCategoryId";
+    private static final String KEY_WAITING = "waitingStatus";
+    private static final int NO_SELECTION = -1;
 
+    private int mSelectedCategoryId = NO_SELECTION;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-
-    private static final int NO_SELECTION = -1;
-
-
-    private int mSelectedMoviePosition = NO_SELECTION;
-    private boolean mNewsListChanged = true;//debug
-
+    private boolean mNewsListChanged = false;//debug
+    private boolean mWaiting = false;
 
     // fragment manager and dynamic fragments
-    private FragmentManager			mFragmentManager;
+    private FragmentManager mFragmentManager;
     private ClientFragment mClientFragment;
     public ArrayList<News> retrievedNews;
+    public ProgressDialog ringProgressDialog;
     private CharSequence mTitle;
 
 
@@ -59,13 +60,22 @@ public class MainActivity extends Activity implements NewsSelectionListener,ApiR
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
 
         mFragmentManager = getFragmentManager();
         addNonUIFragments();
-//        set up list
-        mFragmentManager.beginTransaction()
-                .replace(R.id.container, new NewsListFragment(), NEWS_LIST_FRAGMENT_TAG).commit();
+
+
+        if (savedInstanceState != null) {
+            mSelectedCategoryId = savedInstanceState.getInt(SELECTED_CATEOGRY_ID);
+            mWaiting = savedInstanceState.getBoolean(KEY_WAITING);
+            Log.d(TAG, "onCreate() : retrieved mSelectedCategoryId = " + mSelectedCategoryId);
+
+            if(mWaiting){
+                showLoading();
+            }
+        }
 
         setContentView(R.layout.activity_main);
 
@@ -73,11 +83,11 @@ public class MainActivity extends Activity implements NewsSelectionListener,ApiR
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
 
     }
 
@@ -100,17 +110,34 @@ public class MainActivity extends Activity implements NewsSelectionListener,ApiR
     }
 
     @Override
-    public void onNavigationDrawerItemSelected(int position) {
+    public void onNavigationDrawerItemSelected(int position, boolean fromSavedInstanceState) {
 
-        mClientFragment = (ClientFragment) mFragmentManager.findFragmentByTag(CLIENT_FRAGMENT_TAG);
-        mClientFragment.getMovieList();
+        Log.d(TAG, "onNavigationDrawerItemSelected : mSelectedCategoryId"+mSelectedCategoryId+"||position:"+position);
+        mNewsListChanged = mSelectedCategoryId != position;
 
-        Log.d(TAG, "onNavigationDrawerItemSelected");
+        mSelectedCategoryId = position;
+
+        //when device roated, it will reload data from storied data rather than api.
+        if (mNewsListChanged) {
+          Log.d(TAG, "update news from api");
+            showLoading();
+            mClientFragment.getNewsList(position);
+        }
+
+        if(!fromSavedInstanceState){
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.container, new NewsListFragment(), NEWS_LIST_FRAGMENT_TAG).commit();
+        }
+
+//            mFragmentManager.executePendingTransactions();
+
+        Log.d(TAG, "onNavigationDrawerItemSelected : " + position);
 
 
     }
 
     public void restoreActionBar() {
+        Log.d(TAG, "restoreActionBar");
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
@@ -120,6 +147,7 @@ public class MainActivity extends Activity implements NewsSelectionListener,ApiR
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(TAG, "onCreateOptionsMenu");
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
@@ -133,6 +161,7 @@ public class MainActivity extends Activity implements NewsSelectionListener,ApiR
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected");
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -157,12 +186,13 @@ public class MainActivity extends Activity implements NewsSelectionListener,ApiR
             retrievedNews = JSONParser.parseNewsListJSON(json_object);
             newsListFragment.update(retrievedNews, mNewsListChanged);
         }
+        hideLoading();
     }
 
     @Override
     public void onNewsDetailsResponse(JSONObject json_object) {
 
-        Log.d(TAG, json_object.toString());
+        Log.d(TAG, "onNewsDetailsResponse");
     }
 
 
@@ -170,17 +200,17 @@ public class MainActivity extends Activity implements NewsSelectionListener,ApiR
     public void onNewsSelected(News news) {
         Log.d(TAG, "onNewsSelected() : " + news.title);
 
-        Intent intent= new Intent(this, NewsDetailActivity.class);
+        Intent intent = new Intent(this, NewsDetailActivity.class);
         intent.putExtra(NewsDetailActivity.EXTRA_MESSAGE, news);
         startActivity(intent);
     }
 
     @Override
     public void onBackPressed() {
-
-        if (mNavigationDrawerFragment.isDrawerOpen()){
+        Log.d(TAG, "onBackPressed");
+        if (mNavigationDrawerFragment.isDrawerOpen()) {
             mNavigationDrawerFragment.closeDrawer();
-        }else{
+        } else {
             super.onBackPressed();
         }
 
@@ -193,5 +223,39 @@ public class MainActivity extends Activity implements NewsSelectionListener,ApiR
         return mClientFragment.getImageLoader();
     }
 
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "onStop");
+        super.onStop();
+        if (mClientFragment != null) {
+            mClientFragment.cancelAllRequests();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState");
+        int selectedCategoryId = mNavigationDrawerFragment.mCurrentSelectedPosition;
+        outState.putInt(SELECTED_CATEOGRY_ID, selectedCategoryId);
+        outState.putBoolean(KEY_WAITING, mWaiting);
+        super.onSaveInstanceState(outState);
+
+        Log.d(TAG, "onSaveInstanceState() : stored selected category position = " + selectedCategoryId);
+    }
+
+    public void showLoading() {
+        Log.d(TAG, "showLoading");
+        mWaiting = true;
+        ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Downloading data ...", true);
+    }
+
+    public void hideLoading() {
+        Log.d(TAG, "hideLoading");
+        mWaiting = false;
+        if (ringProgressDialog != null && ringProgressDialog.isShowing()){
+            ringProgressDialog.dismiss();
+        }
+
+    }
 
 }

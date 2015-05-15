@@ -7,7 +7,7 @@
     tools:context="com.android.will.wnews.activities.NewsDetailActivity">
 
     <fragment
-    android:id="@+id/news_list_fragment"
+    android:id="@+id/news_detail_fragment"
     android:name="com.android.will.wnews.fragments.NewsDetailsFragment"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
