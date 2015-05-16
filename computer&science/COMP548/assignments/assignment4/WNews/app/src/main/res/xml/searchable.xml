@@ -1,0 +1,9 @@
+<searchable xmlns:android="http://schemas.android.com/apk/res/android"
+    android:hint="@string/search_hint"
+    android:imeOptions="flagNoFullscreen"
+    android:label="@string/search_lable"
+    android:searchSettingsDescription="@string/search_settings_description"
+    android:searchSuggestAuthority="com.android.will.wnews.providers.NewsSuggestionProvider"
+    android:searchSuggestSelection=" ? "
+    android:searchSuggestThreshold="1" />
+

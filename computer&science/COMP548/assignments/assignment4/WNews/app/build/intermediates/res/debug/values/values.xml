@@ -14,12 +14,16 @@
     <dimen name="navigation_drawer_width">240dp</dimen>
     <!-- From: file:/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&science/COMP548/assignments/assignment4/WNews/app/src/main/res/values/strings.xml -->
     <eat-comment/>
+    <string name="action_bar_search">Search</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
     <string name="app_name">WNews</string>
     <string name="hello_world">Hello world!</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="search_hint">Search for news</string>
+    <string name="search_lable">Search for news</string>
+    <string name="search_settings_description">Search for news</string>
     <string name="title_activity_news_detail">NewsDetailActivity</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>

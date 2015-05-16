@@ -5,10 +5,12 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request.Method;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -30,7 +32,8 @@ public class ClientFragment extends Fragment {
 	private ImageLoader				image_loader			= null;
 	private BitmapCache bitmap_cache			= null;
 
-	private ApiResponseListener trademe_response_listener;
+	private ApiResponseListener mApiResponseListener;
+	private int mSocketTimeout = 20000;//20 seconds
 
 
 	public ClientFragment() {
@@ -42,7 +45,7 @@ public class ClientFragment extends Fragment {
 		Log.d(TAG, "onAttach()");
 		super.onAttach(activity);
 		try {
-			trademe_response_listener = (ApiResponseListener) activity;
+			mApiResponseListener = (ApiResponseListener) activity;
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString() + " must implement TradeMeResponseListener");
 		}
@@ -62,7 +65,7 @@ public class ClientFragment extends Fragment {
 		image_loader = new ImageLoader(request_queue, bitmap_cache);
 
 		Log.i(TAG, "onCreate(Bundle) : "+getActivity().hashCode());
-		Log.i(TAG, "onCreate(Bundle) : "+getActivity().getApplicationContext().hashCode());
+		Log.i(TAG, "onCreate(Bundle) : " + getActivity().getApplicationContext().hashCode());
 		// keep state across config changes (we don't lose the queue and loader)
 		setRetainInstance(true);
 	}
@@ -93,18 +96,69 @@ public class ClientFragment extends Fragment {
 		Log.d(TAG, request_url);
 		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
 			public void onResponse(JSONObject json_object) {
-				Log.d(TAG, "onResponse");
-				trademe_response_listener.onNewsListResponse(json_object);
+				Log.d(TAG, "getNewsList.onResponse");
+				mApiResponseListener.onNewsListResponse(json_object);
 			}
 		}, new ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				Log.d(TAG, "getNewsList : onErrorResponse : " + error.getMessage());
 				error.printStackTrace();
-				trademe_response_listener.onNewsListResponse(null);
+				mApiResponseListener.onNewsListResponse(null);
 			}
 		});
 
 		request_queue.add(request);
 	}
+
+	// issue requests to trademe and return responses to the registered listener
+	public void searchNews(String keywords) {
+		final String request_url = BASE_URL+"search/keyword/"+keywords+"?"+API_ARGUMENTS;
+		Log.d(TAG, request_url);
+		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
+			public void onResponse(JSONObject json_object) {
+				Log.d(TAG, "searchNews.onResponse");
+				mApiResponseListener.onNewsListResponse(json_object);
+			}
+		}, new ErrorListener() {
+			public void onErrorResponse(VolleyError error) {
+				Log.d(TAG, "searchNews : onErrorResponse : " + error.getMessage());
+				error.printStackTrace();
+				mApiResponseListener.onNewsListResponse(null);
+				mApiResponseListener.onApiErrorResponse(error);
+			}
+		});
+
+
+		RetryPolicy policy = new DefaultRetryPolicy(mSocketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+		request.setRetryPolicy(policy);
+
+		request_queue.add(request);
+	}
+
+
+	// issue requests to trademe and return responses to the registered listener
+	public void userLogin(String username, String password) {
+		final String request_url = BASE_URL+"login/?username="+username+"&password="+password+"&"+API_ARGUMENTS;
+		Log.d(TAG, request_url);
+		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
+			public void onResponse(JSONObject json_object) {
+				Log.d(TAG, "userLogin.onResponse");
+				mApiResponseListener.onUserLoginResponse(json_object);
+			}
+		}, new ErrorListener() {
+			public void onErrorResponse(VolleyError error) {
+				Log.d(TAG, "searchNews : onErrorResponse : " + error.getMessage());
+				error.printStackTrace();
+				mApiResponseListener.onUserLoginResponse(null);
+				mApiResponseListener.onApiErrorResponse(error);
+			}
+		});
+
+		RetryPolicy policy = new DefaultRetryPolicy(mSocketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+		request.setRetryPolicy(policy);
+
+		request_queue.add(request);
+	}
+
 
 }
