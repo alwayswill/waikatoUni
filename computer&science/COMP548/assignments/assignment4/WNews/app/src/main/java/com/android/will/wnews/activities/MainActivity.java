@@ -11,6 +11,8 @@ import android.app.SearchableInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -33,21 +35,26 @@ import com.android.will.wnews.apiClients.ClientFragment;
 import com.android.will.wnews.apiClients.JSONParser;
 import com.android.will.wnews.fragments.NavigationDrawerFragment;
 import com.android.will.wnews.fragments.NewsListFragment;
+import com.android.will.wnews.fragments.UserLoginFragment;
 import com.android.will.wnews.interfaces.ApiResponseListener;
 import com.android.will.wnews.interfaces.NewsSelectionListener;
+import com.android.will.wnews.interfaces.UserLoginListener;
 import com.android.will.wnews.model.News;
+import com.android.will.wnews.model.User;
 import com.android.will.wnews.providers.NewsSuggestionProvider;
+import com.android.will.wnews.utils.UserSession;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends Activity implements NewsSelectionListener, ApiResponseListener, NavigationDrawerFragment.NavigationDrawerCallbacks, OnEditorActionListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener, View.OnFocusChangeListener{
+public class MainActivity extends Activity implements NewsSelectionListener, ApiResponseListener, NavigationDrawerFragment.NavigationDrawerCallbacks, OnEditorActionListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener, View.OnFocusChangeListener, UserLoginListener {
 
     public static final String TAG = "MainActivity";
     public static final String CLIENT_FRAGMENT_TAG = "ClientFragment";
     public static final String NEWS_LIST_FRAGMENT_TAG = "NewsListFragment";
+    public static final String USER_LOGIN_FRAGMENT_TAG = "UserLoginFragment";
     private static final String SELECTED_CATEOGRY_ID = "selectedCategoryId";
 
     private static final int NO_SELECTION = -1;
@@ -74,6 +81,7 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
     public ProgressDialog ringProgressDialog;
     private CharSequence mTitle;
     private MenuItem mSearchMenuItem;
+    private UserSession mUserSession;
 
     // holds action bar search widget text that we save/restore on configuration change
     private CharSequence mQueryText = "";
@@ -124,7 +132,12 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-//        mClientFragment.userLogin("shuzuli", "9162fa316df079ef770c95e05b708abb");
+        mUserSession = new UserSession(getApplicationContext());
+
+        if (!isNetworkConnected()) {
+            Toast.makeText(this, "Fail to connect to Internet.", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
@@ -161,7 +174,16 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
             mClientFragment.getNewsList(position);
         }
 
+
+
+        UserLoginFragment userLoginFragment = (UserLoginFragment) mFragmentManager.findFragmentByTag(USER_LOGIN_FRAGMENT_TAG);
+        if(userLoginFragment != null){
+            mFragmentManager.popBackStack();
+            mFragmentManager.beginTransaction().remove(userLoginFragment);
+        }
+
         if (!fromSavedInstanceState) {
+            Log.d(TAG, "replace newslist fragment");
             mFragmentManager.beginTransaction()
                     .replace(R.id.container, new NewsListFragment(), NEWS_LIST_FRAGMENT_TAG).commit();
         }
@@ -240,7 +262,11 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
                 onSearchRequested();
                 return true;
             case R.id.action_search:
+                return true;
+            case R.id.action_login:
 
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container, new UserLoginFragment(), USER_LOGIN_FRAGMENT_TAG).addToBackStack(null).commit();
                 return true;
             // Respond to the action bar's Up/Home button
         }
@@ -279,7 +305,16 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
 
     @Override
     public void onUserLoginResponse(JSONObject json_object) {
-        Log.d(TAG, "onUserLoginResponse:"+json_object.toString());
+        Log.d(TAG, "onUserLoginResponse");
+
+        UserLoginFragment userLoginFragment = (UserLoginFragment) mFragmentManager.findFragmentByTag(USER_LOGIN_FRAGMENT_TAG);
+        if (userLoginFragment != null) {
+            Log.d(TAG, "onUserLoginResponse:update");
+            User user = JSONParser.parseUserJSON(json_object);
+            userLoginFragment.update(user);
+        }
+        hideLoading();
+
     }
 
     @Override
@@ -361,14 +396,14 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
 
     }
 
-/*
-* User input
-* */
+    /*
+    * User input
+    * */
     @Override
     public boolean onQueryTextSubmit(String query) {
-        Log.d(TAG, "onQueryTextSubmit:"+query);
+        Log.d(TAG, "onQueryTextSubmit:" + query);
 //        record search query
-        NewsSuggestionProvider.getBridge(this) .saveRecentQuery(query, null);
+        NewsSuggestionProvider.getBridge(this).saveRecentQuery(query, null);
 
         mQueryText = query;
         showLoading();
@@ -393,20 +428,63 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        Log.d(TAG, "onEditorAction:event:"+event.toString());
+        Log.d(TAG, "onEditorAction:event:" + event.toString());
         if (event == null || event.getAction() == KeyEvent.ACTION_UP) {
 
-            InputMethodManager imm=
-                    (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm =
+                    (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
 
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
 
-        return(true);
+        return (true);
     }
 
     @Override
     public boolean onClose() {
         return true;
+    }
+
+    /**
+     * User
+     */
+
+    @Override
+    public void onAuthenticate(String username, String password) {
+        Log.d(TAG, "onAuthenticate");
+        showLoading();
+        mClientFragment.userLogin("shuzuli", "9162fa316df079ef770c95e05b708abb");
+    }
+
+    @Override
+    public void onLoginSuccessfully() {
+        UserLoginFragment userLoginFragment = (UserLoginFragment) mFragmentManager.findFragmentByTag(USER_LOGIN_FRAGMENT_TAG);
+        if(userLoginFragment != null){
+            mFragmentManager.popBackStack();
+            mFragmentManager.beginTransaction().remove(userLoginFragment);
+            Log.d(TAG, "user:"+mUserSession.getUserDetails().username);//debug
+        }
+
+    }
+
+
+    /**
+     * check network, if network including WIFI and mobile is not working, we are not able to download movies.
+     */
+    private boolean isNetworkConnected() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
     }
 }

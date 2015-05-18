@@ -107,6 +107,9 @@ public class ClientFragment extends Fragment {
 			}
 		});
 
+		RetryPolicy policy = new DefaultRetryPolicy(mSocketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+		request.setRetryPolicy(policy);
+
 		request_queue.add(request);
 	}
 
@@ -136,7 +139,7 @@ public class ClientFragment extends Fragment {
 	}
 
 
-	// issue requests to trademe and return responses to the registered listener
+	// Userlogin required onUserLoginListenser
 	public void userLogin(String username, String password) {
 		final String request_url = BASE_URL+"login/?username="+username+"&password="+password+"&"+API_ARGUMENTS;
 		Log.d(TAG, request_url);

@@ -17,5 +17,5 @@ public interface ApiResponseListener {
     /*
     * handle errors, especially for timeout exception
      */
-    void onApiErrorResponse(VolleyError error);
+    public void onApiErrorResponse(VolleyError error);
 }
