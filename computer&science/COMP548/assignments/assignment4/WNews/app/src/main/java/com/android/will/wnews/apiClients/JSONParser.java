@@ -57,8 +57,12 @@ public class JSONParser {
 			JSONObject userInfo = response.getJSONObject("userinfo");
 			int code = response.optInt("code");
 			if (code == 1){
+				user.id = userInfo.optInt("id");
 				user.username = userInfo.optString("username");
 				user.email = userInfo.optString("email");
+				user.notifications_new_message = userInfo.optBoolean("notifications_new_message");
+				user.notifications_new_message_vibrate = userInfo.optBoolean("notifications_new_message_vibrate");
+				user.notifications_new_message_ringtone = userInfo.optString("notifications_new_message_ringtone");
 			}else{
 				return user;
 			}

@@ -51,6 +51,10 @@
             android:name=".providers.NewsSuggestionProvider"
             android:authorities="com.android.will.wnews.providers.NewsSuggestionProvider" />
 
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest> <!-- android:parentActivityName=".activities.MainActivity" -->

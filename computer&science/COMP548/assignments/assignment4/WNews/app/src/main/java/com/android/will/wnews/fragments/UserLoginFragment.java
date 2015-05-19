@@ -3,28 +3,35 @@ package com.android.will.wnews.fragments;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.will.wnews.R;
 import com.android.will.wnews.interfaces.UserLoginListener;
 import com.android.will.wnews.model.User;
+import com.android.will.wnews.utils.Constants;
 import com.android.will.wnews.utils.UserSession;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserLoginFragment extends Fragment implements View.OnClickListener {
+public class UserLoginFragment extends Fragment implements TextView.OnEditorActionListener {
 
     private static final String TAG = "UserLoginFragment";
     public String mUsername;
@@ -50,6 +57,7 @@ public class UserLoginFragment extends Fragment implements View.OnClickListener 
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
+
 
         try {
             mUserLoginListener = (UserLoginListener) activity;
@@ -84,18 +92,13 @@ public class UserLoginFragment extends Fragment implements View.OnClickListener 
 
         mUsernameView = (EditText) getView().findViewById(R.id.user_login_username);
         mPasswordView = (EditText) getView().findViewById(R.id.user_login_password);
+        String username = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()).getString(Constants.KEY_USER_NAME, "");
+        mUsernameView.setText(username);
+        mPasswordView.setOnEditorActionListener(this);
 
-        Button loginButton = (Button) getView().findViewById(R.id.user_login_submit_button);
-        loginButton.setOnClickListener(this);
 
     }
 
-    @Override
-    public void onClick(View v) {
-        if(v.getId() == R.id.user_login_submit_button){
-            doLogin();
-        }
-    }
 
     private void doLogin() {
         Log.d(TAG, "doLogin");
@@ -114,12 +117,15 @@ public class UserLoginFragment extends Fragment implements View.OnClickListener 
 
     public void update(User user){
         Log.d(TAG, "update");
-        if (!user.equals(null)){
+        if (user.id != 0){
             mUserSession.createUserLoginSession(user);
 
             Toast.makeText(getActivity(),
                     "Login sucessfully",
                     Toast.LENGTH_LONG).show();
+
+            mUsernameView.clearFocus();
+            mPasswordView.clearFocus();
 
             mUserLoginListener.onLoginSuccessfully();
         }else{
@@ -127,6 +133,18 @@ public class UserLoginFragment extends Fragment implements View.OnClickListener 
                     "Username/Password is incorrect",
                     Toast.LENGTH_LONG).show();
         }
+
     }
 
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        Log.d(TAG, "onEditorAction");
+        boolean handled = false;
+        if (actionId == EditorInfo.IME_ACTION_GO){
+
+            doLogin();
+            handled = true;
+        }
+        return handled;
+    }
 }

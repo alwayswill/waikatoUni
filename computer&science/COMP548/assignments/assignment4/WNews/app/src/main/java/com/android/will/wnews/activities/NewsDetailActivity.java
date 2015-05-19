@@ -15,10 +15,10 @@ import android.view.View;
 import com.android.will.wnews.R;
 import com.android.will.wnews.fragments.NewsDetailsFragment;
 import com.android.will.wnews.model.News;
+import com.android.will.wnews.utils.Constants;
 
 public class NewsDetailActivity extends Activity {
     public static final String EXTRA_MESSAGE="selectedNews";
-    public static final String NEWS_DETAIL_FRAGMENT_TAG = "NewsDetailFragment";
     public News mSelectedNews;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class NewsDetailActivity extends Activity {
 
             getFragmentManager().beginTransaction()
                     .add(android.R.id.content,
-                            mNewsDetailsFragment, NEWS_DETAIL_FRAGMENT_TAG).commit();
+                            mNewsDetailsFragment, Constants.NEWS_DETAIL_FRAGMENT_TAG).commit();
         }
 
         ActionBar actionBar = getActionBar();

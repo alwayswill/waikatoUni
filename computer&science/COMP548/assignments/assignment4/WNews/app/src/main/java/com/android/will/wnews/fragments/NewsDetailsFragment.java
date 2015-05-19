@@ -7,17 +7,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.android.will.wnews.R;
 import com.android.will.wnews.model.News;
+import com.android.will.wnews.utils.Constants;
 
 /**
  * fragment for show details of a movie.
  */
 public class NewsDetailsFragment extends Fragment {
-    public static final String NEWS_DETAIL = "newsDetail";
+
     public News mNews;
 
 
@@ -35,9 +35,9 @@ public class NewsDetailsFragment extends Fragment {
     public static NewsDetailsFragment newInstance(News news) {
         NewsDetailsFragment newsDetailsFragment = new NewsDetailsFragment();
 
-        // Supply index input as an argument.
+
         Bundle args = new Bundle();
-        args.putParcelable(NEWS_DETAIL, news);
+        args.putParcelable(Constants.KEY_NEWS_DETAIL, news);
         newsDetailsFragment.setArguments(args);
 
         return newsDetailsFragment;
@@ -55,7 +55,7 @@ public class NewsDetailsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mNews = getArguments().getParcelable(NEWS_DETAIL);
+        mNews = getArguments().getParcelable(Constants.KEY_NEWS_DETAIL);
         title = (TextView) getView().findViewById(R.id.news_details_title);
         timestamp = (TextView) getView().findViewById(R.id.news_details_timestamp);
         content = (TextView) getView().findViewById(R.id.news_details_content);

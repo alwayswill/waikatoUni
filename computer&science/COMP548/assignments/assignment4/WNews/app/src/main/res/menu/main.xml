@@ -10,8 +10,13 @@
     <item
         android:id="@+id/action_login"
         android:icon="@android:drawable/ic_menu_gallery"
-        android:showAsAction="collapseActionView|ifRoom"
+        android:showAsAction="never"
         android:title="@string/action_user_login"/>
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" android:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_logout"
+        android:showAsAction="never"
+        android:title="@string/action_user_logout"/>
 </menu>

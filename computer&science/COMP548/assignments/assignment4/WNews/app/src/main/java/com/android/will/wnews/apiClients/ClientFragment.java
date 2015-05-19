@@ -16,16 +16,18 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.android.will.wnews.interfaces.ApiResponseListener;
+import com.android.will.wnews.model.User;
 import com.android.will.wnews.utils.BitmapCache;
+import com.android.will.wnews.utils.Constants;
+import com.android.will.wnews.utils.UserSession;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ClientFragment extends Fragment {
 	private static final String		TAG						= "ClientFragment";
 
-	public static final String		BASE_URL			= "http://wnews.timepic.net/wnews/api/";
-	public static final String		API_KEY		= "hXVBQPSennzh46Xp";
-	public static final String		API_ARGUMENTS			= "key=" + API_KEY;
 
 	// Volley queue, cache, image loader
 	private RequestQueue			request_queue			= null;
@@ -33,8 +35,7 @@ public class ClientFragment extends Fragment {
 	private BitmapCache bitmap_cache			= null;
 
 	private ApiResponseListener mApiResponseListener;
-	private int mSocketTimeout = 20000;//20 seconds
-
+	private RetryPolicy mPolicy;
 
 	public ClientFragment() {
 	}
@@ -64,6 +65,8 @@ public class ClientFragment extends Fragment {
 		bitmap_cache = new BitmapCache();
 		image_loader = new ImageLoader(request_queue, bitmap_cache);
 
+		mPolicy = new DefaultRetryPolicy(Constants.REQUEST_SOCKET_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+
 		Log.i(TAG, "onCreate(Bundle) : "+getActivity().hashCode());
 		Log.i(TAG, "onCreate(Bundle) : " + getActivity().getApplicationContext().hashCode());
 		// keep state across config changes (we don't lose the queue and loader)
@@ -92,7 +95,7 @@ public class ClientFragment extends Fragment {
 	
 	// issue requests to trademe and return responses to the registered listener
 	public void getNewsList(int category_id) {
-		final String request_url = BASE_URL+"newslist/category_id/"+category_id+"?"+API_ARGUMENTS;
+		final String request_url = String.format(Constants.API_NEWS_LIST, category_id);
 		Log.d(TAG, request_url);
 		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
 			public void onResponse(JSONObject json_object) {
@@ -107,15 +110,13 @@ public class ClientFragment extends Fragment {
 			}
 		});
 
-		RetryPolicy policy = new DefaultRetryPolicy(mSocketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-		request.setRetryPolicy(policy);
-
+		request.setRetryPolicy(mPolicy);
 		request_queue.add(request);
 	}
 
 	// issue requests to trademe and return responses to the registered listener
 	public void searchNews(String keywords) {
-		final String request_url = BASE_URL+"search/keyword/"+keywords+"?"+API_ARGUMENTS;
+		final String request_url = String.format(Constants.API_NEWS_SEARCH, keywords);
 		Log.d(TAG, request_url);
 		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
 			public void onResponse(JSONObject json_object) {
@@ -132,16 +133,14 @@ public class ClientFragment extends Fragment {
 		});
 
 
-		RetryPolicy policy = new DefaultRetryPolicy(mSocketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-		request.setRetryPolicy(policy);
-
+		request.setRetryPolicy(mPolicy);
 		request_queue.add(request);
 	}
 
 
 	// Userlogin required onUserLoginListenser
 	public void userLogin(String username, String password) {
-		final String request_url = BASE_URL+"login/?username="+username+"&password="+password+"&"+API_ARGUMENTS;
+		final String request_url = String.format(Constants.API_USER_LOGIN, username, password);
 		Log.d(TAG, request_url);
 		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
 			public void onResponse(JSONObject json_object) {
@@ -150,18 +149,49 @@ public class ClientFragment extends Fragment {
 			}
 		}, new ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
-				Log.d(TAG, "searchNews : onErrorResponse : " + error.getMessage());
+				Log.d(TAG, "userLogin : onErrorResponse : " + error.getMessage());
 				error.printStackTrace();
 				mApiResponseListener.onUserLoginResponse(null);
 				mApiResponseListener.onApiErrorResponse(error);
 			}
 		});
 
-		RetryPolicy policy = new DefaultRetryPolicy(mSocketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-		request.setRetryPolicy(policy);
-
+		request.setRetryPolicy(mPolicy);
 		request_queue.add(request);
 	}
 
+
+	// Userlogin required onUserLoginListenser
+	public void syncSettings() {
+		UserSession mUserSession = new UserSession(getActivity().getApplicationContext());
+		User user = mUserSession.getUserDetails();
+		JSONObject settings = new JSONObject();
+		try {
+			settings.put("email", user.email);
+			settings.put("notifications_new_message", user.notifications_new_message);
+			settings.put("notifications_new_message_ringtone", user.notifications_new_message_ringtone);
+			settings.put("notifications_new_message_vibrate", user.notifications_new_message_vibrate);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		final String request_url = String.format(Constants.API_USER_SYNC_SETTINGS, user.id, settings.toString());
+		Log.d(TAG, request_url);
+		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
+			public void onResponse(JSONObject json_object) {
+				Log.d(TAG, "syncSettings.onResponse");
+//				not need response here
+			}
+		}, new ErrorListener() {
+			public void onErrorResponse(VolleyError error) {
+				Log.d(TAG, "syncSettings : onErrorResponse : " + error.getMessage());
+				error.printStackTrace();
+				mApiResponseListener.onApiErrorResponse(error);
+			}
+		});
+
+		request.setRetryPolicy(mPolicy);
+		request_queue.add(request);
+	}
 
 }

@@ -12,15 +12,13 @@ import com.android.will.wnews.activities.MainActivity;
 import com.android.will.wnews.adapters.NewsListAdapter;
 import com.android.will.wnews.interfaces.NewsSelectionListener;
 import com.android.will.wnews.model.News;
+import com.android.will.wnews.utils.Constants;
 
 
 import java.util.ArrayList;
 
 public class NewsListFragment extends ListFragment {
 	private static final String TAG = "NewsListFragment";
-	private static final String KEY_SELECTED_NEWS_ID = "sSelectedMovieId";
-	private static final int NO_SELECTION = -1;
-	private static final String KEY_NEWS_LIST = "MovieList";
 
 
 	private ArrayList<News> mNews = new ArrayList<>();
@@ -28,7 +26,7 @@ public class NewsListFragment extends ListFragment {
 	private NewsListAdapter mNewsListAdapter;
 	private int mSelectedNewsId = 0;
 
-	private int selectedItemPosition = NO_SELECTION;
+	private int selectedItemPosition = Constants.NO_SELECTION;
 
 
 	public NewsListFragment() {
@@ -63,8 +61,8 @@ public class NewsListFragment extends ListFragment {
 		if (savedInstanceState != null) {
 
 			selectedItemPosition = savedInstanceState.getInt("selectedItemPosition");
-			mSelectedNewsId = savedInstanceState.getInt(KEY_SELECTED_NEWS_ID);
-			mNews = savedInstanceState.getParcelableArrayList(KEY_NEWS_LIST);
+			mSelectedNewsId = savedInstanceState.getInt(Constants.KEY_SELECTED_NEWS_ID);
+			mNews = savedInstanceState.getParcelableArrayList(Constants.KEY_NEWS_LIST);
 		}
 
 
@@ -84,7 +82,7 @@ public class NewsListFragment extends ListFragment {
 
 		setIsLoading(false);
 
-		if (mNewsListAdapter.getCount() > 0 && selectedItemPosition != NO_SELECTION) {
+		if (mNewsListAdapter.getCount() > 0 && selectedItemPosition != Constants.NO_SELECTION) {
 			getListView().setItemChecked(selectedItemPosition, true);
 			getListView().setSelection(selectedItemPosition);
 			getListView().smoothScrollToPositionFromTop(selectedItemPosition, 200, 0);
@@ -128,7 +126,7 @@ public class NewsListFragment extends ListFragment {
          * we use checking titles of two items to ensure the item we restored is the right one otherwise refresh the list and detail fragment.
          */
 
-		if (filter_changed == false && selectedItemPosition != NO_SELECTION){
+		if (filter_changed == false && selectedItemPosition != Constants.NO_SELECTION){
 			try {
 				News seletedMovie = mNewsListAdapter.getItem(selectedItemPosition);
 				if (seletedMovie == null || !mNewsListAdapter.getItem(selectedItemPosition).id.equals(mSelectedNewsId)){
@@ -144,9 +142,9 @@ public class NewsListFragment extends ListFragment {
 
 		if (filter_changed) {
 			getListView().setItemChecked(selectedItemPosition, false);
-			selectedItemPosition = NO_SELECTION;
+			selectedItemPosition = Constants.NO_SELECTION;
 			getListView().setSelection(0);
-		} else if (mNewsListAdapter.getCount() > 0 && selectedItemPosition != NO_SELECTION) {
+		} else if (mNewsListAdapter.getCount() > 0 && selectedItemPosition != Constants.NO_SELECTION) {
 			getListView().setItemChecked(selectedItemPosition, true);
 			getListView().setSelection(selectedItemPosition);
 			getListView().smoothScrollToPositionFromTop(selectedItemPosition, 200, 0);
@@ -158,7 +156,7 @@ public class NewsListFragment extends ListFragment {
      * Return the currently selected movie
      */
 	public News getSelectedNews() {
-		if (mNewsListAdapter.getCount() > 0 && selectedItemPosition != NO_SELECTION) {
+		if (mNewsListAdapter.getCount() > 0 && selectedItemPosition != Constants.NO_SELECTION) {
 			return mNewsListAdapter.getItem(selectedItemPosition);
 		} else {
 			return null;
@@ -169,11 +167,11 @@ public class NewsListFragment extends ListFragment {
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt("selectedItemPosition", selectedItemPosition);
-		outState.putParcelableArrayList(KEY_NEWS_LIST, mNews);
-		if (selectedItemPosition != NO_SELECTION){
-			outState.putInt(KEY_SELECTED_NEWS_ID, getSelectedNews().id);
+		outState.putParcelableArrayList(Constants.KEY_NEWS_LIST, mNews);
+		if (selectedItemPosition != Constants.NO_SELECTION){
+			outState.putInt(Constants.KEY_SELECTED_NEWS_ID, getSelectedNews().id);
 		}else{
-			outState.putInt(KEY_SELECTED_NEWS_ID, 0);
+			outState.putInt(Constants.KEY_SELECTED_NEWS_ID, 0);
 		}
 
 

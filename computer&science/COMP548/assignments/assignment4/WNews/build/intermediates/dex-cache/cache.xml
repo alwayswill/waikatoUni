@@ -16,18 +16,18 @@
         <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-78b70aa94c7f6edb3adfd39488d2a97863a86f2e.jar" />
     </item>
     <item
-        jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/WNews/volley/unspecified/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="cb27b7c43615d9b59f15bdb12bb98fb26519fe03">
-        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/classes-f46f16df1739f635b2e91f6d613604a7fe645b09.jar" />
-    </item>
-    <item
         jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
         <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/classes-3e993d0a1e181516bb1e566037cebbde76a3afb2.jar" />
+    </item>
+    <item
+        jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/WNews/volley/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="11ae1fa91b3aa30a4a3b09de6830ba6aab4c1281">
+        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/classes-f46f16df1739f635b2e91f6d613604a7fe645b09.jar" />
     </item>
 
 </items>

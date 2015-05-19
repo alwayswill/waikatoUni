@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -42,6 +43,8 @@ import com.android.will.wnews.interfaces.UserLoginListener;
 import com.android.will.wnews.model.News;
 import com.android.will.wnews.model.User;
 import com.android.will.wnews.providers.NewsSuggestionProvider;
+import com.android.will.wnews.utils.CommonHelper;
+import com.android.will.wnews.utils.Constants;
 import com.android.will.wnews.utils.UserSession;
 
 import org.json.JSONObject;
@@ -52,19 +55,8 @@ import java.util.ArrayList;
 public class MainActivity extends Activity implements NewsSelectionListener, ApiResponseListener, NavigationDrawerFragment.NavigationDrawerCallbacks, OnEditorActionListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener, View.OnFocusChangeListener, UserLoginListener {
 
     public static final String TAG = "MainActivity";
-    public static final String CLIENT_FRAGMENT_TAG = "ClientFragment";
-    public static final String NEWS_LIST_FRAGMENT_TAG = "NewsListFragment";
-    public static final String USER_LOGIN_FRAGMENT_TAG = "UserLoginFragment";
-    private static final String SELECTED_CATEOGRY_ID = "selectedCategoryId";
 
-    private static final int NO_SELECTION = -1;
-
-    private int mSelectedCategoryId = NO_SELECTION;
-
-    private static final String KEY_WAITING = "waitingStatus";
-    private static final String KEY_SEARCH_VIEW_TEXT = "keySearchViewText";
-    private static final String KEY_SEARCH_VIEW_EXPANDED = "keySearchViewExpanded";
-
+    private int mSelectedCategoryId = Constants.NO_SELECTION;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -102,23 +94,21 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
 
 
         if (savedInstanceState != null) {
-            mSelectedCategoryId = savedInstanceState.getInt(SELECTED_CATEOGRY_ID);
-            mWaiting = savedInstanceState.getBoolean(KEY_WAITING);
+            mSelectedCategoryId = savedInstanceState.getInt(Constants.SELECTED_CATEGORY_ID);
+            mWaiting = savedInstanceState.getBoolean(Constants.KEY_WAITING);
             Log.d(TAG, "onCreate() : retrieved mSelectedCategoryId = " + mSelectedCategoryId);
 
-            if (savedInstanceState.containsKey(KEY_SEARCH_VIEW_TEXT)) {
-                mQueryText = savedInstanceState.getCharSequence(KEY_SEARCH_VIEW_TEXT);
+            if (savedInstanceState.containsKey(Constants.KEY_SEARCH_VIEW_TEXT)) {
+                mQueryText = savedInstanceState.getCharSequence(Constants.KEY_SEARCH_VIEW_TEXT);
             }
 
-            if (savedInstanceState.containsKey(KEY_SEARCH_VIEW_EXPANDED)) {
-                mSearchViewExpanded = savedInstanceState.getBoolean(KEY_SEARCH_VIEW_EXPANDED);
+            if (savedInstanceState.containsKey(Constants.KEY_SEARCH_VIEW_EXPANDED)) {
+                mSearchViewExpanded = savedInstanceState.getBoolean(Constants.KEY_SEARCH_VIEW_EXPANDED);
             }
 
             if (mWaiting) {
                 showLoading();
             }
-
-
         }
 
         setContentView(R.layout.activity_main);
@@ -138,6 +128,8 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
             Toast.makeText(this, "Fail to connect to Internet.", Toast.LENGTH_SHORT).show();
         }
 
+
+
     }
 
 
@@ -147,12 +139,12 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
     private void addNonUIFragments() {
         Log.d(getClass().getName(), "addNonUIFragments()");
 
-        mClientFragment = (ClientFragment) mFragmentManager.findFragmentByTag(CLIENT_FRAGMENT_TAG);
+        mClientFragment = (ClientFragment) mFragmentManager.findFragmentByTag(Constants.CLIENT_FRAGMENT_TAG);
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
         if (mClientFragment == null) {
             mClientFragment = new ClientFragment();
-            fragmentTransaction.add(mClientFragment, CLIENT_FRAGMENT_TAG);
+            fragmentTransaction.add(mClientFragment, Constants.CLIENT_FRAGMENT_TAG);
         }
 
         fragmentTransaction.commit();
@@ -166,18 +158,22 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
         mNewsListChanged = mSelectedCategoryId != position;
 
         mSelectedCategoryId = position;
-
+        Log.d(TAG, "mNewsListChanged:"+mNewsListChanged);
         //when device roated, it will reload data from storied data rather than api.
         if (mNewsListChanged) {
             Log.d(TAG, "update news from api");
             showLoading();
+            UserSession userSession = new UserSession(getApplicationContext());
+//            sync preferences if user login
+            if(userSession.isUserLoggedIn()){
+                mClientFragment.syncSettings();
+            }
             mClientFragment.getNewsList(position);
         }
 
 
-
-        UserLoginFragment userLoginFragment = (UserLoginFragment) mFragmentManager.findFragmentByTag(USER_LOGIN_FRAGMENT_TAG);
-        if(userLoginFragment != null){
+        UserLoginFragment userLoginFragment = (UserLoginFragment) mFragmentManager.findFragmentByTag(Constants.USER_LOGIN_FRAGMENT_TAG);
+        if (userLoginFragment != null) {
             mFragmentManager.popBackStack();
             mFragmentManager.beginTransaction().remove(userLoginFragment);
         }
@@ -185,7 +181,7 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
         if (!fromSavedInstanceState) {
             Log.d(TAG, "replace newslist fragment");
             mFragmentManager.beginTransaction()
-                    .replace(R.id.container, new NewsListFragment(), NEWS_LIST_FRAGMENT_TAG).commit();
+                    .replace(R.id.container, new NewsListFragment(), Constants.NEWS_LIST_FRAGMENT_TAG).commit();
         }
 
 //            mFragmentManager.executePendingTransactions();
@@ -216,6 +212,16 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
             getMenuInflater().inflate(R.menu.main, menu);
             configureSearchView(menu);
             restoreActionBar();
+
+            //check action bar depending on login status
+            if(mUserSession.isUserLoggedIn()){
+                MenuItem item = menu.findItem(R.id.action_login);
+                item.setVisible(false);
+            }else{
+                MenuItem item = menu.findItem(R.id.action_logout);
+                item.setVisible(false);
+            }
+            invalidateOptionsMenu();
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -259,14 +265,23 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
 
         switch (item.getItemId()) {
             case R.id.action_settings:
-                onSearchRequested();
+                startActivity(new Intent(this, SettingsActivity.class));
+
                 return true;
             case R.id.action_search:
+//                onSearchRequested();
                 return true;
+
+            case R.id.action_logout:
+                UserSession userSession = new UserSession(getApplicationContext());
+                userSession.logoutUser();
+                Toast.makeText(this, "Logout seccessfully", Toast.LENGTH_SHORT).show();
+                return true;
+
             case R.id.action_login:
 
                 mFragmentManager.beginTransaction()
-                        .replace(R.id.container, new UserLoginFragment(), USER_LOGIN_FRAGMENT_TAG).addToBackStack(null).commit();
+                        .replace(R.id.container, new UserLoginFragment(), Constants.USER_LOGIN_FRAGMENT_TAG).addToBackStack(null).commit();
                 return true;
             // Respond to the action bar's Up/Home button
         }
@@ -278,7 +293,7 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
     @Override
     public void onNewsListResponse(JSONObject json_object) {
         Log.d(getClass().getName(), "onNewsListResponse()");
-        NewsListFragment newsListFragment = (NewsListFragment) mFragmentManager.findFragmentByTag(NEWS_LIST_FRAGMENT_TAG);
+        NewsListFragment newsListFragment = (NewsListFragment) mFragmentManager.findFragmentByTag(Constants.NEWS_LIST_FRAGMENT_TAG);
         if (newsListFragment != null) {
             retrievedNews = JSONParser.parseNewsListJSON(json_object);
             newsListFragment.update(retrievedNews, mNewsListChanged);
@@ -289,7 +304,7 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
     @Override
     public void onNewsSearchListResponse(JSONObject json_object) {
         Log.d(getClass().getName(), "onNewsSearchListResponse()");
-        NewsListFragment newsListFragment = (NewsListFragment) mFragmentManager.findFragmentByTag(NEWS_LIST_FRAGMENT_TAG);
+        NewsListFragment newsListFragment = (NewsListFragment) mFragmentManager.findFragmentByTag(Constants.NEWS_LIST_FRAGMENT_TAG);
         if (newsListFragment != null) {
             retrievedNews = JSONParser.parseNewsListJSON(json_object);
             newsListFragment.update(retrievedNews, mNewsListChanged);
@@ -307,7 +322,7 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
     public void onUserLoginResponse(JSONObject json_object) {
         Log.d(TAG, "onUserLoginResponse");
 
-        UserLoginFragment userLoginFragment = (UserLoginFragment) mFragmentManager.findFragmentByTag(USER_LOGIN_FRAGMENT_TAG);
+        UserLoginFragment userLoginFragment = (UserLoginFragment) mFragmentManager.findFragmentByTag(Constants.USER_LOGIN_FRAGMENT_TAG);
         if (userLoginFragment != null) {
             Log.d(TAG, "onUserLoginResponse:update");
             User user = JSONParser.parseUserJSON(json_object);
@@ -367,13 +382,13 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
     public void onSaveInstanceState(Bundle outState) {
         Log.d(TAG, "onSaveInstanceState");
         int selectedCategoryId = mNavigationDrawerFragment.mCurrentSelectedPosition;
-        outState.putInt(SELECTED_CATEOGRY_ID, selectedCategoryId);
-        outState.putBoolean(KEY_WAITING, mWaiting);
+        outState.putInt(Constants.SELECTED_CATEGORY_ID, selectedCategoryId);
+        outState.putBoolean(Constants.KEY_WAITING, mWaiting);
 
-        outState.putCharSequence(KEY_SEARCH_VIEW_TEXT, mQueryText);
+        outState.putCharSequence(Constants.KEY_SEARCH_VIEW_TEXT, mQueryText);
 
         if (mSearchMenuItem != null) {
-            outState.putBoolean(KEY_SEARCH_VIEW_EXPANDED, mSearchMenuItem.isActionViewExpanded());
+            outState.putBoolean(Constants.KEY_SEARCH_VIEW_EXPANDED, mSearchMenuItem.isActionViewExpanded());
         }
 
         super.onSaveInstanceState(outState);
@@ -453,16 +468,16 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
     public void onAuthenticate(String username, String password) {
         Log.d(TAG, "onAuthenticate");
         showLoading();
-        mClientFragment.userLogin("shuzuli", "9162fa316df079ef770c95e05b708abb");
+        mClientFragment.userLogin(username, CommonHelper.md5(password));
     }
 
     @Override
     public void onLoginSuccessfully() {
-        UserLoginFragment userLoginFragment = (UserLoginFragment) mFragmentManager.findFragmentByTag(USER_LOGIN_FRAGMENT_TAG);
-        if(userLoginFragment != null){
+        UserLoginFragment userLoginFragment = (UserLoginFragment) mFragmentManager.findFragmentByTag(Constants.USER_LOGIN_FRAGMENT_TAG);
+        if (userLoginFragment != null) {
             mFragmentManager.popBackStack();
             mFragmentManager.beginTransaction().remove(userLoginFragment);
-            Log.d(TAG, "user:"+mUserSession.getUserDetails().username);//debug
+            Log.d(TAG, "user:" + mUserSession.getUserDetails().username);//debug
         }
 
     }
