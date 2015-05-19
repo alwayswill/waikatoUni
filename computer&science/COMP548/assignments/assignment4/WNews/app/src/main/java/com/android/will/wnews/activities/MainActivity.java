@@ -52,7 +52,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class MainActivity extends Activity implements NewsSelectionListener, ApiResponseListener, NavigationDrawerFragment.NavigationDrawerCallbacks, OnEditorActionListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener, View.OnFocusChangeListener, UserLoginListener {
+public class MainActivity extends BaseActivity implements NewsSelectionListener, ApiResponseListener, NavigationDrawerFragment.NavigationDrawerCallbacks, OnEditorActionListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener, View.OnFocusChangeListener {
 
     public static final String TAG = "MainActivity";
 
@@ -64,13 +64,12 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
     private boolean mNewsListChanged = false;//debug
-    private boolean mWaiting = false;
 
     // fragment manager and dynamic fragments
     private FragmentManager mFragmentManager;
     private ClientFragment mClientFragment;
     public ArrayList<News> retrievedNews;
-    public ProgressDialog ringProgressDialog;
+
     private CharSequence mTitle;
     private MenuItem mSearchMenuItem;
     private UserSession mUserSession;
@@ -95,7 +94,6 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
 
         if (savedInstanceState != null) {
             mSelectedCategoryId = savedInstanceState.getInt(Constants.SELECTED_CATEGORY_ID);
-            mWaiting = savedInstanceState.getBoolean(Constants.KEY_WAITING);
             Log.d(TAG, "onCreate() : retrieved mSelectedCategoryId = " + mSelectedCategoryId);
 
             if (savedInstanceState.containsKey(Constants.KEY_SEARCH_VIEW_TEXT)) {
@@ -106,9 +104,11 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
                 mSearchViewExpanded = savedInstanceState.getBoolean(Constants.KEY_SEARCH_VIEW_EXPANDED);
             }
 
+            //showing loading
             if (mWaiting) {
-                showLoading();
+                showLoading(this);
             }
+
         }
 
         setContentView(R.layout.activity_main);
@@ -123,10 +123,6 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         mUserSession = new UserSession(getApplicationContext());
-
-        if (!isNetworkConnected()) {
-            Toast.makeText(this, "Fail to connect to Internet.", Toast.LENGTH_SHORT).show();
-        }
 
 
 
@@ -162,7 +158,7 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
         //when device roated, it will reload data from storied data rather than api.
         if (mNewsListChanged) {
             Log.d(TAG, "update news from api");
-            showLoading();
+            showLoading(this);
             UserSession userSession = new UserSession(getApplicationContext());
 //            sync preferences if user login
             if(userSession.isUserLoggedIn()){
@@ -276,14 +272,14 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
                 UserSession userSession = new UserSession(getApplicationContext());
                 userSession.logoutUser();
                 Toast.makeText(this, "Logout seccessfully", Toast.LENGTH_SHORT).show();
+                invalidateOptionsMenu();
                 return true;
 
             case R.id.action_login:
 
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.container, new UserLoginFragment(), Constants.USER_LOGIN_FRAGMENT_TAG).addToBackStack(null).commit();
+                Intent intent = new Intent(this, UserActivity.class);
+                startActivity(intent);
                 return true;
-            // Respond to the action bar's Up/Home button
         }
 
         return super.onOptionsItemSelected(item);
@@ -318,19 +314,6 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
         Log.d(TAG, "onNewsDetailsResponse");
     }
 
-    @Override
-    public void onUserLoginResponse(JSONObject json_object) {
-        Log.d(TAG, "onUserLoginResponse");
-
-        UserLoginFragment userLoginFragment = (UserLoginFragment) mFragmentManager.findFragmentByTag(Constants.USER_LOGIN_FRAGMENT_TAG);
-        if (userLoginFragment != null) {
-            Log.d(TAG, "onUserLoginResponse:update");
-            User user = JSONParser.parseUserJSON(json_object);
-            userLoginFragment.update(user);
-        }
-        hideLoading();
-
-    }
 
     @Override
     public void onApiErrorResponse(VolleyError error) {
@@ -379,11 +362,19 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.KEY_UPDATE_ACTIONBAR, Constants.IS_UPDATE_ACTIONBAR)){
+            invalidateOptionsMenu();
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         Log.d(TAG, "onSaveInstanceState");
+        super.onSaveInstanceState(outState);
         int selectedCategoryId = mNavigationDrawerFragment.mCurrentSelectedPosition;
         outState.putInt(Constants.SELECTED_CATEGORY_ID, selectedCategoryId);
-        outState.putBoolean(Constants.KEY_WAITING, mWaiting);
 
         outState.putCharSequence(Constants.KEY_SEARCH_VIEW_TEXT, mQueryText);
 
@@ -391,24 +382,8 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
             outState.putBoolean(Constants.KEY_SEARCH_VIEW_EXPANDED, mSearchMenuItem.isActionViewExpanded());
         }
 
-        super.onSaveInstanceState(outState);
 
         Log.d(TAG, "onSaveInstanceState() : stored selected category position = " + selectedCategoryId);
-    }
-
-    public void showLoading() {
-        Log.d(TAG, "showLoading");
-        mWaiting = true;
-        ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Downloading data ...", true);
-    }
-
-    public void hideLoading() {
-        Log.d(TAG, "hideLoading");
-        mWaiting = false;
-        if (ringProgressDialog != null && ringProgressDialog.isShowing()) {
-            ringProgressDialog.dismiss();
-        }
-
     }
 
     /*
@@ -421,7 +396,7 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
         NewsSuggestionProvider.getBridge(this).saveRecentQuery(query, null);
 
         mQueryText = query;
-        showLoading();
+        showLoading(this);
         mClientFragment.searchNews(query);
         SearchView searchView = (SearchView) mSearchMenuItem.getActionView();
         searchView.clearFocus();
@@ -460,46 +435,4 @@ public class MainActivity extends Activity implements NewsSelectionListener, Api
         return true;
     }
 
-    /**
-     * User
-     */
-
-    @Override
-    public void onAuthenticate(String username, String password) {
-        Log.d(TAG, "onAuthenticate");
-        showLoading();
-        mClientFragment.userLogin(username, CommonHelper.md5(password));
-    }
-
-    @Override
-    public void onLoginSuccessfully() {
-        UserLoginFragment userLoginFragment = (UserLoginFragment) mFragmentManager.findFragmentByTag(Constants.USER_LOGIN_FRAGMENT_TAG);
-        if (userLoginFragment != null) {
-            mFragmentManager.popBackStack();
-            mFragmentManager.beginTransaction().remove(userLoginFragment);
-            Log.d(TAG, "user:" + mUserSession.getUserDetails().username);//debug
-        }
-
-    }
-
-
-    /**
-     * check network, if network including WIFI and mobile is not working, we are not able to download movies.
-     */
-    private boolean isNetworkConnected() {
-        boolean haveConnectedWifi = false;
-        boolean haveConnectedMobile = false;
-
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
-        for (NetworkInfo ni : netInfo) {
-            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
-                if (ni.isConnected())
-                    haveConnectedWifi = true;
-            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
-                if (ni.isConnected())
-                    haveConnectedMobile = true;
-        }
-        return haveConnectedWifi || haveConnectedMobile;
-    }
 }

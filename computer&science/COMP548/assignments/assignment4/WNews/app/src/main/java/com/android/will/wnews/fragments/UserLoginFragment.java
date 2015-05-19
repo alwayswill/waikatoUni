@@ -51,18 +51,11 @@ public class UserLoginFragment extends Fragment implements TextView.OnEditorActi
         super.onAttach(activity);
 
         mUserSession = new UserSession(getActivity().getApplicationContext());
-        setHasOptionsMenu(true);
-
-        ActionBar actionBar = getActivity().getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-
 
         try {
             mUserLoginListener = (UserLoginListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement MovieSelectionListener");
+            throw new ClassCastException(activity.toString() + " must implement UserLoginListener");
         }
     }
 
@@ -71,10 +64,6 @@ public class UserLoginFragment extends Fragment implements TextView.OnEditorActi
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Log.d(TAG, "onCreateOptionsMenu");
         super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-//        MenuItem item = (MenuItem) menu.clear(R.id.action_login);
-//        item.setVisible(false);
-        getActivity().invalidateOptionsMenu();
     }
 
     @Override

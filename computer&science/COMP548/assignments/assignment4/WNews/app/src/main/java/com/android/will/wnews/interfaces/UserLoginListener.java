@@ -1,5 +1,7 @@
 package com.android.will.wnews.interfaces;
 
+import com.android.volley.VolleyError;
+
 import org.json.JSONObject;
 
 /**
@@ -12,5 +14,13 @@ import org.json.JSONObject;
  */
 public interface UserLoginListener {
     public void onAuthenticate(String username, String password);
+
     public void onLoginSuccessfully();
+
+    public void onUserLoginResponse(JSONObject json_object);
+
+    /*
+    * handle errors, especially for timeout exception
+    */
+    public void onApiErrorResponse(VolleyError error);
 }

@@ -48,7 +48,7 @@ public class ClientFragment extends Fragment {
 		try {
 			mApiResponseListener = (ApiResponseListener) activity;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString() + " must implement TradeMeResponseListener");
+			throw new ClassCastException(activity.toString() + " must implement ApiResponseListener");
 		}
 	}
 
@@ -138,27 +138,6 @@ public class ClientFragment extends Fragment {
 	}
 
 
-	// Userlogin required onUserLoginListenser
-	public void userLogin(String username, String password) {
-		final String request_url = String.format(Constants.API_USER_LOGIN, username, password);
-		Log.d(TAG, request_url);
-		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
-			public void onResponse(JSONObject json_object) {
-				Log.d(TAG, "userLogin.onResponse");
-				mApiResponseListener.onUserLoginResponse(json_object);
-			}
-		}, new ErrorListener() {
-			public void onErrorResponse(VolleyError error) {
-				Log.d(TAG, "userLogin : onErrorResponse : " + error.getMessage());
-				error.printStackTrace();
-				mApiResponseListener.onUserLoginResponse(null);
-				mApiResponseListener.onApiErrorResponse(error);
-			}
-		});
-
-		request.setRetryPolicy(mPolicy);
-		request_queue.add(request);
-	}
 
 
 	// Userlogin required onUserLoginListenser

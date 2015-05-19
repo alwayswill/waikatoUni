@@ -48,15 +48,18 @@ public final class R {
         public static final int activity_main=0x7f040000;
         public static final int activity_news_detail=0x7f040001;
         public static final int activity_settings=0x7f040002;
-        public static final int fragment_navigation_drawer=0x7f040003;
-        public static final int fragment_news_details=0x7f040004;
-        public static final int fragment_user_login=0x7f040005;
-        public static final int news_list_item=0x7f040006;
+        public static final int activity_user=0x7f040003;
+        public static final int fragment_navigation_drawer=0x7f040004;
+        public static final int fragment_news_details=0x7f040005;
+        public static final int fragment_user_login=0x7f040006;
+        public static final int news_list_item=0x7f040007;
     }
     public static final class menu {
         public static final int global=0x7f0a0000;
         public static final int main=0x7f0a0001;
-        public static final int menu_settings=0x7f0a0002;
+        public static final int menu_base=0x7f0a0002;
+        public static final int menu_settings=0x7f0a0003;
+        public static final int menu_user=0x7f0a0004;
     }
     public static final class mipmap {
         public static final int ic_launcher=0x7f030000;
@@ -85,14 +88,16 @@ public final class R {
         public static final int search_hint=0x7f090014;
         public static final int search_lable=0x7f090015;
         public static final int search_settings_description=0x7f090016;
-        public static final int title_activity_news_detail=0x7f090017;
-        public static final int title_activity_settings=0x7f090018;
-        public static final int title_activity_user_login=0x7f090019;
-        public static final int title_section1=0x7f09001a;
-        public static final int title_section2=0x7f09001b;
-        public static final int title_section3=0x7f09001c;
-        public static final int user_login_header=0x7f09001d;
-        public static final int user_login_submit_button=0x7f09001e;
+        public static final int title_activity_base=0x7f090017;
+        public static final int title_activity_news_detail=0x7f090018;
+        public static final int title_activity_settings=0x7f090019;
+        public static final int title_activity_user=0x7f09001a;
+        public static final int title_activity_user_login=0x7f09001b;
+        public static final int title_section1=0x7f09001c;
+        public static final int title_section2=0x7f09001d;
+        public static final int title_section3=0x7f09001e;
+        public static final int user_login_header=0x7f09001f;
+        public static final int user_login_submit_button=0x7f090020;
     }
     public static final class style {
         /**  Customize your theme here. 

@@ -43,6 +43,8 @@ public class JSONParser {
 			Log.d(TAG, "JSONException");
 			e.printStackTrace();
 			return newses;
+		} catch (Exception se) {
+			se.printStackTrace();
 		}
 		return newses;
 	}
@@ -71,6 +73,8 @@ public class JSONParser {
 			Log.d(TAG, "JSONException");
 			e.printStackTrace();
 			return user;
+		} catch (Exception se) {
+			se.printStackTrace();
 		}
 		return user;
 	}

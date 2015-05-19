@@ -20,6 +20,8 @@ public class Constants {
     public static final int NO_SELECTION = -1;
     public static final int REQUEST_SOCKET_TIMEOUT = 20000;
     public static final String DEFAULT_USER_NOTIFICATIONS_NEW_MESSAGE_RINGTONE = "content://settings/system/notification_sound";
+    public static final boolean IS_UPDATE_ACTIONBAR = false;
+    public static final String KEY_UPDATE_ACTIONBAR = "keyUpdateActionbar";
 
     //Key
     //MainActivity

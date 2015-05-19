@@ -12,8 +12,6 @@ public interface ApiResponseListener {
 
     public void onNewsDetailsResponse(JSONObject json_object);
 
-    public void onUserLoginResponse(JSONObject json_object);
-
     /*
     * handle errors, especially for timeout exception
      */
