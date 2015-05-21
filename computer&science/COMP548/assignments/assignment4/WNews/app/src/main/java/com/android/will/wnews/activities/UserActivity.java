@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -119,8 +120,11 @@ public class UserActivity extends BaseActivity implements UserLoginListener{
     @Override
     public void onLoginSuccessfully() {
         this.onBackPressed();
-        Log.d(TAG, "user:" + mUserSession.getUserDetails().username);//debug
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.KEY_UPDATE_ACTIONBAR, true);
+        Log.d(TAG, "onLoginSuccessfully:" + mUserSession.getUserDetails().username);//debug
+
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        sp.edit().putBoolean(Constants.KEY_UPDATE_ACTIONBAR, true).apply();
     }
 
     @Override

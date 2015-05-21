@@ -8,7 +8,7 @@ public interface ApiResponseListener {
 
     public void onNewsListResponse(JSONObject json_object);
 
-    public void onNewsSearchListResponse(JSONObject json_object);
+    public void onNewsCategoriesResponse(JSONObject json_object);
 
     public void onNewsDetailsResponse(JSONObject json_object);
 

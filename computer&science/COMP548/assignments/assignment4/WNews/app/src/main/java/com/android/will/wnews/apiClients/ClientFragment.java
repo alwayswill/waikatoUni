@@ -93,7 +93,7 @@ public class ClientFragment extends Fragment {
 		cancelAllRequests();
 	}
 	
-	// issue requests to trademe and return responses to the registered listener
+	// issue requests to api and return responses to the registered listener
 	public void getNewsList(int category_id) {
 		final String request_url = String.format(Constants.API_NEWS_LIST, category_id);
 		Log.d(TAG, request_url);
@@ -114,7 +114,7 @@ public class ClientFragment extends Fragment {
 		request_queue.add(request);
 	}
 
-	// issue requests to trademe and return responses to the registered listener
+	// issue requests to api and return responses to the registered listener
 	public void searchNews(String keywords) {
 		final String request_url = String.format(Constants.API_NEWS_SEARCH, keywords);
 		Log.d(TAG, request_url);
@@ -137,10 +137,32 @@ public class ClientFragment extends Fragment {
 		request_queue.add(request);
 	}
 
+	// issue requests to api and return responses to the registered listener
+	public void getCategories() {
+		final String request_url = String.format(Constants.API_NEWS_CATEGORIES);
+		Log.d(TAG, request_url);
+		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
+			public void onResponse(JSONObject json_object) {
+				Log.d(TAG, "getCategories.onResponse");
+				mApiResponseListener.onNewsCategoriesResponse(json_object);
+			}
+		}, new ErrorListener() {
+			public void onErrorResponse(VolleyError error) {
+				Log.d(TAG, "getCategories : onErrorResponse : " + error.getMessage());
+				error.printStackTrace();
+				mApiResponseListener.onNewsCategoriesResponse(null);
+				mApiResponseListener.onApiErrorResponse(error);
+			}
+		});
+
+		request.setRetryPolicy(mPolicy);
+		request_queue.add(request);
+	}
 
 
 
-	// Userlogin required onUserLoginListenser
+
+
 	public void syncSettings() {
 		UserSession mUserSession = new UserSession(getActivity().getApplicationContext());
 		User user = mUserSession.getUserDetails();

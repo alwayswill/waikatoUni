@@ -1,18 +1,14 @@
 package com.android.will.wnews.activities;
 
-import android.app.Activity;
-
 import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -34,16 +30,15 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.will.wnews.R;
 import com.android.will.wnews.apiClients.ClientFragment;
 import com.android.will.wnews.apiClients.JSONParser;
+import com.android.will.wnews.databases.NewsCategoriesDataSource;
 import com.android.will.wnews.fragments.NavigationDrawerFragment;
 import com.android.will.wnews.fragments.NewsListFragment;
 import com.android.will.wnews.fragments.UserLoginFragment;
 import com.android.will.wnews.interfaces.ApiResponseListener;
 import com.android.will.wnews.interfaces.NewsSelectionListener;
-import com.android.will.wnews.interfaces.UserLoginListener;
+import com.android.will.wnews.model.Category;
 import com.android.will.wnews.model.News;
-import com.android.will.wnews.model.User;
 import com.android.will.wnews.providers.NewsSuggestionProvider;
-import com.android.will.wnews.utils.CommonHelper;
 import com.android.will.wnews.utils.Constants;
 import com.android.will.wnews.utils.UserSession;
 
@@ -73,12 +68,14 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
     private CharSequence mTitle;
     private MenuItem mSearchMenuItem;
     private UserSession mUserSession;
+    private NewsCategoriesDataSource mNewsCategoriesDBSource = null;
 
     // holds action bar search widget text that we save/restore on configuration change
     private CharSequence mQueryText = "";
 
     // holds action bar search widget state that we save/restore on configuration change
     boolean mSearchViewExpanded = false;
+
 
     private ShareActionProvider mShareActionProvider;
     private Intent mShareIntent;
@@ -87,6 +84,8 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
+        //refresh categories per 24 hours
+        checkCategoriesCache();
 
         mFragmentManager = getFragmentManager();
         addNonUIFragments();
@@ -123,7 +122,8 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         mUserSession = new UserSession(getApplicationContext());
-
+        mNewsCategoriesDBSource = new NewsCategoriesDataSource(this);
+        mNewsCategoriesDBSource.open();
 
 
     }
@@ -148,23 +148,26 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
     }
 
     @Override
-    public void onNavigationDrawerItemSelected(int position, boolean fromSavedInstanceState) {
+    public void onNavigationDrawerItemSelected(int position, boolean fromSavedInstanceState, int catId) {
+
 
         Log.d(TAG, "onNavigationDrawerItemSelected : mSelectedCategoryId" + mSelectedCategoryId + "||position:" + position);
         mNewsListChanged = mSelectedCategoryId != position;
 
         mSelectedCategoryId = position;
-        Log.d(TAG, "mNewsListChanged:"+mNewsListChanged);
+        Log.d(TAG, "mNewsListChanged:" + mNewsListChanged);
         //when device roated, it will reload data from storied data rather than api.
         if (mNewsListChanged) {
             Log.d(TAG, "update news from api");
             showLoading(this);
             UserSession userSession = new UserSession(getApplicationContext());
 //            sync preferences if user login
-            if(userSession.isUserLoggedIn()){
+            if (userSession.isUserLoggedIn()) {
                 mClientFragment.syncSettings();
             }
-            mClientFragment.getNewsList(position);
+            mClientFragment.getNewsList(catId);
+
+            Log.d(TAG, "update news catid:" + catId);
         }
 
 
@@ -210,10 +213,10 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
             restoreActionBar();
 
             //check action bar depending on login status
-            if(mUserSession.isUserLoggedIn()){
+            if (mUserSession.isUserLoggedIn()) {
                 MenuItem item = menu.findItem(R.id.action_login);
                 item.setVisible(false);
-            }else{
+            } else {
                 MenuItem item = menu.findItem(R.id.action_logout);
                 item.setVisible(false);
             }
@@ -288,7 +291,7 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
 
     @Override
     public void onNewsListResponse(JSONObject json_object) {
-        Log.d(getClass().getName(), "onNewsListResponse()");
+        Log.d(getClass().getName(), "onNewsListResponse");
         NewsListFragment newsListFragment = (NewsListFragment) mFragmentManager.findFragmentByTag(Constants.NEWS_LIST_FRAGMENT_TAG);
         if (newsListFragment != null) {
             retrievedNews = JSONParser.parseNewsListJSON(json_object);
@@ -298,14 +301,36 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
     }
 
     @Override
-    public void onNewsSearchListResponse(JSONObject json_object) {
-        Log.d(getClass().getName(), "onNewsSearchListResponse()");
-        NewsListFragment newsListFragment = (NewsListFragment) mFragmentManager.findFragmentByTag(Constants.NEWS_LIST_FRAGMENT_TAG);
-        if (newsListFragment != null) {
-            retrievedNews = JSONParser.parseNewsListJSON(json_object);
-            newsListFragment.update(retrievedNews, mNewsListChanged);
+    public void onNewsCategoriesResponse(JSONObject json_object) {
+
+        Log.d(TAG, "onNewsCategoriesResponse:");
+        int num = mNewsCategoriesDBSource.updateCache();
+        Log.d(TAG, "update cache:" + num);
+        ArrayList<Category> retrievedCategories = JSONParser.parseCategoriesJSON(json_object);
+        //put them in database
+        for (Category temp : retrievedCategories) {
+            mNewsCategoriesDBSource.createCategory(temp);
         }
-        hideLoading();
+        int cacheTime = (int) System.currentTimeMillis() / 1000;
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        sp.edit().putInt(Constants.KEY_UPDATE_TIME_CATEGORY_CACHE, cacheTime).apply();
+
+    }
+
+
+    public void checkCategoriesCache() {
+        int cacheTime = (int) System.currentTimeMillis() / 1000;
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(this);
+//        if we cannot get last update time, then update immediately
+        int lastUpdateTime = sp.getInt(Constants.KEY_UPDATE_TIME_CATEGORY_CACHE, (cacheTime - Constants.UPDATE_TIME_CATEGORY_CACHE + 1));
+        if ((cacheTime - lastUpdateTime) >= Constants.UPDATE_TIME_CATEGORY_CACHE) {
+            Log.d(TAG, "update cache");
+            mClientFragment.getCategories();
+        } else {
+            Log.d(TAG, "no need to update cache");
+        }
     }
 
     @Override
@@ -364,8 +389,14 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
     @Override
     public void onResume() {
         super.onResume();
-        if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.KEY_UPDATE_ACTIONBAR, Constants.IS_UPDATE_ACTIONBAR)){
+        mNewsCategoriesDBSource.open();
+        Log.d(TAG, "update menu :" +PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.KEY_UPDATE_ACTIONBAR, Constants.IS_UPDATE_ACTIONBAR));
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.KEY_UPDATE_ACTIONBAR, Constants.IS_UPDATE_ACTIONBAR)) {
+            Log.d(TAG, "update menu");
             invalidateOptionsMenu();
+            SharedPreferences sp = PreferenceManager
+                    .getDefaultSharedPreferences(this);
+            sp.edit().putBoolean(Constants.KEY_UPDATE_ACTIONBAR, Constants.IS_UPDATE_ACTIONBAR).apply();
         }
     }
 
@@ -435,4 +466,15 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
         return true;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mNewsCategoriesDBSource.close();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mNewsCategoriesDBSource.close();
+    }
 }

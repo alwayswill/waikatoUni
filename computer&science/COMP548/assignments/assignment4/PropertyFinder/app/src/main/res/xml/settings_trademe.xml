@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/pref_trademe_request_category" >
+        <org.stevej.android.propertyfinder.customui.NumberPickerPreference
+            android:defaultValue="10"
+            android:key="pref_num_to_load"
+            android:summary="@string/pref_num_to_load_summary"
+            android:title="@string/pref_num_to_load_title" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
+

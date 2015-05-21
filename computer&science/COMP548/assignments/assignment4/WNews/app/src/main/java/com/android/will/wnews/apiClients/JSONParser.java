@@ -2,6 +2,7 @@ package com.android.will.wnews.apiClients;
 
 import android.util.Log;
 
+import com.android.will.wnews.model.Category;
 import com.android.will.wnews.model.News;
 import com.android.will.wnews.model.User;
 
@@ -25,6 +26,16 @@ public class JSONParser {
         n.timestamp = news.optString("dateline");
 
 		return n;
+	}
+
+
+	public static Category parseCategoryJSON(JSONObject category) {
+
+		Category cat = new Category();
+		cat.id = category.optInt("id");
+		cat.name = category.optString("name");
+
+		return cat;
 	}
 
 	public static ArrayList<News> parseNewsListJSON(JSONObject json) {
@@ -56,9 +67,9 @@ public class JSONParser {
 		try {
 
 			JSONObject response = json.getJSONObject("datas");
-			JSONObject userInfo = response.getJSONObject("userinfo");
 			int code = response.optInt("code");
 			if (code == 1){
+				JSONObject userInfo = response.getJSONObject("userinfo");
 				user.id = userInfo.optInt("id");
 				user.username = userInfo.optString("username");
 				user.email = userInfo.optString("email");
@@ -77,6 +88,30 @@ public class JSONParser {
 			se.printStackTrace();
 		}
 		return user;
+	}
+
+	public static ArrayList<Category> parseCategoriesJSON(JSONObject json) {
+		ArrayList<Category> categories = new ArrayList<Category>();
+
+		try {
+			JSONArray categoriesList = json.getJSONArray("datas");
+
+			for (int i = 0; i < categoriesList.length(); i++) {
+
+				JSONObject category = categoriesList.getJSONObject(i);
+
+
+				categories.add(parseCategoryJSON(category));
+			}
+
+		} catch (JSONException e) {
+			Log.d(TAG, "JSONException");
+			e.printStackTrace();
+			return categories;
+		} catch (Exception se) {
+			se.printStackTrace();
+		}
+		return categories;
 	}
 
 }

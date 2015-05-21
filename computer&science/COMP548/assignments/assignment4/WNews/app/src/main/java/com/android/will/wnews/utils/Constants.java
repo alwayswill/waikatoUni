@@ -19,6 +19,7 @@ public class Constants {
     public static final String SELECTED_CATEGORY_ID = "selectedCategoryId";
     public static final int NO_SELECTION = -1;
     public static final int REQUEST_SOCKET_TIMEOUT = 20000;
+    public static final int UPDATE_TIME_CATEGORY_CACHE = 86400;
     public static final String DEFAULT_USER_NOTIFICATIONS_NEW_MESSAGE_RINGTONE = "content://settings/system/notification_sound";
     public static final boolean IS_UPDATE_ACTIONBAR = false;
     public static final String KEY_UPDATE_ACTIONBAR = "keyUpdateActionbar";
@@ -35,6 +36,8 @@ public class Constants {
     //NewsDetailFragment
     public static final String KEY_NEWS_DETAIL = "keyNewsDetail";
 
+    //MainActivity
+    public static final String KEY_UPDATE_TIME_CATEGORY_CACHE = "keyUpdateTimeCategoryCache";
 //    UserSession
     public static final String IS_USER_LOGIN = "isUserLoggedIn";
     public static final String KEY_USER_NAME = "general_user_name";
@@ -50,12 +53,27 @@ public class Constants {
     public static final String API_ARGUMENTS = "key=" + API_KEY;
     /*
     get news list
-    exp:http://wnews.timepic.net/wnews/api/newslist/category_id/0?key=hXVBQPSennzh46Xp
+    http://wnews.timepic.net/wnews/api/newslist/category_id/0?key=hXVBQPSennzh46Xp
      */
     public static final String API_NEWS_LIST = API_BASE_URL +"newslist/category_id/%d?"+API_ARGUMENTS;
+
+    /*
+    http://wnews.timepic.net/wnews/api/search/keyword/a?key=hXVBQPSennzh46Xp
+     */
     public static final String API_NEWS_SEARCH = API_BASE_URL +"search/keyword/%s?"+ API_ARGUMENTS;
+    /*
+        http://wnews.timepic.net/wnews/api/login/?username=shuzuli&password=9162fa316df079ef770c95e05b708abb&key=hXVBQPSennzh46Xp
+
+     */
     public static final String API_USER_LOGIN = API_BASE_URL +"login/?username=%s&password=%s&"+API_ARGUMENTS;
+    /*
+    http://wnews.timepic.net/wnews/api/settingsUpdate/?uid=0&settings={%22email%22:%22lishuzu@gmail.com%22,%22notifications_new_message%22:true,%22notifications_new_message_ringtone%22:%22content:\/\/media\/internal\/audio\/media\/17%22,%22notifications_new_message_vibrate%22:true}&key=hXVBQPSennzh46Xp
+     */
     public static final String API_USER_SYNC_SETTINGS = API_BASE_URL +"settingsUpdate/?uid=%d&settings=%s&"+API_ARGUMENTS;
+    /*
+    http://test.wnews.timepic.net/wnews/api/categories?key=hXVBQPSennzh46Xp
+     */
+    public static final String API_NEWS_CATEGORIES = API_BASE_URL +"categories?"+API_ARGUMENTS;
 
 
 }

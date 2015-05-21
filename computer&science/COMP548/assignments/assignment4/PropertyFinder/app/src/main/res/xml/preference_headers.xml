@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <header
+        android:fragment="org.stevej.android.propertyfinder.fragments.SettingsFragment"
+        android:summary="@string/pref_group_location_summary"
+        android:title="@string/pref_group_location_title" >
+        <extra
+            android:name="settings_group"
+            android:value="location_settings" />
+    </header>
+    <header
+        android:fragment="org.stevej.android.propertyfinder.fragments.SettingsFragment"
+        android:summary="@string/pref_group_startup_summary"
+        android:title="@string/pref_group_startup_title" >
+        <extra
+            android:name="settings_group"
+            android:value="startup_settings" />
+    </header>
+    <header
+        android:fragment="org.stevej.android.propertyfinder.fragments.SettingsFragment"
+        android:summary="@string/pref_group_trademe_summary"
+        android:title="@string/pref_group_trademe_title" >
+        <extra
+            android:name="settings_group"
+            android:value="trademe_settings" />
+    </header>
+
+</preference-headers>

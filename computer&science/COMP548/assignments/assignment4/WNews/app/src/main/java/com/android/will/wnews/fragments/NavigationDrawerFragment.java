@@ -4,7 +4,6 @@ package com.android.will.wnews.fragments;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.support.annotation.DrawableRes;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,9 +20,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.will.wnews.R;
+import com.android.will.wnews.databases.NewsCategoriesDataSource;
+
+import java.util.List;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -61,6 +62,8 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
+    private List<String> mCategoryNames;
+
     public NavigationDrawerFragment() {
     }
 
@@ -78,8 +81,19 @@ public class NavigationDrawerFragment extends Fragment {
             mFromSavedInstanceState = true;
         }
 
+
+        setUpList();
         // Select either the default item (0) or the last selected item.
-        selectItem(mCurrentSelectedPosition,mFromSavedInstanceState );
+        selectItem(mCurrentSelectedPosition, mFromSavedInstanceState);
+
+
+    }
+
+    public void setUpList(){
+        NewsCategoriesDataSource db = new NewsCategoriesDataSource(getActivity());
+        db.open();
+        mCategoryNames = db.getCategoriesNames();
+//        db.close();
     }
 
     @Override
@@ -101,7 +115,9 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        String[] categoryList = getResources().getStringArray(R.array.categories);
+//        String[] categoryList = getResources().getStringArray(R.array.categories);
+
+        String[] categoryList = mCategoryNames.toArray(new String[mCategoryNames.size()]);
         ArrayAdapter<String> categoryListAdapter = new ArrayAdapter<String>(getActionBar().getThemedContext(), android.R.layout.simple_list_item_activated_1, android.R.id.text1, categoryList);
 
         mDrawerListView.setAdapter(categoryListAdapter);
@@ -197,8 +213,14 @@ public class NavigationDrawerFragment extends Fragment {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null) {
+
+            String catName = mCategoryNames.get(position);
+            NewsCategoriesDataSource db = new NewsCategoriesDataSource(getActivity());
+            db.open();
+            int catId = db.getCatIdByName(catName);
+
             mCallbacks.onNavigationDrawerItemSelected(
-                    position, fromSavedInstanceState);
+                    position, fromSavedInstanceState, catId);
         }
     }
 
@@ -282,6 +304,6 @@ public class NavigationDrawerFragment extends Fragment {
         /**
          * Called when an item in the navigation drawer is selected.
          */
-        void onNavigationDrawerItemSelected(int position, boolean fromSavedInstanceState);
+        void onNavigationDrawerItemSelected(int position, boolean fromSavedInstanceState, int catId);
     }
 }
