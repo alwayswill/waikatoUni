@@ -47,7 +47,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class MainActivity extends BaseActivity implements NewsSelectionListener, ApiResponseListener, NavigationDrawerFragment.NavigationDrawerCallbacks, OnEditorActionListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener, View.OnFocusChangeListener {
+public class MainActivity extends BaseActivity implements NewsSelectionListener, ApiResponseListener, NavigationDrawerFragment.NavigationDrawerCallbacks, OnEditorActionListener, SearchView.OnCloseListener, View.OnFocusChangeListener {
 
     public static final String TAG = "MainActivity";
 
@@ -125,8 +125,8 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
         mNewsCategoriesDBSource = new NewsCategoriesDataSource(this);
         mNewsCategoriesDBSource.open();
 
-
     }
+
 
 
     /**
@@ -236,9 +236,7 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
         SearchableInfo searchable_info = searchManager.getSearchableInfo(activity_name);
         searchView.setSearchableInfo(searchable_info);
 
-        searchView.setSubmitButtonEnabled(true);
         searchView.setQueryHint("News name");
-        searchView.setIconifiedByDefault(true);
 
         // if it was expanded before a config change, expand it again and hide the keyboard
         if (mSearchViewExpanded) {
@@ -248,7 +246,6 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
             searchView.setQuery(mQueryText, false);
         }
 
-        searchView.setOnQueryTextListener(this);
         searchView.setOnQueryTextFocusChangeListener(this);
         searchView.setOnCloseListener(this);
     }
@@ -390,7 +387,7 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
     public void onResume() {
         super.onResume();
         mNewsCategoriesDBSource.open();
-        Log.d(TAG, "update menu :" +PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.KEY_UPDATE_ACTIONBAR, Constants.IS_UPDATE_ACTIONBAR));
+        Log.d(TAG, "update menu :" + PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.KEY_UPDATE_ACTIONBAR, Constants.IS_UPDATE_ACTIONBAR));
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.KEY_UPDATE_ACTIONBAR, Constants.IS_UPDATE_ACTIONBAR)) {
             Log.d(TAG, "update menu");
             invalidateOptionsMenu();
@@ -417,27 +414,13 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
         Log.d(TAG, "onSaveInstanceState() : stored selected category position = " + selectedCategoryId);
     }
 
-    /*
-    * User input
-    * */
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        Log.d(TAG, "onQueryTextSubmit:" + query);
-//        record search query
-        NewsSuggestionProvider.getBridge(this).saveRecentQuery(query, null);
 
-        mQueryText = query;
+
+
+    public void doSearch(String query){
+        NewsSuggestionProvider.getBridge(this).saveRecentQuery(query, null);
         showLoading(this);
         mClientFragment.searchNews(query);
-        SearchView searchView = (SearchView) mSearchMenuItem.getActionView();
-        searchView.clearFocus();
-
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return true;
     }
 
     @Override
@@ -476,5 +459,20 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
     public void onPause() {
         super.onPause();
         mNewsCategoriesDBSource.close();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Log.d(TAG, "onNewIntent");
+        super.onNewIntent(intent);
+        setIntent(intent);
+
+        if (Intent.ACTION_VIEW.equals(intent.getAction()) || Intent.ACTION_SEARCH.equals(intent.getAction())){
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            doSearch(query);
+            SearchView searchView = (SearchView) mSearchMenuItem.getActionView();
+            searchView.clearFocus();
+            searchView.setQuery(query, false);
+        }
     }
 }

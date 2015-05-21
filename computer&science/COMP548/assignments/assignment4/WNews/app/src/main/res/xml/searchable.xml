@@ -5,5 +5,6 @@
     android:searchSettingsDescription="@string/search_settings_description"
     android:searchSuggestAuthority="com.android.will.wnews.providers.NewsSuggestionProvider"
     android:searchSuggestSelection=" ? "
-    android:searchSuggestThreshold="1" />
+    android:searchSuggestIntentAction="android.intent.action.VIEW"
+    android:searchSuggestThreshold="3" />
 
