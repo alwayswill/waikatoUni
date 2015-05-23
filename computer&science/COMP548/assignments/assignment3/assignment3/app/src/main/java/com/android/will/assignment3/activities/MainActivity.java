@@ -23,6 +23,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -39,11 +40,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     static final String TAG = "MainActivity";
     private static final String KEY_PHOTO_LIST = "keyPhotoList";
     private static final String KEY_IMAGE_LIST = "keyImageList";
+    private static final String KEY_CURRENT_POSITION = "keyCurrnetPosition";
     public GoogleMap mMap;
 
     private HashMap<String, Uri> mImages =new HashMap<String, Uri>();
     private PopupAdapter mPopupAdapter;
     public LatLng mHamilton = new LatLng(-37.7833, 175.2833);
+    public CameraPosition mCurrentPosition;
 
     private ArrayList<MyPhoto> mPhotoList = new ArrayList<>();
 
@@ -63,6 +66,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             Log.d(TAG, "onActivityCreated() : getting photos from savedInstanceState");
             mPhotoList = savedInstanceState.getParcelableArrayList(KEY_PHOTO_LIST);
             mImages = (HashMap<String, Uri>) savedInstanceState.getSerializable(KEY_IMAGE_LIST);
+            mCurrentPosition = savedInstanceState.getParcelable(KEY_CURRENT_POSITION);
         }
     }
 
@@ -70,20 +74,38 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onSaveInstanceState(Bundle outState) {
         Log.d(TAG, "onSaveInstanceState");
         super.onSaveInstanceState(outState);
+
         outState.putSerializable(KEY_IMAGE_LIST, mImages);
         outState.putParcelableArrayList(KEY_PHOTO_LIST, mPhotoList);
+
+        mCurrentPosition = mMap.getCameraPosition();
+        outState.putParcelable(KEY_CURRENT_POSITION, mCurrentPosition);
     }
 
     @Override
     public void onMapReady(GoogleMap map) {
         Log.d(TAG, "onMapReady");
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        CameraUpdate center=
-                CameraUpdateFactory.newLatLng(mHamilton);
-        CameraUpdate zoom=CameraUpdateFactory.zoomTo(13);
 
-        map.moveCamera(center);
-        map.animateCamera(zoom);
+        if (mCurrentPosition != null){
+            CameraUpdate center=
+                    CameraUpdateFactory.newLatLng(mCurrentPosition.target);
+            CameraUpdate zoom=CameraUpdateFactory.zoomTo(mCurrentPosition.zoom);
+
+            map.moveCamera(center);
+            map.animateCamera(zoom);
+
+        }else{
+            CameraUpdate center=
+                    CameraUpdateFactory.newLatLng(mHamilton);
+            CameraUpdate zoom=CameraUpdateFactory.zoomTo(11);
+
+            map.moveCamera(center);
+            map.animateCamera(zoom);
+        }
+
+        Log.d(TAG, "CameraMaxZoom" + map.getMaxZoomLevel());
+        Log.d(TAG, "CameraPosition"+map.getCameraPosition().target);
 
 
 
@@ -92,7 +114,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 mImages);
         map.setInfoWindowAdapter(mPopupAdapter);
         map.setOnInfoWindowClickListener(this);
-
+        if (mPhotoList.isEmpty()){
+            initIntent();
+        }
         addMarker();
     }
 
@@ -167,8 +191,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onNewIntent(intent);
         setIntent(intent);
         String action = intent.getAction();
+        Log.d(TAG, "onNewIntent:action" + action);
         String type = intent.getType();
-
         if(Intent.ACTION_SEND.equals(action) && type != null){
             handleSendImage(intent);
         }else if(Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
@@ -176,7 +200,18 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
+    protected void initIntent() {
+        Log.d(TAG, "initIntent");
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        Log.d(TAG, "initIntent:action"+action);
+        String type = intent.getType();
+        if(Intent.ACTION_SEND.equals(action) && type != null){
+            handleSendImage(intent);
+        }else if(Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+            handleSendMultipleImages(intent);
+        }
+    }
 
 
 
@@ -201,17 +236,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

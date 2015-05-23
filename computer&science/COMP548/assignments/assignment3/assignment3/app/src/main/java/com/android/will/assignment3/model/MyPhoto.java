@@ -51,7 +51,7 @@ public class MyPhoto implements Parcelable{
         this.Model = exif.getAttribute(ExifInterface.TAG_MODEL);
         this.Make = exif.getAttribute(ExifInterface.TAG_MAKE);
         this.DateTime = exif.getAttribute(ExifInterface.TAG_DATETIME);
-        this.ImageLength = exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, 0);
+        this.ImageWidth = exif.getAttributeInt(ExifInterface.TAG_IMAGE_WIDTH, 0);
         this.ImageLength = exif.getAttributeInt(ExifInterface.TAG_IMAGE_LENGTH, 0);
         GeoDegree geoDegree = new GeoDegree(exif);
         this.GPSLatitude = geoDegree.Latitude != 0f ? geoDegree.Latitude : 0;
@@ -135,7 +135,6 @@ public class MyPhoto implements Parcelable{
     public boolean equals(Object o) {
 
         boolean isSame = false;
-        Log.d(getClass().getName(), "o equals:"+((MyPhoto) o).fileName);
         Log.d(getClass().getName(), "this:"+this.fileName);
         if (((MyPhoto) o).fileName.equals(this.fileName)){
             isSame = true;
