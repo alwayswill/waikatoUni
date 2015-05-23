@@ -105,7 +105,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         Log.d(TAG, "CameraMaxZoom" + map.getMaxZoomLevel());
-        Log.d(TAG, "CameraPosition"+map.getCameraPosition().target);
+        Log.d(TAG, "CameraPosition" + map.getCameraPosition().target);
 
 
 
@@ -214,6 +214,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(this, marker.getTitle(), Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -274,8 +278,4 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(this, marker.getTitle(), Toast.LENGTH_LONG).show();
-    }
 }
