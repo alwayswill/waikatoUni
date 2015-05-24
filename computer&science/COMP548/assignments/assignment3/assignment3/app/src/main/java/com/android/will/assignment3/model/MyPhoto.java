@@ -135,7 +135,6 @@ public class MyPhoto implements Parcelable{
     public boolean equals(Object o) {
 
         boolean isSame = false;
-        Log.d(getClass().getName(), "this:"+this.fileName);
         if (((MyPhoto) o).fileName.equals(this.fileName)){
             isSame = true;
         }

@@ -2,12 +2,9 @@ package com.android.will.assignment3.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -29,24 +26,29 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     static final String TAG = "MainActivity";
+    //KEY for resume
     private static final String KEY_PHOTO_LIST = "keyPhotoList";
     private static final String KEY_IMAGE_LIST = "keyImageList";
-    private static final String KEY_CURRENT_POSITION = "keyCurrnetPosition";
+
+    private static final String KEY_CURRENT_POSITION = "keyCurrentPosition";
+    static final float COORDINATE_OFFSET = 0.0000002f;
+    static final int MAX_NUMBER_OF_MARKERS = 10;
     public GoogleMap mMap;
 
     private HashMap<String, Uri> mImages =new HashMap<String, Uri>();
     private PopupAdapter mPopupAdapter;
     public LatLng mHamilton = new LatLng(-37.7833, 175.2833);
     public CameraPosition mCurrentPosition;
+
 
     private ArrayList<MyPhoto> mPhotoList = new ArrayList<>();
 
@@ -146,8 +148,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             mPhoto.imageUri = imageUri.toString();
             mPhoto.fileName = photoFile.getName();
             if(mPhoto.checkPhoto() && !mPhotoList.contains(mPhoto)){
+
+                if (checkSamePosition(mPhotoList, mPhoto)){
+                    mPhoto = getNewPosition(mPhoto);
+                }
+
                 mPhotoList.add(mPhoto);
-                Log.d(TAG, "mPhotoList:"+mPhotoList.size());
                 return mPhoto;
             }else{
                 Toast.makeText(this, "Ignore "+mPhoto.fileName+" because of no location tag or duplicated", Toast.LENGTH_SHORT).show();
@@ -276,6 +282,29 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     {
         return(tag + " : " + exif.getAttribute(tag) + "\n");
     }
+
+    //check whether there is photo has same positoin otherwise google will only display the latest marker
+    public boolean checkSamePosition(ArrayList<MyPhoto> photoList, MyPhoto myPhoto){
+        if (!photoList.isEmpty()){
+            for(MyPhoto tempPhoto : photoList){
+                if(tempPhoto.GPSLongitude == myPhoto.GPSLongitude && tempPhoto.GPSLatitude == myPhoto.GPSLatitude){
+                    Log.d(TAG, "checkSamePosition:true");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    //get a new postion around original one.
+    public MyPhoto getNewPosition(MyPhoto myPhoto){
+        Random random = new Random();
+        double randomLat = (random.nextInt(201) - 100)*COORDINATE_OFFSET;
+        double randomLon = (random.nextInt(201) - 100)*COORDINATE_OFFSET;
+        myPhoto.GPSLatitude += randomLat;
+        myPhoto.GPSLongitude += randomLon;
+        return myPhoto;
+    }
+
 
 
 }
