@@ -54,6 +54,7 @@ public class NewsListAdapter extends ArrayAdapter<News> {
         News news = this.getItem(position);
 
         holder.title.setText(news.title);
+        holder.thumbnail.setDefaultImageResId(R.drawable.image_holder);
         holder.thumbnail.setImageUrl(news.picURL, mImageLoader);
 
         return convertView;

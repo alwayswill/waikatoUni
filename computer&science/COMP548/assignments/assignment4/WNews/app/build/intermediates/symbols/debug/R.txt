@@ -4,6 +4,7 @@ int dimen activity_vertical_margin 0x7f070001
 int dimen navigation_drawer_width 0x7f070002
 int drawable drawer_shadow 0x7f020000
 int drawable ic_drawer 0x7f020001
+int drawable image_holder 0x7f020002
 int id action_login 0x7f0b0012
 int id action_logout 0x7f0b0013
 int id action_search 0x7f0b0011
