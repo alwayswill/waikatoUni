@@ -10,7 +10,15 @@ import com.android.will.wnews.R;
 import com.android.will.wnews.fragments.SettingsFragment;
 
 import java.util.List;
-
+/**
+ * Paper      : COMP548-15A(HAM)
+ * Student ID : 125491
+ * Name       : Shuzu Li
+ * Email      : lishuzu@gmail.com
+ */
+/**
+ * Activity for user settings
+ */
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     public static final String TAG = "SettingsActivity";

@@ -24,14 +24,15 @@ public final class R {
         public static final int image_holder=0x7f020002;
     }
     public static final class id {
-        public static final int action_login=0x7f0b0012;
-        public static final int action_logout=0x7f0b0013;
-        public static final int action_search=0x7f0b0011;
-        public static final int action_settings=0x7f0b0010;
+        public static final int action_login=0x7f0b0013;
+        public static final int action_logout=0x7f0b0014;
+        public static final int action_search=0x7f0b0012;
+        public static final int action_settings=0x7f0b0011;
         public static final int container=0x7f0b0001;
         public static final int drawer_layout=0x7f0b0000;
         public static final int movie_details_data_source=0x7f0b0007;
         public static final int navigation_drawer=0x7f0b0002;
+        public static final int news_date=0x7f0b0010;
         public static final int news_detail_fragment=0x7f0b0003;
         public static final int news_details_content=0x7f0b0006;
         public static final int news_details_timestamp=0x7f0b0005;

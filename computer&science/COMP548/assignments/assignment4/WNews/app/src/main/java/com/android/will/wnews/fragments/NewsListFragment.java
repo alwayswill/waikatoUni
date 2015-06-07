@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.will.wnews.R;
 import com.android.will.wnews.activities.MainActivity;
@@ -118,6 +119,10 @@ public class NewsListFragment extends ListFragment {
 		mNews.clear();
 		mNews.addAll(retrieved_news);
 		mNewsListAdapter.notifyDataSetChanged();
+
+		if(retrieved_news.isEmpty()){
+			Toast.makeText(getActivity(), "No result.", Toast.LENGTH_SHORT).show();
+		}
         /*
          * when device rotated during requesting with a selected item, It might choose wrong item or get a null pointer,
          * because the selected item has changed. If we still try to set selection to original position, then we may get

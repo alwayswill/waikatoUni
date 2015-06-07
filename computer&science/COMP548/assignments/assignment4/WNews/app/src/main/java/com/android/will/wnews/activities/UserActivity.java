@@ -28,7 +28,15 @@ import com.android.will.wnews.utils.Constants;
 import com.android.will.wnews.utils.UserSession;
 
 import org.json.JSONObject;
-
+/**
+ * Paper      : COMP548-15A(HAM)
+ * Student ID : 125491
+ * Name       : Shuzu Li
+ * Email      : lishuzu@gmail.com
+ */
+/**
+ * Activity for user ogin
+ */
 public class UserActivity extends BaseActivity implements UserLoginListener{
 
     public static final String TAG = "UserActivity";

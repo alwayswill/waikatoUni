@@ -25,5 +25,13 @@
         android:typeface="sans"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/news_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/news_title"
+        android:layout_toRightOf="@id/news_thumbnail"
+        />
+
 </RelativeLayout>
 <!-- From: file:/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/src/main/res/layout/news_list_item.xml -->

@@ -12,6 +12,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * Paper      : COMP548-15A(HAM)
+ * Student ID : 125491
+ * Name       : Shuzu Li
+ * Email      : lishuzu@gmail.com
+ */
+
+/**
+ * class for parsing json data from API
+ */
 public class JSONParser {
 	private static final String	TAG	= "JSONParser";
 
@@ -28,7 +38,11 @@ public class JSONParser {
 		return n;
 	}
 
-
+	/**
+	 * Parse categorie of the news
+	 * @param category
+	 * @return
+	 */
 	public static Category parseCategoryJSON(JSONObject category) {
 
 		Category cat = new Category();
@@ -38,6 +52,11 @@ public class JSONParser {
 		return cat;
 	}
 
+	/**
+	 * parse news list
+	 * @param json
+	 * @return
+	 */
 	public static ArrayList<News> parseNewsListJSON(JSONObject json) {
 		ArrayList<News> newses = new ArrayList<News>();
 
@@ -60,7 +79,11 @@ public class JSONParser {
 		return newses;
 	}
 
-
+	/**
+	 * parse user information
+	 * @param json
+	 * @return
+	 */
 	public static User parseUserJSON(JSONObject json) {
 		User user = new User();
 
@@ -90,6 +113,11 @@ public class JSONParser {
 		return user;
 	}
 
+	/**
+	 * pase news categories
+	 * @param json
+	 * @return
+	 */
 	public static ArrayList<Category> parseCategoriesJSON(JSONObject json) {
 		ArrayList<Category> categories = new ArrayList<Category>();
 

@@ -16,7 +16,16 @@ import com.android.will.wnews.R;
 import com.android.will.wnews.fragments.NewsDetailsFragment;
 import com.android.will.wnews.model.News;
 import com.android.will.wnews.utils.Constants;
+/**
+ * Paper      : COMP548-15A(HAM)
+ * Student ID : 125491
+ * Name       : Shuzu Li
+ * Email      : lishuzu@gmail.com
+ */
 
+/**
+ * Activity for News detail
+ */
 public class NewsDetailActivity extends Activity {
     public static final String EXTRA_MESSAGE="selectedNews";
     public News mSelectedNews;

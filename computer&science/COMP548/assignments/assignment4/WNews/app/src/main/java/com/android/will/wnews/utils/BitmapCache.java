@@ -29,7 +29,7 @@ public class BitmapCache extends LruCache<String, Bitmap> implements ImageLoader
 
 		Bitmap b = get(url);
 		if (b != null) {
-//			Log.d("BitmapCache", "getBitmap : " + b.getWidth() + " x " + b.getHeight());
+			Log.d("BitmapCache", "getBitmap : " + b.getWidth() + " x " + b.getHeight());
 		}
 		return get(url);
 	}
@@ -38,7 +38,7 @@ public class BitmapCache extends LruCache<String, Bitmap> implements ImageLoader
 //		Log.d("BitmapCache", "putBitmap : " + url);
 		// url = url.substring(url.indexOf("http"));
 
-//		Log.d("BitmapCache", "putBitmap : " + bitmap.getWidth() + " x " + bitmap.getHeight());
+		Log.d("BitmapCache", "putBitmap : " + bitmap.getWidth() + " x " + bitmap.getHeight());
 		put(url, bitmap);
 	}
 }

@@ -22,8 +22,12 @@ import com.android.will.wnews.utils.Constants;
 import org.json.JSONObject;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Paper      : COMP548-15A(HAM)
+ * Student ID : 125491
+ * Name       : Shuzu Li
+ * Email      : lishuzu@gmail.com
  */
+
 public class UserClientFragment extends Fragment {
 
     private static final String		TAG						= "UserClientFragment";

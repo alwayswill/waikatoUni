@@ -63,7 +63,6 @@ public class Constants {
     public static final String API_NEWS_SEARCH = API_BASE_URL +"search/keyword/%s?"+ API_ARGUMENTS;
     /*
         http://wnews.timepic.net/wnews/api/login/?username=shuzuli&password=9162fa316df079ef770c95e05b708abb&key=hXVBQPSennzh46Xp
-
      */
     public static final String API_USER_LOGIN = API_BASE_URL +"login/?username=%s&password=%s&"+API_ARGUMENTS;
     /*
@@ -71,7 +70,7 @@ public class Constants {
      */
     public static final String API_USER_SYNC_SETTINGS = API_BASE_URL +"settingsUpdate/?uid=%d&settings=%s&"+API_ARGUMENTS;
     /*
-    http://test.wnews.timepic.net/wnews/api/categories?key=hXVBQPSennzh46Xp
+    http://wnews.timepic.net/wnews/api/categories?key=hXVBQPSennzh46Xp
      */
     public static final String API_NEWS_CATEGORIES = API_BASE_URL +"categories?"+API_ARGUMENTS;
 

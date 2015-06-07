@@ -6,6 +6,6 @@
     android:searchSuggestAuthority="com.android.will.wnews.providers.NewsSuggestionProvider"
     android:searchSuggestSelection=" ? "
     android:searchSuggestIntentAction="android.intent.action.VIEW"
-    android:searchSuggestThreshold="3" />
+    android:searchSuggestThreshold="1" />
 
 <!-- From: file:/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/src/main/res/xml/searchable.xml -->

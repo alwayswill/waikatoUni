@@ -25,174 +25,194 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Paper      : COMP548-15A(HAM)
+ * Student ID : 125491
+ * Name       : Shuzu Li
+ * Email      : lishuzu@gmail.com
+ */
+
+/**
+ * The fragment without layout for requesting data from the API
+ */
 public class ClientFragment extends Fragment {
-	private static final String		TAG						= "ClientFragment";
+    private static final String TAG = "ClientFragment";
 
 
-	// Volley queue, cache, image loader
-	private RequestQueue			request_queue			= null;
-	private ImageLoader				image_loader			= null;
-	private BitmapCache bitmap_cache			= null;
+    // Volley queue, cache, image loader
+    private RequestQueue request_queue = null;
+    private ImageLoader image_loader = null;
+    private BitmapCache bitmap_cache = null;
 
-	private ApiResponseListener mApiResponseListener;
-	private RetryPolicy mPolicy;
+    private ApiResponseListener mApiResponseListener;
+    private RetryPolicy mPolicy;
 
-	public ClientFragment() {
-	}
+    public ClientFragment() {
+    }
 
-	// ensure that the hosting activity implements the response listener interface
-	@Override
-	public void onAttach(Activity activity) {
-		Log.d(TAG, "onAttach()");
-		super.onAttach(activity);
-		try {
-			mApiResponseListener = (ApiResponseListener) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString() + " must implement ApiResponseListener");
-		}
-	}
+    // ensure that the hosting activity implements the response listener interface
+    @Override
+    public void onAttach(Activity activity) {
+        Log.d(TAG, "onAttach()");
+        super.onAttach(activity);
+        try {
+            mApiResponseListener = (ApiResponseListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement ApiResponseListener");
+        }
+    }
 
-	/**
-	 * This method is called only once when the Fragment is first created.
-	 */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		Log.i(TAG, "onCreate(Bundle)");
-		super.onCreate(savedInstanceState);
+    /**
+     * This method is called only once when the Fragment is first created.
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate(Bundle)");
+        super.onCreate(savedInstanceState);
 
-		// initialise the Volley queue and image loader
-		request_queue = Volley.newRequestQueue(getActivity().getApplicationContext());
-		bitmap_cache = new BitmapCache();
-		image_loader = new ImageLoader(request_queue, bitmap_cache);
+        // initialise the Volley queue and image loader
+        request_queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        bitmap_cache = new BitmapCache();
+        image_loader = new ImageLoader(request_queue, bitmap_cache);
 
-		mPolicy = new DefaultRetryPolicy(Constants.REQUEST_SOCKET_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        mPolicy = new DefaultRetryPolicy(Constants.REQUEST_SOCKET_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 
-		Log.i(TAG, "onCreate(Bundle) : "+getActivity().hashCode());
-		Log.i(TAG, "onCreate(Bundle) : " + getActivity().getApplicationContext().hashCode());
-		// keep state across config changes (we don't lose the queue and loader)
-		setRetainInstance(true);
-	}
+        Log.i(TAG, "onCreate(Bundle) : " + getActivity().hashCode());
+        Log.i(TAG, "onCreate(Bundle) : " + getActivity().getApplicationContext().hashCode());
+        // keep state across config changes (we don't lose the queue and loader)
+        setRetainInstance(true);
+    }
 
-	public ImageLoader getImageLoader() {
-		return image_loader;
-	}
+    public ImageLoader getImageLoader() {
+        return image_loader;
+    }
 
-	public BitmapCache getBitmapCache() {
-		return bitmap_cache;
-	}
+    public BitmapCache getBitmapCache() {
+        return bitmap_cache;
+    }
 
-	public void cancelAllRequests() {
-		request_queue.cancelAll(this);
+    public void cancelAllRequests() {
+        request_queue.cancelAll(this);
 
-	}
+    }
 
-	@Override
-	public void onStop() {
-		Log.d(TAG, "onStop");
-		super.onStop();
-		cancelAllRequests();
-	}
-	
-	// issue requests to api and return responses to the registered listener
-	public void getNewsList(int category_id) {
-		final String request_url = String.format(Constants.API_NEWS_LIST, category_id);
-		Log.d(TAG, request_url);
-		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
-			public void onResponse(JSONObject json_object) {
-				Log.d(TAG, "getNewsList.onResponse");
-				mApiResponseListener.onNewsListResponse(json_object);
-			}
-		}, new ErrorListener() {
-			public void onErrorResponse(VolleyError error) {
-				Log.d(TAG, "getNewsList : onErrorResponse : " + error.getMessage());
-				error.printStackTrace();
-				mApiResponseListener.onNewsListResponse(null);
-			}
-		});
+    @Override
+    public void onStop() {
+        Log.d(TAG, "onStop");
+        super.onStop();
+        cancelAllRequests();
+    }
 
-		request.setRetryPolicy(mPolicy);
-		request_queue.add(request);
-	}
+    /**
+     * get news list from api
+     *
+     * @param category_id
+     */
+    public void getNewsList(int category_id) {
+        final String request_url = String.format(Constants.API_NEWS_LIST, category_id);
+        Log.d(TAG, request_url);
+        JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
+            public void onResponse(JSONObject json_object) {
+                Log.d(TAG, "getNewsList.onResponse");
+                mApiResponseListener.onNewsListResponse(json_object);
+            }
+        }, new ErrorListener() {
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "getNewsList : onErrorResponse : " + error.getMessage());
+                error.printStackTrace();
+                mApiResponseListener.onNewsListResponse(null);
+            }
+        });
 
-	// issue requests to api and return responses to the registered listener
-	public void searchNews(String keywords) {
-		final String request_url = String.format(Constants.API_NEWS_SEARCH, keywords);
-		Log.d(TAG, request_url);
-		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
-			public void onResponse(JSONObject json_object) {
-				Log.d(TAG, "searchNews.onResponse");
-				mApiResponseListener.onNewsListResponse(json_object);
-			}
-		}, new ErrorListener() {
-			public void onErrorResponse(VolleyError error) {
-				Log.d(TAG, "searchNews : onErrorResponse : " + error.getMessage());
-				error.printStackTrace();
-				mApiResponseListener.onNewsListResponse(null);
-				mApiResponseListener.onApiErrorResponse(error);
-			}
-		});
+        request.setRetryPolicy(mPolicy);
+        request_queue.add(request);
+    }
 
 
-		request.setRetryPolicy(mPolicy);
-		request_queue.add(request);
-	}
-
-	// issue requests to api and return responses to the registered listener
-	public void getCategories() {
-		final String request_url = String.format(Constants.API_NEWS_CATEGORIES);
-		Log.d(TAG, request_url);
-		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
-			public void onResponse(JSONObject json_object) {
-				Log.d(TAG, "getCategories.onResponse");
-				mApiResponseListener.onNewsCategoriesResponse(json_object);
-			}
-		}, new ErrorListener() {
-			public void onErrorResponse(VolleyError error) {
-				Log.d(TAG, "getCategories : onErrorResponse : " + error.getMessage());
-				error.printStackTrace();
-				mApiResponseListener.onNewsCategoriesResponse(null);
-				mApiResponseListener.onApiErrorResponse(error);
-			}
-		});
-
-		request.setRetryPolicy(mPolicy);
-		request_queue.add(request);
-	}
+    /**
+     * * get news list with keywords from api
+     *
+     * @param keywords
+     */
+    public void searchNews(String keywords) {
+        final String request_url = String.format(Constants.API_NEWS_SEARCH, keywords);
+        Log.d(TAG, request_url);
+        JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
+            public void onResponse(JSONObject json_object) {
+                Log.d(TAG, "searchNews.onResponse");
+                mApiResponseListener.onNewsListResponse(json_object);
+            }
+        }, new ErrorListener() {
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "searchNews : onErrorResponse : " + error.getMessage());
+                error.printStackTrace();
+                mApiResponseListener.onNewsListResponse(null);
+                mApiResponseListener.onApiErrorResponse(error);
+            }
+        });
 
 
+        request.setRetryPolicy(mPolicy);
+        request_queue.add(request);
+    }
 
+    /**
+     * get cateogres
+     */
+    public void getCategories() {
+        final String request_url = String.format(Constants.API_NEWS_CATEGORIES);
+        Log.d(TAG, request_url);
+        JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
+            public void onResponse(JSONObject json_object) {
+                Log.d(TAG, "getCategories.onResponse");
+                mApiResponseListener.onNewsCategoriesResponse(json_object);
+            }
+        }, new ErrorListener() {
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "getCategories : onErrorResponse : " + error.getMessage());
+                error.printStackTrace();
+                mApiResponseListener.onNewsCategoriesResponse(null);
+                mApiResponseListener.onApiErrorResponse(error);
+            }
+        });
 
+        request.setRetryPolicy(mPolicy);
+        request_queue.add(request);
+    }
 
-	public void syncSettings() {
-		UserSession mUserSession = new UserSession(getActivity().getApplicationContext());
-		User user = mUserSession.getUserDetails();
-		JSONObject settings = new JSONObject();
-		try {
-			settings.put("email", user.email);
-			settings.put("notifications_new_message", user.notifications_new_message);
-			settings.put("notifications_new_message_ringtone", user.notifications_new_message_ringtone);
-			settings.put("notifications_new_message_vibrate", user.notifications_new_message_vibrate);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+    /**
+     * synchronize user settings with the server.
+     */
+    public void syncSettings() {
+        UserSession mUserSession = new UserSession(getActivity().getApplicationContext());
+        User user = mUserSession.getUserDetails();
+        JSONObject settings = new JSONObject();
+        try {
+            settings.put("email", user.email);
+            settings.put("notifications_new_message", user.notifications_new_message);
+            settings.put("notifications_new_message_ringtone", user.notifications_new_message_ringtone);
+            settings.put("notifications_new_message_vibrate", user.notifications_new_message_vibrate);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-		final String request_url = String.format(Constants.API_USER_SYNC_SETTINGS, user.id, settings.toString());
-		Log.d(TAG, request_url);
-		JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
-			public void onResponse(JSONObject json_object) {
-				Log.d(TAG, "syncSettings.onResponse");
-//				not need response here
-			}
-		}, new ErrorListener() {
-			public void onErrorResponse(VolleyError error) {
-				Log.d(TAG, "syncSettings : onErrorResponse : " + error.getMessage());
-				error.printStackTrace();
-				mApiResponseListener.onApiErrorResponse(error);
-			}
-		});
+        final String request_url = String.format(Constants.API_USER_SYNC_SETTINGS, user.id, settings.toString());
+        Log.d(TAG, request_url);
+        JsonObjectRequest request = new JsonObjectRequest(Method.GET, request_url, null, new Listener<JSONObject>() {
+            public void onResponse(JSONObject json_object) {
+                Log.d(TAG, "syncSettings.onResponse");
+//				not need response here, because we only need to sync user settings to the server.
+            }
+        }, new ErrorListener() {
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "syncSettings : onErrorResponse : " + error.getMessage());
+                error.printStackTrace();
+                mApiResponseListener.onApiErrorResponse(error);
+            }
+        });
 
-		request.setRetryPolicy(mPolicy);
-		request_queue.add(request);
-	}
+        request.setRetryPolicy(mPolicy);
+        request_queue.add(request);
+    }
 
 }

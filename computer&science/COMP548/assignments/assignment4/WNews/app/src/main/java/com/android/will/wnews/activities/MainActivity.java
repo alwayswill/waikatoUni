@@ -45,8 +45,16 @@ import com.android.will.wnews.utils.UserSession;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+/**
+ * Paper      : COMP548-15A(HAM)
+ * Student ID : 125491
+ * Name       : Shuzu Li
+ * Email      : lishuzu@gmail.com
+ */
 
-
+/**
+ * MainActivy as a launch active, this include drawer on the lfetside
+ */
 public class MainActivity extends BaseActivity implements NewsSelectionListener, ApiResponseListener, NavigationDrawerFragment.NavigationDrawerCallbacks, OnEditorActionListener, SearchView.OnCloseListener, View.OnFocusChangeListener {
 
     public static final String TAG = "MainActivity";
@@ -75,10 +83,6 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
 
     // holds action bar search widget state that we save/restore on configuration change
     boolean mSearchViewExpanded = false;
-
-
-    private ShareActionProvider mShareActionProvider;
-    private Intent mShareIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,6 +194,9 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
 
     }
 
+    /**
+     * when roate or recreate activity, we need to restore our actionbar status.
+     */
     public void restoreActionBar() {
         Log.d(TAG, "restoreActionBar");
         ActionBar actionBar = getActionBar();
@@ -226,6 +233,10 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * configure the SearchView
+     * @param menu
+     */
     private void configureSearchView(Menu menu) {
 
         mSearchMenuItem = (MenuItem) menu.findItem(R.id.action_search);
@@ -253,11 +264,6 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected");
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
 
         switch (item.getItemId()) {
             case R.id.action_settings:
@@ -315,7 +321,9 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
 
     }
 
-
+    /**
+     * Update categories for every 24 hours
+     */
     public void checkCategoriesCache() {
         int cacheTime = (int) System.currentTimeMillis() / 1000;
         SharedPreferences sp = PreferenceManager
@@ -367,9 +375,10 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
 
     }
 
-    /*
-    * This is for images in the movie list by using ImageLoader of Volley.
-    * */
+    /**
+     * This is for images in the movie list by using ImageLoader of Volley.
+     * @return
+     */
     public ImageLoader getImageLoader() {
         return mClientFragment.getImageLoader();
     }
@@ -415,8 +424,10 @@ public class MainActivity extends BaseActivity implements NewsSelectionListener,
     }
 
 
-
-
+    /**
+     *  get data from API when doing search
+     * @param query
+     */
     public void doSearch(String query){
         NewsSuggestionProvider.getBridge(this).saveRecentQuery(query, null);
         showLoading(this);

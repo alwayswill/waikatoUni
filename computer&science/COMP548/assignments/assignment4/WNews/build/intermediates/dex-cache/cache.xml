@@ -2,46 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/Applications/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
-        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-bb460cd1147b2b176376e0b853dbdc5fd2cd3ddf.jar" />
-    </item>
-    <item
-        jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
-        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/classes-3e993d0a1e181516bb1e566037cebbde76a3afb2.jar" />
-    </item>
-    <item
         jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
         <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/classes-3e993d0a1e181516bb1e566037cebbde76a3afb2.jar" />
-    </item>
-    <item
-        jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
-        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-78b70aa94c7f6edb3adfd39488d2a97863a86f2e.jar" />
-    </item>
-    <item
-        jar="/Applications/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
-        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-bb460cd1147b2b176376e0b853dbdc5fd2cd3ddf.jar" />
-    </item>
-    <item
-        jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/WNews/volley/unspecified/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="71edaeea21dc1ac3ef356ea5e7cbdc4473750dc0">
-        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/classes-f46f16df1739f635b2e91f6d613604a7fe645b09.jar" />
     </item>
     <item
         jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/WNews/volley/unspecified/jars/classes.jar"
@@ -51,11 +16,46 @@
         <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/classes-f46f16df1739f635b2e91f6d613604a7fe645b09.jar" />
     </item>
     <item
+        jar="/Applications/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
+        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-bb460cd1147b2b176376e0b853dbdc5fd2cd3ddf.jar" />
+    </item>
+    <item
         jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
         <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-78b70aa94c7f6edb3adfd39488d2a97863a86f2e.jar" />
+    </item>
+    <item
+        jar="/Applications/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
+        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-bb460cd1147b2b176376e0b853dbdc5fd2cd3ddf.jar" />
+    </item>
+    <item
+        jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
+        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-78b70aa94c7f6edb3adfd39488d2a97863a86f2e.jar" />
+    </item>
+    <item
+        jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
+        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/classes-3e993d0a1e181516bb1e566037cebbde76a3afb2.jar" />
+    </item>
+    <item
+        jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/exploded-aar/WNews/volley/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="71edaeea21dc1ac3ef356ea5e7cbdc4473750dc0">
+        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment4/WNews/app/build/intermediates/pre-dexed/debug/classes-f46f16df1739f635b2e91f6d613604a7fe645b09.jar" />
     </item>
 
 </items>

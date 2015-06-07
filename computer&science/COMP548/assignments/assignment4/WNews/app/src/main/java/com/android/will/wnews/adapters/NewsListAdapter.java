@@ -25,6 +25,9 @@ import java.util.List;
  *
  */
 
+/**
+ * Tailored adapter for news list.
+ */
 public class NewsListAdapter extends ArrayAdapter<News> {
     private LayoutInflater mLayoutInflater;
     private ImageLoader mImageLoader = null;
@@ -45,6 +48,7 @@ public class NewsListAdapter extends ArrayAdapter<News> {
             holder = new ViewHolder();
             holder.thumbnail = (NetworkImageView) convertView.findViewById(R.id.news_thumbnail);
             holder.title = (TextView) convertView.findViewById(R.id.news_title);
+            holder.date = (TextView) convertView.findViewById(R.id.news_date);
 
             convertView.setTag(holder);
         } else {
@@ -54,6 +58,7 @@ public class NewsListAdapter extends ArrayAdapter<News> {
         News news = this.getItem(position);
 
         holder.title.setText(news.title);
+        holder.date.setText(news.timestamp);
         holder.thumbnail.setDefaultImageResId(R.drawable.image_holder);
         holder.thumbnail.setImageUrl(news.picURL, mImageLoader);
 
@@ -63,5 +68,6 @@ public class NewsListAdapter extends ArrayAdapter<News> {
     static class ViewHolder {
         NetworkImageView thumbnail;
         TextView title;
+        TextView date;
     }
 }

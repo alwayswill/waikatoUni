@@ -14,6 +14,16 @@ import android.widget.Toast;
 
 import com.android.will.wnews.utils.Constants;
 
+/**
+ * Paper      : COMP548-15A(HAM)
+ * Student ID : 125491
+ * Name       : Shuzu Li
+ * Email      : lishuzu@gmail.com
+ */
+
+/**
+ * Activity that for doing basic service like checking network.
+ */
 public class BaseActivity extends Activity {
     public static final String TAG = "BaseActivity";
     public boolean mWaiting = false;
@@ -32,12 +42,19 @@ public class BaseActivity extends Activity {
         }
     }
 
+    /**
+     * show the loading status over the screen.
+     * @param context
+     */
     public void showLoading(Context context) {
         Log.d(TAG, "showLoading");
         mWaiting = true;
         mRingProgressDialog = ProgressDialog.show(context, "Please wait ...", "Downloading data ...", true);
     }
 
+    /**
+     * hide the loading status over the screen.
+     */
     public void hideLoading() {
         Log.d(TAG, "hideLoading");
         mWaiting = false;
@@ -61,7 +78,8 @@ public class BaseActivity extends Activity {
     }
 
     /**
-     * check network, if network including WIFI and mobile is not working, we are not able to download movies.
+     * check network, if network including WIFI and mobile is not working, we are not able to download data.
+     * @return
      */
     private boolean isNetworkConnected() {
         boolean haveConnectedWifi = false;
@@ -79,7 +97,6 @@ public class BaseActivity extends Activity {
         }
         return haveConnectedWifi || haveConnectedMobile;
     }
-
 
 
     @Override
