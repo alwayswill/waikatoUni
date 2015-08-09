@@ -44,15 +44,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view} {delete}{start}',
                 'buttons' => [
                     'delete' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-remove"></span>', $url, [
-                                'title' => Yii::t('app', 'Stop the process'),
-                                "id"=> "stopPro"
-                        ]);
+                        $html =  Html::a('', ['delete', 'id' => $model->id], [
+                                'class' => 'glyphicon glyphicon-remove',
+                                'data' => [
+                                    'confirm' => 'Are you sure you want to stop this process?',
+                                    'method' => 'post',
+                                ]]);
+                        return $html;
                     },
                     'start' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-play"></span>', $url, [
-                                'title' => Yii::t('app', 'Start the process'), "id"=> "startPro"
-                        ]);
+                        
+                        $html =  Html::a('', ['start', 'id' => $model->id], [
+                                'class' => 'glyphicon glyphicon-play',
+                                'data' => [
+                                    'confirm' => 'Are you sure you want to start this process?',
+                                    'method' => 'post',
+                                ]]);
+                        return $html;
                     }
                 ]
             ]
