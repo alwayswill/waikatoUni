@@ -18,8 +18,8 @@ class RPAThreadsSearch extends RPAThreads
     public function rules()
     {
         return [
-            [['id', 'pid', 'memory', 'CPU'], 'integer'],
-            [['time', 'command', 'IP'], 'safe'],
+            [['id', 'pid', 'memory', 'status'], 'integer'],
+            [['time', 'CPU', 'command', 'IP'], 'safe'],
         ];
     }
 
@@ -59,10 +59,11 @@ class RPAThreadsSearch extends RPAThreads
             'id' => $this->id,
             'pid' => $this->pid,
             'memory' => $this->memory,
-            'CPU' => $this->CPU,
+            'status' => $this->status,
         ]);
 
         $query->andFilterWhere(['like', 'time', $this->time])
+            ->andFilterWhere(['like', 'CPU', $this->CPU])
             ->andFilterWhere(['like', 'command', $this->command])
             ->andFilterWhere(['like', 'IP', $this->IP]);
 

@@ -15,12 +15,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?=
-    GridView::widget([
+
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
-//        'filterModel' => $searchModel,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+
             'id',
             'pid',
             [
@@ -40,11 +41,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'command:ntext',
             'IP',
+            'status' ,
             ['class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {delete}{start}',
+                'template' => '{view} {stop}{start}',
                 'buttons' => [
-                    'delete' => function ($url, $model) {
-                        $html =  Html::a('', ['delete', 'id' => $model->id], [
+                    'stop' => function ($url, $model) {
+                        $html =  Html::a('', ['stop', 'id' => $model->id], [
                                 'class' => 'glyphicon glyphicon-remove',
                                 'data' => [
                                     'confirm' => 'Are you sure you want to stop this process?',
@@ -53,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $html;
                     },
                     'start' => function ($url, $model) {
-                        
+
                         $html =  Html::a('', ['start', 'id' => $model->id], [
                                 'class' => 'glyphicon glyphicon-play',
                                 'data' => [
@@ -65,12 +67,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             ]
         ],
-    ]);
-    ?>
+    ]); ?>
 
 </div>
-<!--<script type="text/javascript">
-    $("#startPro").click(function() {
-  alert( "Handler for .click() called." );
-});
-</script>  -->

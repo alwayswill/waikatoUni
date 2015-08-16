@@ -25,6 +25,24 @@ class ThreadsController extends Controller
             ],
         ];
     }
+    
+    public function actionStop($id){
+        $thread = $this->findModel($id);
+        if (!empty($thread)) {
+            $thread->status = -1;
+            $thread->save();
+        }
+        return $this->redirect(['index']);
+    }
+    public function actionStart($id){
+        $thread = $this->findModel($id);
+        if (!empty($thread)) {
+            $thread->status = 0;
+            $thread->save();
+        }
+
+        return $this->redirect(['index']);
+    }
 
     /**
      * Lists all RPAThreads models.
