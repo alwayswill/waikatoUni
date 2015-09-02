@@ -24,21 +24,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'pid',
+        		[
+        		'attribute' => 'CPU',
+        		'format' => 'text',
+        		'value' => function ($model) {
+        			return '' . $model->CPU.'%';
+        		},
+        		],
             [
                 'attribute' => 'memory',
                 'format' => 'text',
                 'value' => function ($model) {
-                    return '' . $model->memory.'K';
+                    return '' . ($model->memory/1000).'M';
                 },
             ],
-            'time:ntext',
-            [
-                'attribute' => 'CPU',
-                'format' => 'text',
-                'value' => function ($model) {
-                    return '' . $model->CPU.'%';
-                },
-            ],
+            
+           'startTime:ntext',
+           'runningTime',
+           'stat',
             'command:ntext',
             'IP',
             'status' ,

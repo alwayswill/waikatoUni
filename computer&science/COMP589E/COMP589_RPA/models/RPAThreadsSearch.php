@@ -19,7 +19,7 @@ class RPAThreadsSearch extends RPAThreads
     {
         return [
             [['id', 'pid', 'memory', 'status'], 'integer'],
-            [['time', 'CPU', 'command', 'IP'], 'safe'],
+            [['startTime', 'runningTime', 'CPU', 'command', 'stat', 'IP'], 'safe'],
         ];
     }
 
@@ -62,9 +62,11 @@ class RPAThreadsSearch extends RPAThreads
             'status' => $this->status,
         ]);
 
-        $query->andFilterWhere(['like', 'time', $this->time])
+        $query->andFilterWhere(['like', 'startTime', $this->startTime])
+            ->andFilterWhere(['like', 'runningTime', $this->runningTime])
             ->andFilterWhere(['like', 'CPU', $this->CPU])
             ->andFilterWhere(['like', 'command', $this->command])
+            ->andFilterWhere(['like', 'stat', $this->stat])
             ->andFilterWhere(['like', 'IP', $this->IP]);
 
         return $dataProvider;

@@ -16,11 +16,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'memory')->textInput() ?>
 
-    <?= $form->field($model, 'time')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'startTime')->textarea(['rows' => 6]) ?>
+
+    <?= $form->field($model, 'runningTime')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'CPU')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'command')->textarea(['rows' => 6]) ?>
+
+    <?= $form->field($model, 'stat')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'IP')->textInput(['maxlength' => true]) ?>
 

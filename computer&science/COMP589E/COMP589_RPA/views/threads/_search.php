@@ -21,11 +21,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'memory') ?>
 
-    <?= $form->field($model, 'time') ?>
+    <?= $form->field($model, 'startTime') ?>
 
-    <?= $form->field($model, 'CPU') ?>
+    <?= $form->field($model, 'runningTime') ?>
+
+    <?php // echo $form->field($model, 'CPU') ?>
 
     <?php // echo $form->field($model, 'command') ?>
+
+    <?php // echo $form->field($model, 'stat') ?>
 
     <?php // echo $form->field($model, 'IP') ?>
 

@@ -10,9 +10,11 @@ use Yii;
  * @property integer $id
  * @property integer $pid
  * @property integer $memory
- * @property string $time
+ * @property string $startTime
+ * @property string $runningTime
  * @property string $CPU
  * @property string $command
+ * @property string $stat
  * @property string $IP
  * @property integer $status
  */
@@ -32,10 +34,12 @@ class RPAThreads extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pid', 'memory', 'time', 'CPU', 'command', 'IP'], 'required'],
+            [['pid', 'memory', 'startTime', 'runningTime', 'CPU', 'command', 'stat', 'IP'], 'required'],
             [['pid', 'memory', 'status'], 'integer'],
-            [['time', 'command'], 'string'],
-            [['CPU', 'IP'], 'string', 'max' => 255]
+            [['startTime', 'command'], 'string'],
+            [['runningTime'], 'string', 'max' => 20],
+            [['CPU', 'IP'], 'string', 'max' => 255],
+            [['stat'], 'string', 'max' => 10]
         ];
     }
 
@@ -48,9 +52,11 @@ class RPAThreads extends \yii\db\ActiveRecord
             'id' => 'ID',
             'pid' => 'Pid',
             'memory' => 'Memory',
-            'time' => 'Time',
+            'startTime' => 'Start Time',
+            'runningTime' => 'Running Time',
             'CPU' => 'Cpu',
             'command' => 'Command',
+            'stat' => 'Stat',
             'IP' => 'Ip',
             'status' => 'Status',
         ];
