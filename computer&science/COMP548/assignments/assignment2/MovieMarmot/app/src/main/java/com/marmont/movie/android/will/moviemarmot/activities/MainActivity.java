@@ -160,7 +160,6 @@ public class MainActivity extends Activity implements MYFResponseListener, Movie
         } else {
             Toast.makeText(this, "Network Exception, Please try again.", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     @Override

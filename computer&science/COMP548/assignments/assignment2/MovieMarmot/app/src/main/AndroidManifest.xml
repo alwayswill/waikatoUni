@@ -16,7 +16,7 @@
         android:xlargeScreens="true" />
     <uses-sdk
         android:minSdkVersion="21"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="22" />
 
     <application
         android:allowBackup="true"

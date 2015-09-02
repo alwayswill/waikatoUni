@@ -122,6 +122,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         addMarker();
     }
 
+    /**
+     * add google markers.
+     */
     public void addMarker(){
         Log.d(TAG, "addMarker");
         if (mPhotoList != null){
@@ -137,6 +140,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    /**
+     * process images
+     * @param imageUri
+     * @return
+     */
     private MyPhoto handlePhoto(Uri imageUri){
         Log.d(TAG, "handlePhoto");
         try{
@@ -248,8 +256,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-
-
+    /**
+     * get real parth from Uri
+     * @param contentUri
+     * @return
+     */
     public String getRealPathFromURI(Uri contentUri) {
         String res = null;
         String[] proj = { MediaStore.Images.Media.DATA };

@@ -2,6 +2,20 @@
 <items version="2" >
 
     <item
+        jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment2/MovieMarmot/app/build/intermediates/exploded-aar/MovieMarmot/volley/unspecified/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a0e6b90f393a3ce00c089111fa2992f34ba9c825">
+        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment2/MovieMarmot/app/build/intermediates/pre-dexed/debug/classes-f750eda90482b90eda03f5438906cea6c7cc3579.jar" />
+    </item>
+    <item
+        jar="/Applications/android-sdk-macosx/extras/android/m2repository/com/android/support/support-v4/18.0.0/support-v4-18.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="44ec51e9d395a47aab135e5e1b556c0007442156">
+        <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment2/MovieMarmot/app/build/intermediates/pre-dexed/debug/support-v4-18.0.0-f5bd42a4888d2067828e478c3ac9d9175725618a.jar" />
+    </item>
+    <item
         jar="/Applications/android-sdk-macosx/extras/android/m2repository/com/android/support/support-v4/18.0.0/support-v4-18.0.0.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -12,7 +26,7 @@
         jar="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment2/MovieMarmot/app/build/intermediates/exploded-aar/MovieMarmot/volley/unspecified/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="856ec4f44032b28c47d9417eef098e0696d40a3d">
+        sha1="7bd33ec2dceeb01ad9235539be58ea8d327b256a">
         <dex dex="/Users/lixiaoxin/Sites/alwayswilllee/waikatoUni/computer&amp;science/COMP548/assignments/assignment2/MovieMarmot/app/build/intermediates/pre-dexed/debug/classes-f750eda90482b90eda03f5438906cea6c7cc3579.jar" />
     </item>
 
