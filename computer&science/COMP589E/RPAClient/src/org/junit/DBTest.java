@@ -13,7 +13,7 @@ public class DBTest {
 	@Test
 	public void testAddProcesses() {
 		Processes processes = new Processes();
-		processes.addProcesses();
+//		processes.addProcesses();
 	}
 	
 	@Test

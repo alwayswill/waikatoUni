@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * ThreadsController implements the CRUD actions for RPAThreads model.
  */
-class ThreadsController extends Controller
+class ThreadsController extends RPAController
 {
     public function behaviors()
     {

@@ -73,3 +73,10 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
 </div>
+<script type="text/javascript"> 
+/*<![CDATA[*/
+setTimeout(function(){
+   window.location.reload(1);
+}, 5000);
+/*]]>*/
+</script> 
