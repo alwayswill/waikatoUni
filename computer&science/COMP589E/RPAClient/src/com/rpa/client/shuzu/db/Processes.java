@@ -17,6 +17,7 @@ public class Processes {
 	
 	public void updateInfo(RPAProcess RPAprocess){
 		int id = getProcess(RPAprocess);
+//		TODO: If the status of the process is -1  and running, kill it.
 		logger.debug("updateInfo id:"+id);
 		if(id != 0){
 			updateProcesses(id, RPAprocess);

@@ -14,17 +14,17 @@ use yii\filters\VerbFilter;
  */
 class ThreadsController extends RPAController
 {
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
-    }
+//     public function behaviors()
+//     {
+//         return [
+//             'verbs' => [
+//                 'class' => VerbFilter::className(),
+//                 'actions' => [
+//                     'delete' => ['post'],
+//                 ],
+//             ],
+//         ];
+//     }
     
     public function actionStop($id){
         $thread = $this->findModel($id);

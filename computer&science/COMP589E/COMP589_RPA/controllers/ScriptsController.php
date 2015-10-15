@@ -12,17 +12,17 @@ use yii\filters\VerbFilter;
 
 class ScriptsController extends RPAController
 {
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
-    }
+//     public function behaviors()
+//     {
+//         return [
+//             'verbs' => [
+//                 'class' => VerbFilter::className(),
+//                 'actions' => [
+//                     'delete' => ['post'],
+//                 ],
+//             ],
+//         ];
+//     }
 
    
     public function actionIndex()

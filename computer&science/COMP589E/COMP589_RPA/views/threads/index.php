@@ -44,7 +44,13 @@ $this->params['breadcrumbs'][] = $this->title;
            'stat',
             'command:ntext',
             'IP',
-            'status' ,
+           [
+           'attribute' => 'status',
+           'format' => 'text',
+           'value' => function ($model) {
+           		return $model->status < 0 ? "Stop" :  "Running";
+           },
+           ],
             ['class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {stop}{start}',
                 'buttons' => [
